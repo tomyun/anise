@@ -8,7 +8,7 @@
 #include "option.h"
 
 #define VIEW_SPRITES					1000
-#define VIEW_LAYERS						4
+#define SPRITE_LAYERS					4
 #define TILE_SIZE						8
 #define CHARACTER_LOG					10
 #define C5_CHARACTER_SIZE				16
@@ -184,11 +184,15 @@ private:
 	word view_coord_xw;
 	word view_coord_yw;
 
+	bool has_map_created;
+	bool has_map_scrolled;
+
 	word map_widthw;
 	word map_heightw;
 
-	word view[VIEW_SPRITES][VIEW_LAYERS];
-	word view_buffer[VIEW_SPRITES][VIEW_LAYERS];
+	word *map_sprite[SPRITE_LAYERS];
+	//word view[VIEW_SPRITES][SPRITE_LAYERS];
+	//word view_buffer[VIEW_SPRITES][SPRITE_LAYERS];
 
 	byte operation_type;	//TODO: figure it out
 
@@ -204,6 +208,7 @@ private:
 
 	word calculateMapOffset(word coord_xw, word coord_yw);
 	void saveCharacterLog(word character_offset, byte character_frame, word character_coord_xw, word character_coord_yw);
+	void drawScreenBuffer();
 
 	// character movement related stuffs (field_move.cpp)
 	word verifyMovement();
