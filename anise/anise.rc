@@ -53,7 +53,7 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,2,4,115
+ FILEVERSION 0,2,5,121
  PRODUCTVERSION 0,2,0,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
@@ -69,12 +69,13 @@ BEGIN
     BEGIN
         BLOCK "041204b0"
         BEGIN
-            VALUE "Comments", "Beta 4"
+            VALUE "Comments", "Beta 5"
             VALUE "CompanyName", "Yoon, Kyung Dam (tomyun)"
             VALUE "FileDescription", "A Newly Implemented Scripting Engine for ai5v"
-            VALUE "FileVersion", "0, 2, 4, 115"
+            VALUE "FileVersion", "0, 2, 5, 121"
             VALUE "InternalName", "anise"
             VALUE "LegalCopyright", "(C) 2002-2004 Yoon, Kyung Dam (tomyun)"
+            VALUE "LegalTrademarks", "http://anise.kldp.net"
             VALUE "OriginalFilename", "anise.exe"
             VALUE "ProductName", "Project ANISE"
             VALUE "ProductVersion", "0, 2, 0, 0"
