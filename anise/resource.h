@@ -2,7 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by anise.rc
 //
-#define IDI_ICON1                       108
+#define IDI_ICON_ANISE                  108
 
 // Next default values for new objects
 // 
