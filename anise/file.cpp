@@ -24,18 +24,12 @@ void File::open(const char *filename, const char *mode)
 
 	if (handle != NULL) {
 		//TODO: process error
-		PRINT("[File::open()] file is already opened\n");
+		ERROR("[File::open()] file is already opened\n");
 		close();
 	}
 
 	// concatenate path name with file name
 	name = config->path_name;
-
-	//HACK: need some more implementation
-	if (name.at(name.length() - 1) != '\\') {
-		name += '\\';
-	}
-
 	for (int i = 0; i < FILE_NAME_LENGTH; i++) {
 		name += tolower(filename[i]);
 	}
@@ -43,7 +37,7 @@ void File::open(const char *filename, const char *mode)
 	handle = fopen(name.data(), mode);
 	if (handle == NULL) {
 		//TODO: process error
-		PRINT("[File::open()] fopen() failed\n");
+		ERROR("[File::open()] fopen() failed\n");
 		exit(1);
 	}
 
@@ -59,7 +53,7 @@ void File::open(const char *filename, const char *mode)
 
 void File::close()
 {
-	PRINT("[File::close()]\n");
+	//PRINT("[File::close()]\n");
 
 	if (handle != NULL) {
 		fclose(handle);
@@ -94,7 +88,7 @@ bool File::load(MemoryBlock *memory_block, word offset)
 {
 	//assert(offset < memory_block->getSize());
 
-	PRINT("[File::load()]\n");
+	//PRINT("[File::load()]\n");
 
 	byte *raw = memory_block->getRaw();
 
@@ -104,7 +98,7 @@ bool File::load(MemoryBlock *memory_block, word offset)
 	}
 	else {
 		//TODO: process error
-		PRINT("[File::open()] fread() failed (read %d of %d)\n", read_length, size);
+		ERROR("[File::open()] fread() failed (read %d of %d)\n", read_length, size);
 		return false;
 	}
 }
@@ -121,7 +115,7 @@ bool File::store(MemoryBlock *memory_block)
 	}
 	else {
 		//TODO: process error
-		PRINT("[File::open()] fwrite() failed (written %d of %d)\n", write_length, size);
+		ERROR("[File::open()] fwrite() failed (written %d of %d)\n", write_length, size);
 		return false;
 	}
 }
