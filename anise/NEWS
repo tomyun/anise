@@ -1,6 +1,15 @@
 Project ANISE
 =============
 
+ 2004. 3. 7
+ ----------
+
+   beta 10 Released
+     * Make .wav sound pack for 'Dokyusei 1' and 'Dokyusei 2'
+     * Fix several problems occur when processing .wav files
+     * Fix memory corruption bug when initializing selection menu
+
+
  2004. 2. 26
  -----------
 
