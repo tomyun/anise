@@ -354,6 +354,15 @@
 				RelativePath=".\file.h">
 			</File>
 			<File
+				RelativePath=".\font_gamebox.h">
+			</File>
+			<File
+				RelativePath=".\font_jis.h">
+			</File>
+			<File
+				RelativePath=".\font_jishan.h">
+			</File>
+			<File
 				RelativePath=".\image.h">
 			</File>
 			<File
