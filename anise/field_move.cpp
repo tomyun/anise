@@ -899,7 +899,7 @@ bool Field::moveCharacterRight(word character_offset)
 }
 
 
-inline void Field::toggleFrame(word character_offset)
+void Field::toggleFrame(word character_offset)
 {
 	data->xorByte(character_offset + CHARACTER_FRAME, CHARACTER_FRAME_MASK);
 }

@@ -33,7 +33,7 @@ Video::~Video()
 }
 
 
-inline void Video::setColor(byte color_index, word color)
+void Video::setColor(byte color_index, word color)
 {
 	if (color_index < VIDEO_COLOR) {
 		sdl_palette[color_index] = convertColor(color);
@@ -48,7 +48,7 @@ inline void Video::setColor(byte color_index, word color)
 }
 
 
-inline Uint32 Video::getColor(byte color_index)
+Uint32 Video::getColor(byte color_index)
 {
 	if (color_index < VIDEO_COLOR) {
 		return sdl_palette[color_index];
@@ -74,7 +74,7 @@ Uint32 Video::convertColor(word color)
 }
 
 
-inline void Video::splitColor(word color, Uint8 *color_red, Uint8 *color_green, Uint8 *color_blue)
+void Video::splitColor(word color, Uint8 *color_red, Uint8 *color_green, Uint8 *color_blue)
 {
 	*color_red = (Uint8) (((color >> 4) & COLOR_MASK) * 0x11);
 	*color_green = (Uint8) (((color >> 8) & COLOR_MASK) * 0x11);
@@ -82,7 +82,7 @@ inline void Video::splitColor(word color, Uint8 *color_red, Uint8 *color_green, 
 }
 
 
-inline void Video::setIntermediateColor(byte color_index, word color)
+void Video::setIntermediateColor(byte color_index, word color)
 {
 	if (color_index < VIDEO_COLOR) {
 		intermediate_palette[color_index] = color;
@@ -128,7 +128,7 @@ void Video::setPalette()
 }
 
 
-inline byte* Video::getSurface(byte surface_type)
+byte* Video::getSurface(byte surface_type)
 {
 	byte *surface;
 
@@ -160,13 +160,13 @@ byte* Video::getDrawSurface()
 }
 
 
-inline bool Video::isScreen(byte *surface)
+bool Video::isScreen(byte *surface)
 {
 	return (surface == screen);
 }
 
 
-inline bool Video::isScreen(byte surface_type)
+bool Video::isScreen(byte surface_type)
 {
 	return (surface_type == SURFACE_SCREEN);
 }
@@ -192,7 +192,7 @@ void Video::updateScreen(word coord_x, word coord_y, word width, word height)
 }
 
 
-inline void Video::updateScreen()
+void Video::updateScreen()
 {
 	updateScreen(0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
 }
@@ -558,7 +558,7 @@ void Video::putPoint(byte surface_type, word coord_x, word coord_y, byte color_i
 }
 
 
-inline void Video::putPoint(word coord_x, word coord_y, byte color_index)
+void Video::putPoint(word coord_x, word coord_y, byte color_index)
 {
 	putPoint(SURFACE_SCREEN, coord_x, coord_y, color_index);
 }
@@ -576,7 +576,7 @@ byte Video::getPoint(byte surface_type, word coord_x, word coord_y)
 }
 
 
-inline byte Video::getPoint(word coord_x, word coord_y)
+byte Video::getPoint(word coord_x, word coord_y)
 {
 	return getPoint(SURFACE_SCREEN, coord_x, coord_y);
 }
@@ -594,7 +594,7 @@ void Video::lockScreen(SDL_Surface *surface)
 }
 
 
-inline void Video::lockScreen()
+void Video::lockScreen()
 {
 	lockScreen(sdl_screen);
 }
@@ -608,7 +608,7 @@ void Video::unlockScreen(SDL_Surface *surface)
 }
 
 
-inline void Video::unlockScreen()
+void Video::unlockScreen()
 {
 	unlockScreen(sdl_screen);
 }

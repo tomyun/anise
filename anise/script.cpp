@@ -36,19 +36,19 @@ Script::~Script()
 }
 
 
-inline byte Script::fetch()
+byte Script::fetch()
 {
 	return memory->b_Script->queryByte();
 }
 
 
-inline byte Script::fetchAdvance()
+byte Script::fetchAdvance()
 {
 	return memory->b_Script->readByte();
 }
 
 
-inline void Script::advance()
+void Script::advance()
 {
 	memory->b_Script->advance();
 }
@@ -82,13 +82,13 @@ word Script::skipScriptBlock()
 }
 
 
-inline word Script::getOffset()
+word Script::getOffset()
 {
 	return memory->b_Script->getCurrentIndex();
 }
 
 
-inline void Script::setOffset(word offset)
+void Script::setOffset(word offset)
 {
 	memory->b_Script->set(offset);
 }
@@ -479,7 +479,7 @@ SCRIPTCALL Script::parse()
 }
 
 
-inline SCRIPTCALL Script::parseNested()
+SCRIPTCALL Script::parseNested()
 {
 	advance();
 	return parse();

@@ -500,7 +500,7 @@ word MemoryBlock::shiftLeftWord(word index, int count)
 
 
 /* miscellaneous methods */
-inline void MemoryBlock::clear()
+void MemoryBlock::clear()
 {
 	for (word i = 0; i < size; i++) {
 		raw[i] = 0;

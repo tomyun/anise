@@ -331,13 +331,13 @@ void Field::moveCharacterOnPath(word character_offset)
 }
 
 
-inline word Field::calculatePathOffset(word coord_xw, word coord_yw)
+word Field::calculatePathOffset(word coord_xw, word coord_yw)
 {
 	return ((coord_yw * map_widthw) + coord_xw) + path_offset;
 }
 
 
-inline byte Field::getPathMark(word coord_xw, word coord_yw)
+byte Field::getPathMark(word coord_xw, word coord_yw)
 {
 	return (data->queryByte(calculatePathOffset(coord_xw, coord_yw)));
 }

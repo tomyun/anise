@@ -578,7 +578,7 @@ void Field::clearPathFoundStatus()
 }
 
 
-inline word Field::calculateMapOffset(word coord_xw, word coord_yw)
+word Field::calculateMapOffset(word coord_xw, word coord_yw)
 {
 	return (((coord_yw * map_widthw) + coord_xw) * 2) + map_offset + 4;
 }

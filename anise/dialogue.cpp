@@ -282,7 +282,7 @@ void Dialogue::breakNewLine()
 }
 
 
-inline void Dialogue::setPosition(word coord_xb, word coord_y)
+void Dialogue::setPosition(word coord_xb, word coord_y)
 {
 	if (coord_xb != NONE) {
 		memory->b_SystemVariable->writeWord(iw_Dialogue_CoordXb, coord_xb);

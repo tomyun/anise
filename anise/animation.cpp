@@ -16,61 +16,61 @@ Animation::~Animation()
 }
 
 
-inline word Animation::getSlotOffset(word slot_index)
+word Animation::getSlotOffset(word slot_index)
 {
 	return (memory->animation_slot_entry + (slot_index * SLOT_SIZE));
 }
 
 
-inline byte Animation::getSlotStatus(word slot_offset)
+byte Animation::getSlotStatus(word slot_offset)
 {
 	return b_Slot->queryByte(slot_offset + ib_Status);
 }
 
 
-inline word Animation::getSlotEntryOffset(word slot_offset)
+word Animation::getSlotEntryOffset(word slot_offset)
 {
 	return b_Slot->queryWord(slot_offset + iwpo_Entry);
 }
 
 
-inline word Animation::getSlotCurrentOffset(word slot_offset)
+word Animation::getSlotCurrentOffset(word slot_offset)
 {
 	return b_Slot->queryWord(slot_offset + iwpo_Current);
 }
 
 
-inline byte Animation::getSlotDelayFrame(word slot_offset)
+byte Animation::getSlotDelayFrame(word slot_offset)
 {
 	return b_Slot->queryByte(slot_offset + ib_Delay);
 }
 
 
-inline void Animation::setSlotStatus(word slot_offset, byte status)
+void Animation::setSlotStatus(word slot_offset, byte status)
 {
 	b_Slot->writeByte(slot_offset + ib_Status, status);
 }
 
 
-inline void Animation::setSlotEntryOffset(word slot_offset, word entry_offset)
+void Animation::setSlotEntryOffset(word slot_offset, word entry_offset)
 {
 	b_Slot->writeWord(slot_offset + iwpo_Entry, entry_offset);
 }
 
 
-inline void Animation::setSlotCurrentOffset(word slot_offset, word current_offset)
+void Animation::setSlotCurrentOffset(word slot_offset, word current_offset)
 {
 	b_Slot->writeWord(slot_offset + iwpo_Current, current_offset);
 }
 
 
-inline void Animation::setSlotDelayFrame(word slot_offset, byte delay_frame)
+void Animation::setSlotDelayFrame(word slot_offset, byte delay_frame)
 {
 	b_Slot->writeByte(slot_offset + ib_Delay, delay_frame);
 }
 
 
-inline void Animation::decreaseSlotDelayFrame(word slot_offset)
+void Animation::decreaseSlotDelayFrame(word slot_offset)
 {
 	b_Slot->writeByte(slot_offset + ib_Delay, (getSlotDelayFrame(slot_offset) - 1));
 }
