@@ -53,7 +53,7 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,2,8,216
+ FILEVERSION 0,2,9,226
  PRODUCTVERSION 0,2,0,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
@@ -69,10 +69,10 @@ BEGIN
     BEGIN
         BLOCK "041204b0"
         BEGIN
-            VALUE "Comments", "Beta 8"
+            VALUE "Comments", "Beta 9"
             VALUE "CompanyName", "Yoon, Kyung Dam (tomyun)"
             VALUE "FileDescription", "A Newly Implemented Scripting Engine for AI5V"
-            VALUE "FileVersion", "0, 2, 8, 216"
+            VALUE "FileVersion", "0, 2, 9, 226"
             VALUE "InternalName", "anise"
             VALUE "LegalCopyright", "(C) 2002-2004 Yoon, Kyung Dam (tomyun)"
             VALUE "LegalTrademarks", "http://anise.kldp.net"
