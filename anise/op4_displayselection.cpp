@@ -40,7 +40,9 @@ SCRIPTCALL Script::op4_displaySelection()
 	while (true) {
 		//TODO: debugmode
 		animation->show();
-		input->refresh();
+		if (input->refresh() == false) {
+			break;
+		}
 
 		if (memory->b_SystemVariable->queryWord(iwf_Selection_InUse) == INUSE_FALSE) {
 			setOffset(script_offset);

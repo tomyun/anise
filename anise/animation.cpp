@@ -368,7 +368,9 @@ bool Animation::setSlot(word function, word slot_index, word parameter_2, word p
 
 					//TODO: debugmode
 					show();
-					input->refresh();
+					if (input->refresh() == false) {
+						break;
+					}
 
 					timer->resetFrameTimer();
 				} while (getSlotStatus(slot_offset) != STATUS_DEACTIVATED);

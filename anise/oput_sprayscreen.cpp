@@ -48,13 +48,17 @@ SCRIPTCALL Script::oput_sprayScreen()
 		current_mask = mask | (byte) (masks[mask_index]);
 		masks[mask_index] = (word) current_mask;
 
-		input->refresh();
+		if (input->refresh() == false) {
+			break;
+		}
 
 		word spray_timer = 0;
 		while (spray_timer < 2) {
 			//TODO: debugmode
 			animation->show();
-			input->refresh();
+			if (input->refresh() == false) {
+				break;
+			}
 
 			spray_timer = timer->checkSprayTimer();
 		}
