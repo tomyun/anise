@@ -137,6 +137,10 @@ bool Input::refreshKeyboard()
 				case SDLK_HOME:
 					is_capture = true;
 					break;
+
+				case SDLK_DELETE:
+					is_quit = true;
+					break;
 			}
 		}
 	}
