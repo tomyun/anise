@@ -69,7 +69,7 @@ BEGIN
     BEGIN
         BLOCK "041204b0"
         BEGIN
-            VALUE "Comments", "Beta 5"
+            VALUE "Comments", "Beta 6"
             VALUE "CompanyName", "Yoon, Kyung Dam (tomyun)"
             VALUE "FileDescription", "A Newly Implemented Scripting Engine for ai5v"
             VALUE "FileVersion", "0, 2, 6, 128"
