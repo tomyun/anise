@@ -55,7 +55,7 @@ Video::Video(Memory *memory, Timer *timer, Option *option)
 	overlap_inuse = false;
 	overlap_parameter = 0;
 	overlap_level = 0;
-	overlap_current_level = 0;
+	overlap_left_level = 0;
 	overlap_delay = 0;
 }
 
@@ -316,15 +316,15 @@ void Video::overlapScreen()
 
 		int overlap_interval = (int) (SDL_ALPHA_OPAQUE / overlap_level);
 		int overlap_initial = SDL_ALPHA_OPAQUE - (overlap_interval * overlap_level);
-		SDL_SetAlpha(overlap_new_screen, SDL_SRCALPHA, overlap_initial + (overlap_interval * overlap_current_level));
+		SDL_SetAlpha(overlap_new_screen, SDL_SRCALPHA, overlap_initial + (overlap_interval * (overlap_level - overlap_left_level)));
 
 		SDL_BlitSurface(overlap_old_screen, NULL, sdl_screen, NULL);
 		SDL_BlitSurface(overlap_new_screen, NULL, sdl_screen, NULL);
 
 		SDL_UpdateRect(sdl_screen, 0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
 
-		overlap_current_level++;
-		if (overlap_current_level == overlap_level) {
+		overlap_left_level--;
+		if (overlap_left_level == 0) {
 			overlap_inuse = false;
 
 			SDL_FreeSurface(overlap_old_screen);

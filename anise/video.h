@@ -216,7 +216,7 @@ public:
 	bool overlap_inuse;
 	word overlap_parameter;
 	word overlap_level;
-	word overlap_current_level;
+	word overlap_left_level;
 	word overlap_delay;
 
 private:
