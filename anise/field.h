@@ -4,6 +4,7 @@
 #include "memory.h"
 #include "video.h"
 #include "input.h"
+#include "config.h"
 
 #define VIEW_SPRITES					1000
 #define VIEW_LAYERS						4
@@ -152,6 +153,7 @@ private:
 	Memory *memory;
 	Video *video;
 	Input *input;
+	Config *config;
 
 	MemoryBlock *data;
 	MemoryBlock *map;
@@ -222,7 +224,7 @@ private:
 	void saveCharacterLog(word character_offset, byte character_frame, word character_coord_xw, word character_coord_yw);
 
 public:
-	Field(Memory *memory, Video *video, Input *input);
+	Field(Memory *memory, Video *video, Input *input, Config *config);
 	~Field();
 
 	void initialize();
