@@ -8,7 +8,7 @@ Script::Script(Memory *memory, Video *video, Timer *timer, Input *input, Config 
 	this->input = input;
 	this->config = config;
 	
-	file = new File(memory);
+	file = new File(memory, config);
 	image = new Image(memory, video, file);
 	animation = new Animation(memory, video, timer, input);
 	dialogue = new Dialogue(memory, video, timer, input, animation, config);

@@ -2,8 +2,11 @@
 #define FILE_H
 
 #include <stdio.h>
-#include <stdlib.h>
+#include <string>
 #include "memory.h"
+#include "config.h"
+
+using std::string;
 
 #define FILE_READ			"rb"
 #define FILE_WRITE			"wb"
@@ -12,15 +15,16 @@
 class File {
 private:
 	Memory *memory;
+	Config *config;
 
 	FILE *handle;
-	char name[FILE_NAME_LENGTH];
+	string name;
 	word size;
 	
 	bool is_huge;
 
 public:
-	File(Memory *memory);
+	File(Memory *memory, Config *config);
 	~File();
 
 	void open(const char *filename, const char *mode);

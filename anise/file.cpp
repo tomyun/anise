@@ -1,8 +1,9 @@
 #include "file.h"
 
-File::File(Memory *memory)
+File::File(Memory *memory, Config *config)
 {
 	this->memory = memory;
+	this->config = config;
 
 	handle = NULL;
 	is_huge = false;
@@ -27,11 +28,19 @@ void File::open(const char *filename, const char *mode)
 		close();
 	}
 
-	for (int i = 0; i < FILE_NAME_LENGTH; i++) {
-		name[i] = tolower(filename[i]);
+	// concatenate path name with file name
+	name = config->path_name;
+
+	//HACK: need some more implementation
+	if (name.at(name.length() - 1) != '\\') {
+		name += '\\';
 	}
 
-	handle = fopen(name, mode);
+	for (int i = 0; i < FILE_NAME_LENGTH; i++) {
+		name += tolower(filename[i]);
+	}
+
+	handle = fopen(name.data(), mode);
 	if (handle == NULL) {
 		//TODO: process error
 		PRINT("[File::open()] fopen() failed\n");
