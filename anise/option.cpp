@@ -19,6 +19,8 @@ Option::Option()
 		"  nanpa1\tDokyusei 1\n"
 		"  aisimai\tAisimai\n"
 		"  crescent\tCrescent\n"
+		"  kawa\t\tKawarasagi (experimental)\n"
+		"  nono\t\tNonomura (experimental)\n"
 		"\n"
 		"Example:\n"
 		"  anise -pC:\\NANPA2 -lK nanpa2\n"
@@ -194,6 +196,7 @@ bool Option::initialize(int argc, char *argv[])
 			}
 			else if (strcmp(option, "kawa") == 0) {
 				game_type = GAME_KAWA;
+				font_type = FONT_JIS;
 
 				packed_file_name = "silk";
 				packed_file_extension = ".dat";
@@ -209,6 +212,7 @@ bool Option::initialize(int argc, char *argv[])
 			}
 			else if (strcmp(option, "nono") == 0) {
 				game_type = GAME_NONO;
+				font_type = FONT_JIS;
 
 				packed_file_name = "silk";
 				packed_file_extension = ".dat";
