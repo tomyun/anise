@@ -5947,11 +5947,13 @@ int Dialogue::getGameboxFontOffset(byte first_code, byte second_code)
 	word code = 0;
 	//HACK: fetch proper josa using previous character
 	if ((first_code == 0x91) && (second_code >= 0x82) && (second_code <= 0x86)) {
-		byte josa_array_shift = previous_code & 0x07;
-		byte josa_array_index = previous_code >> 3;
-		byte josa_index = (josa_array[josa_array_index] >> josa_array_shift) & 0x01;
+		int josa_type = (int) (second_code - 0x82);
 
-		code = josa_table[second_code - 0x82][josa_index];
+		int josa_array_shift = (int) (previous_code & 0x07);
+		int josa_array_index = (int) (previous_code >> 3);
+		int josa_index = (int) ((josa_array[josa_array_index] >> josa_array_shift) & 0x01);
+
+		code = josa_table[josa_type][josa_index];
 	}
 	else {
 		 code = (first_code << 8) + second_code;
