@@ -43,6 +43,10 @@ private:
 	void initializeJisHanFont();
 	void initializeGameboxFont();
 
+	int getJisFontOffset(byte first_code, byte second_code);
+	int getJisHanFontOffset(byte first_code, byte second_code);
+	int getGameboxFontOffset(byte first_code, byte second_code);
+
 	void updatePosition();
 	void breakNewLine();
 

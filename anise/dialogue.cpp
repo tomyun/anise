@@ -102,141 +102,18 @@ void Dialogue::putFullWidthCharacter(byte first_code, byte second_code)
 {
 	word coord_xb = memory->b_SystemVariable->queryWord(iw_Dialogue_CoordXb);
 	word coord_y = memory->b_SystemVariable->queryWord(iw_Dialogue_CoordY);
+
 	int offset = 0;
 	if (option->font_type == FONT_JIS) {
-		// calculate font code
-		if ((first_code >= 0x81) && (first_code <= 0x9F)) {
-			first_code = first_code - 0x81;
-		}
-		else if ((first_code >= 0xE0) && (first_code <= 0xFF)) {
-			first_code = first_code - 0x81 - 0x40;
-		}
-		else {
-			//TODO: process error
-			PRINT_ERROR("[Dialogue::putFullWidthCharacter()] invalid first_code: %2x\n", first_code);
-		}
-
-		if ((second_code >= 0x40) && (second_code <= 0x7F)) {
-			second_code = second_code - 0x40;
-		}
-		else if ((second_code >= 0x80) && (second_code <= 0xFC)) {
-			second_code = second_code - 0x40 - 1;
-		}
-		else {
-			//TODO: process error
-			PRINT_ERROR("[Dialogue::putFullWidthCharacter()] invalid second_code: %2x\n", second_code);
-		}
-
-		offset = ((first_code * 0xBC) + second_code + 0x70) * (FONT_FULL_WIDTH / FONT_BPB) * FONT_FULL_HEIGHT;
+		offset = getJisFontOffset(first_code, second_code);
 	}
 	else if (option->font_type == FONT_JISHAN) {
-		//HACK: adjust space size to improve readablity
-		if (first_code == 0x81 && second_code == 0x40) {
-			if (coord_y != 295) {
-				setPosition(coord_xb - 1, NONE);
-			}
-		}
-
-		// calculate font code
-		word code = (first_code << 8) + second_code;
-		code = code - 0x8398;
-
-		//TODO: clean it up
-		if (code <= 4) {
-			int josa_type = (int) code;
-			if ((previous_code != (0x82F1 - 0x8140)) && (previous_code != (0x8393 - 0x8140))) {
-				int table_index = (int) (previous_code & MASK_LOWER_WORD);
-				previous_code = previous_code - (0x8A40 - 0x8140);
-				if (previous_code < (0x9691 - 0x8A40 + 1)) {
-					byte table_offset_index = (previous_code & MASK_UPPER_WORD) >> 8;
-					int table_offset = (table_index << 3) + (table_offset_index * 24);
-
-				}
-
-				// bx1
-			}
-
-			// bx0
-		}
-
-		// g16
-		code = code + 0x8398 - 0x8140;
-		previous_code = code;
-
-		first_code = (byte) ((code & MASK_UPPER_WORD) >> 8);
-		second_code = (byte) (code & MASK_LOWER_WORD);
-
-		// joi10
-		if (first_code >= 7) {
-			first_code = first_code - 3;
-		}
-
-		// joi10b
-		if (second_code < 0xBD) {
-			code = (first_code * 0xBD) + second_code;
-			if (code >= (4841 - 128)) {
-				code = 0x00;
-			}
-		}
-		else {
-			code = 0x00;
-		}
-
-		// joi10a
-		offset = (code + 0x80) * (FONT_FULL_WIDTH / FONT_BPB) * FONT_FULL_HEIGHT;
+		offset = getJisHanFontOffset(first_code, second_code);
 	}
 	else if (option->font_type == FONT_GAMEBOX) {
-		//HACK: adjust space size to improve readablity
-		if (first_code == 0x91 && second_code == 0x40) {
-			setPosition(coord_xb - 1, NONE);
-		}
-		else if (first_code == 0x91 && second_code == 0x41) {
-			if (coord_y != 295) {
-				setPosition(coord_xb - 1, NONE);
-			}
-		}
-
-		// calculate font code
-		if ((first_code == 0x91) && (second_code >= 0x82) && (second_code <= 0x86)) {
-			PRINT("[Dialogue::putFullWidthCharacter()] for nanpa2teen\n");
-		}
-
-		word code = (first_code << 8) + second_code;
-		code = code - 0x8140;
-		first_code = (byte) ((code & MASK_UPPER_WORD) >> 8);
-		second_code = (byte) (code & MASK_LOWER_WORD);
-
-		code = first_code * 0xBB;
-		if (code >= 0x0DE1) {
-			code = code - 0x01CD;
-		}
-		if (code >= 0x0BB0) {
-			code = code - 0x012C;
-		}
-		if (code >= 0x02EC) {
-			code = code - 0x0118;
-		}
-
-		if (second_code >= 0x3F) {
-			second_code = second_code - 1;
-		}
-
-		code = code + second_code;
-
-		if (second_code >= 0x1C) {
-			code = code + 0x7F;
-		}
-		else {
-			code = code + 0x80;
-		}
-
-		if (code <= 0x09EB) {
-			previous_code = code;
-		}
-
-		offset = code * (FONT_FULL_WIDTH / FONT_BPB) * FONT_FULL_HEIGHT;
+		offset = getGameboxFontOffset(first_code, second_code);
 	}
-	
+
 	if (offset < size) {
 		video->drawFont(coord_xb << 3, coord_y, font, offset, FONT_FULL_WIDTH, FONT_FULL_HEIGHT);
 	}
