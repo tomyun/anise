@@ -8,7 +8,6 @@ Sound::Sound(Config *config)
 	length = 0;
 	current_length = 0;
 
-	is_loaded = false;
 	is_playing = false;
 
 	spec.channels = 1;
@@ -81,11 +80,6 @@ void Sound::load()
 		//TODO: process error
 		//ERROR("[Sound::load()] unable to load wave file(%s): %s\n", config->sound_file_name, SDL_GetError());
 		//exit(1);
-
-		is_loaded = false;
-	}
-	else {
-		is_loaded = true;
 	}
 
 	current_length = 0;
@@ -94,7 +88,7 @@ void Sound::load()
 
 void Sound::play()
 {
-	if (is_loaded) {
+	if (buffer) {
 		is_playing = true;
 
 		SDL_PauseAudio(0);
@@ -104,7 +98,7 @@ void Sound::play()
 
 void Sound::stop()
 {
-	if (is_loaded) {
+	if (buffer && is_playing) {
 		SDL_PauseAudio(1);
 
 		is_playing = false;
