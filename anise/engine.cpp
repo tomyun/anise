@@ -33,12 +33,17 @@ bool Engine::on()
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 	HWND hWnd = info.window;
 
-	int icon_width = GetSystemMetrics(SM_CXSMICON);
-	int icon_height = GetSystemMetrics(SM_CYSMICON);
+	int small_icon_width = GetSystemMetrics(SM_CXSMICON);
+	int small_icon_height = GetSystemMetrics(SM_CYSMICON);
 
-	HICON icon = (HICON) LoadImage(hInstance, MAKEINTRESOURCE(IDI_ICON_ANISE), IMAGE_ICON, icon_width, icon_height, LR_DEFAULTCOLOR);
+	int large_icon_width = GetSystemMetrics(SM_CXICON);
+	int large_icon_height = GetSystemMetrics(SM_CYICON);
 
-	SendMessage(hWnd, WM_SETICON, (WPARAM) ICON_SMALL, (LPARAM) icon);
+	HICON small_icon = (HICON) LoadImage(hInstance, MAKEINTRESOURCE(IDI_ICON_ANISE), IMAGE_ICON, small_icon_width, small_icon_height, LR_DEFAULTCOLOR);
+	HICON large_icon = (HICON) LoadImage(hInstance, MAKEINTRESOURCE(IDI_ICON_ANISE), IMAGE_ICON, large_icon_width, large_icon_height, LR_DEFAULTCOLOR);
+
+	SendMessage(hWnd, WM_SETICON, (WPARAM) ICON_SMALL, (LPARAM) small_icon);
+	SendMessage(hWnd, WM_SETICON, (WPARAM) ICON_BIG, (LPARAM) large_icon);
 #endif
 
 	memory = new Memory(option);
