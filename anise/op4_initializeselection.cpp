@@ -1,13 +1,20 @@
 #include "script.h"
 
-#define CHECKITEM_NONE	0xFF
-
 enum InitializeSelectionFunction {
 	SELECTION_SET = 0,
 	SELECTION_COUNT = 1
 };
 
+
+enum InitializeSelectionCheckItem {
+	CHECKITEM_CONTINUE = 0,
+	CHECKITEM_INITIAL = 1,
+	CHECKITEM_NONE = 0xFF
+};
+
+
 byte checkItem(Script *script, word *item_offset);
+
 
 SCRIPTCALL Script::op4_initializeSelection()
 {
@@ -35,7 +42,7 @@ SCRIPTCALL Script::op4_initializeSelection()
 				}
 
 				word item_type = 0;
-				while (true) {
+				while (total_item_count > 0) {
 					item_type++;
 
 					word item_offset;
@@ -43,7 +50,7 @@ SCRIPTCALL Script::op4_initializeSelection()
 					if (return_value == CHECKITEM_NONE) {
 						break;
 					}
-					else if (return_value == 0) {
+					else if (return_value == CHECKITEM_CONTINUE) {
 						continue;
 					}
 					else {
@@ -53,9 +60,12 @@ SCRIPTCALL Script::op4_initializeSelection()
 
 							destination_offset += 4;
 							total_item_count--;
+
+							continue;
 						}
 						else {
 							skip_item_count--;
+							continue;
 						}
 					}
 				}
@@ -75,11 +85,12 @@ SCRIPTCALL Script::op4_initializeSelection()
 						memory->b_SystemVariable->writeWord(iw_Selection_CurrentItemCount, current_item_count);
 						break;
 					}
-					else if (return_value == 0) {
+					else if (return_value == CHECKITEM_CONTINUE) {
 						continue;
 					}
 					else {
 						current_item_count++;
+						continue;
 					}
 				}
 			}
@@ -101,9 +112,9 @@ byte checkItem(Script *script, word *item_offset)
 		return return_value;
 	}
 
-	script->advance();
-	return_value = 1;
+	return_value = CHECKITEM_INITIAL;
 
+	script->advance();
 	code = script->fetch();
 	if (code == CODE_EXPRESSION) {
 		script->advance();
@@ -114,10 +125,12 @@ byte checkItem(Script *script, word *item_offset)
 
 	while (true) {
 		code = script->fetch();
-		if (code == CODE_NULL || code == CODE_CONTINUE) {	//TODO: does it mean right?
+		if (code == CODE_NULL || code == CODE_CONTINUE) {
 			return return_value;
 		}
-
-		script->advance();
+		else {
+			script->advance();
+			continue;
+		}
 	}
 }
