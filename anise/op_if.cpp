@@ -4,7 +4,7 @@
 
 SCRIPTCALL Script::op_if()
 {
-	word condition;
+	SCRIPTCALL condition;
 	word if_condition;
 
 	while (true) {

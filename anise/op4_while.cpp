@@ -8,7 +8,7 @@ SCRIPTCALL Script::op4_while()
 
 		word while_condition = readExpression();
 		if (while_condition) {
-			word condition = parseNested();
+			SCRIPTCALL condition = parseNested();
 
 			setOffset(while_offset);
 
