@@ -5,7 +5,7 @@ Video::Video(Memory *memory, Option *option)
 	this->memory = memory;
 	this->option = option;
 
-	sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, SDL_SWSURFACE);
 	if (sdl_screen == NULL) {
 		PRINT("[Video::Video()] unable to set %dx%dx%d video mode: %s\n", VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, SDL_GetError());
 	}
@@ -34,7 +34,7 @@ inline void Video::setColor(byte color_index, word color)
 	}
 	else {
 		//TODO: process error
-		PRINT("[Video::setColor()] out of bound\n");
+		PRINT_ERROR("[Video::setColor()] out of bound\n");
 		PAUSE;
 	}
 
@@ -52,7 +52,7 @@ inline Uint32 Video::getColor(byte color_index)
 		return 0x000000;
 
 		//TODO: process error
-		PRINT("[Video::getColor()] out of bound\n");
+		PRINT_ERROR("[Video::getColor()] out of bound\n");
 		PAUSE;
 		exit(1);
 	}
@@ -83,7 +83,7 @@ inline void Video::setIntermediateColor(byte color_index, word color)
 	}
 	else {
 		//TODO: process error
-		PRINT("[Video::setIntermediateColor()] out of bound\n");
+		PRINT_ERROR("[Video::setIntermediateColor()] out of bound\n");
 		PAUSE;
 	}
 }
@@ -96,7 +96,7 @@ word Video::getIntermediateColor(byte color_index)
 	}
 	else {
 		//TODO: process error
-		PRINT("[Video::getIntermediateColor()] out of bound\n");
+		PRINT_ERROR("[Video::getIntermediateColor()] out of bound\n");
 		PAUSE;
 		exit(1);
 	}
@@ -202,6 +202,8 @@ void Video::fadeScreen()
 	SDL_Surface *new_screen = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
 
 	lockScreen();
+	lockScreen(old_screen);
+	lockScreen(new_screen);
 
 	SDL_BlitSurface(sdl_screen, NULL, old_screen, NULL);
 
@@ -223,6 +225,8 @@ void Video::fadeScreen()
 	}
 
 	unlockScreen();
+	unlockScreen(old_screen);
+	unlockScreen(new_screen);
 
 	SDL_FreeSurface(old_screen);
 	SDL_FreeSurface(new_screen);
@@ -242,6 +246,8 @@ void Video::initializeOverlapScreen()
 	overlap_new_screen = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
 
 	lockScreen();
+	lockScreen(overlap_old_screen);
+	lockScreen(overlap_new_screen);
 
 	SDL_BlitSurface(sdl_screen, NULL, overlap_old_screen, NULL);
 
@@ -258,6 +264,8 @@ void Video::initializeOverlapScreen()
 	}
 
 	unlockScreen();
+	unlockScreen(overlap_old_screen);
+	unlockScreen(overlap_new_screen);
 
 	overlap_inuse = true;
 }
@@ -270,11 +278,17 @@ void Video::overlapScreen()
 	SDL_SetAlpha(overlap_new_screen, SDL_SRCALPHA, overlap_initial + (overlap_interval * overlap_current_level));
 
 	lockScreen();
+	lockScreen(overlap_old_screen);
+	lockScreen(overlap_new_screen);
 
 	SDL_BlitSurface(overlap_old_screen, NULL, sdl_screen, NULL);
 	SDL_BlitSurface(overlap_new_screen, NULL, sdl_screen, NULL);
 
 	SDL_UpdateRect(sdl_screen, 0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
+
+	unlockScreen();
+	unlockScreen(overlap_old_screen);
+	unlockScreen(overlap_new_screen);
 
 	overlap_current_level++;
 	if (overlap_current_level == overlap_level) {
@@ -288,8 +302,6 @@ void Video::overlapScreen()
 
 		updateScreen();
 	}
-
-	unlockScreen();
 }
 
 
@@ -369,7 +381,7 @@ void Video::blit(byte mode, word source_coord_x0b, word source_coord_y0, word so
 			break;
 		case BLIT_ERROR:
 			//TODO: process error
-			PRINT("[Video::blit()] unknown blitting function\n");
+			PRINT_ERROR("[Video::blit()] unknown blitting function\n");
 			break;
 		case BLIT_DIRECT:
 		default:
@@ -534,7 +546,7 @@ void Video::putPoint(byte surface_type, word coord_x, word coord_y, byte color_i
 	}
 	else {
 		//TODO: process error
-		PRINT("[Video::putPoint()] out of bound\n");
+		PRINT_ERROR("[Video::putPoint()] out of bound\n");
 		PAUSE;
 	}
 }
@@ -564,23 +576,35 @@ inline byte Video::getPoint(word coord_x, word coord_y)
 }
 
 
-void Video::lockScreen()
+void Video::lockScreen(SDL_Surface *surface)
 {
-	if (SDL_MUSTLOCK(sdl_screen)) {
-		if (SDL_LockSurface(sdl_screen) < 0) {
+	if (SDL_MUSTLOCK(surface)) {
+		if (SDL_LockSurface(surface) < 0) {
 			//TODO: process error
-			PRINT("[Video::lockScreen()] unable to lock sdl_screen\n");
+			PRINT_ERROR("[Video::lockScreen()] unable to lock surface\n");
 			exit(1);
 		}
 	}
 }
 
 
-void Video::unlockScreen()
+inline void Video::lockScreen()
 {
-	if (SDL_MUSTLOCK(sdl_screen)) {
-		SDL_UnlockSurface(sdl_screen);
+	lockScreen(sdl_screen);
+}
+
+
+void Video::unlockScreen(SDL_Surface *surface)
+{
+	if (SDL_MUSTLOCK(surface)) {
+		SDL_UnlockSurface(surface);
 	}
+}
+
+
+inline void Video::unlockScreen()
+{
+	unlockScreen(sdl_screen);
 }
 
 
