@@ -7,9 +7,6 @@
 #include "input.h"
 #include "animation.h"
 #include "script_code.h"
-#include "font_jis.h"
-#include "font_jishan.h"
-#include "font_gamebox.h"
 
 using std::string;
 
@@ -34,12 +31,16 @@ private:
 	Option *option;
 
 	const byte *font;
-	long int size;
+	int size;
 
 	byte code_newline_first;
 	byte code_newline_second;
 
 	word previous_code;
+
+	void initializeFontJis();
+	void initializeFontJisHan();
+	void initializeFontGamebox();
 
 	void updatePosition();
 	void breakNewLine();
