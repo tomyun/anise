@@ -144,7 +144,7 @@ void Script::setOpcodes()
 		// 16
 		OPCODE(op4_dummy),
 		OPCODE(op4_manipulateFlag),
-		OPCODE(op4_dummy),
+		OPCODE(op4_changeSlot),
 		OPCODE(op4_checkClick),
 		// 20
 		OPCODE(op4_sound),
@@ -246,6 +246,7 @@ void Script::setOpcodes()
 	if (option->game_type == GAME_NANPA2) {
 		//TODO: make it work
 		//opcode_op_list[6] = OPCODE(op_null);
+		//opcode_op4_list[21] = OPCODE(op4_dummy);
 
 		opcode_oput_list = opcode_nanpa2_oput_list;
 	}

@@ -135,7 +135,7 @@ private:
 	SCRIPTCALL op4_manipulateFlag();
 	SCRIPTCALL op4_checkClick();
 	SCRIPTCALL op4_sound();
-	//SCRIPTCALL op4_null();
+	SCRIPTCALL op4_changeSlot();
 	SCRIPTCALL op4_field();
 	//SCRIPTCALL op4_setSegment();
 	SCRIPTCALL op4_dummy();
