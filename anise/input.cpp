@@ -9,6 +9,7 @@ Input::Input(Memory *memory, Timer *timer)
 	mouse_status = 0;
 
 	is_quit = false;
+	is_capture = false;
 
 	for (int i = 0; i < 2; i++) {
 		for (int y = 0; y < CURSOR_HEIGHT; y++) {
@@ -132,6 +133,10 @@ bool Input::refreshKeyboard()
 				case SDLK_LSHIFT:
 					keyboard_status |= INPUT_SHIFT;
 					break;
+
+				case SDLK_HOME:
+					is_capture = true;
+					break;
 			}
 		}
 	}
@@ -224,6 +229,18 @@ bool Input::check(word type)
 	}
 
 	return ((keyboard != 0) || (mouse != 0));
+}
+
+
+bool Input::isCapture()
+{
+	if (is_capture) {
+		is_capture = false;
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 

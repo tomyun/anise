@@ -41,6 +41,7 @@ private:
 	word mouse_status;
 
 	bool is_quit;
+	bool is_capture;
 
 	SDL_Cursor *cursor[2];
 	byte cursor_image[2][CURSOR_WIDTH * CURSOR_HEIGHT];
@@ -59,6 +60,7 @@ public:
 	bool refresh();
 	bool check(word type);
 
+	bool isCapture();
 	bool isKeyPressed();
 	bool isLeftClicked();
 	bool isRightClicked();
