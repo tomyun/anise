@@ -130,8 +130,8 @@ bool Memory::initialize()
 	b_SystemVariable->writeWord(idp_Video_Buffer3_Plane1, 0xB000);			// SysVar87
 	b_SystemVariable->writeWord(idp_Video_Buffer3_Plane2, 0xB800);			// SysVar89
 	b_SystemVariable->writeWord(idp_Video_Buffer3_Plane3, 0xE000);			// SysVar91
-	b_SystemVariable->writeWord(ib_DATFile_Slot0, 0x01);				// SysVar93l
-	b_SystemVariable->writeWord(ib_DATFile_Slot1, 0x00);				// SysVar93u
+	b_SystemVariable->writeWord(ib_PackedFile_Slot0, 0x00);				// SysVar93l
+	b_SystemVariable->writeWord(ib_PackedFile_Slot1, 0x01);				// SysVar93u
 
 	b_AnimationSlot->writeWord(ia_Slot0 + iwpo_Entry, animation_slot_entry + ia_Terminator);
 	b_AnimationSlot->writeWord(ia_Slot1 + iwpo_Entry, animation_slot_entry + ia_Terminator);
