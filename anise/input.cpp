@@ -8,6 +8,8 @@ Input::Input(Memory *memory, Timer *timer)
 	keyboard_status = 0;
 	mouse_status = 0;
 
+	is_quit = false;
+
 	cursor[CURSOR_FIRSTFRAME] = NULL;
 	cursor[CURSOR_SECONDFRAME] = NULL;
 
@@ -33,9 +35,9 @@ bool Input::refreshKeyboard()
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT) {
-			//TODO: process exit (send a exit signal to engine)
-			//return false;
-			exit(0);
+			is_quit = true;
+
+			return false;
 		}
 		else if (event.type == SDL_KEYUP) {
 			switch (event.key.keysym.sym) {
@@ -157,8 +159,13 @@ void Input::refreshMouse()
 
 bool Input::refresh()
 {
-	refreshMouse();
-	return refreshKeyboard();
+	if (!is_quit) {
+		refreshMouse();
+		return refreshKeyboard();
+	}
+	else {
+		return false;
+	}
 }
 
 

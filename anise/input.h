@@ -39,6 +39,8 @@ private:
 	word keyboard_status;
 	word mouse_status;
 
+	bool is_quit;
+
 	SDL_Cursor *cursor[2];
 	byte cursor_image[2][CURSOR_WIDTH * CURSOR_HEIGHT];
 	byte cursor_mask[2][CURSOR_WIDTH * CURSOR_HEIGHT];
@@ -55,7 +57,7 @@ public:
 	void refreshMouse();
 	bool refresh();
 	bool check(word type);
-	
+
 	bool isKeyPressed();
 	bool isLeftClicked();
 	bool isRightClicked();
