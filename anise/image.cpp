@@ -189,12 +189,18 @@ void Image::load(const char *filename)
 		destination_y = 0;
 	}
 
-	if (memory->b_SystemVariable->testByte(ibf_DisabledStatus, DISABLE_PRESERVEIMAGEPALETTE) == false) {
-		for (int i = 0; i < VIDEO_COLOR; i++) {
-			word image_color = b_Image->readWordBE(image_offset + GP4_PALETTE_OFFSET + (i * 2));
-			word gp4_color = (((image_color >> 12) & COLOR_MASK) << 8) | (((image_color >> 7) & COLOR_MASK) << 4) | ((image_color >> 2) & COLOR_MASK);
+	for (int i = 0; i < VIDEO_COLOR; i++) {
+		word image_color = b_Image->readWordBE(image_offset + GP4_PALETTE_OFFSET + (i * 2));
+		word gp4_color = (((image_color >> 12) & COLOR_MASK) << 8) | (((image_color >> 7) & COLOR_MASK) << 4) | ((image_color >> 2) & COLOR_MASK);
+
+		if (memory->b_SystemVariable->testByte(ibf_DisabledStatus, DISABLE_PRESERVEIMAGEPALETTE) == false) {
 			memory->b_SystemVariable->writeWord(iw_Video_Palette0 + (i * 2), gp4_color);
 		}
+
+		//HACK: ensure correct palette for screenshot buffers
+		SDL_Color sdl_color;
+		video->splitColor(&sdl_color, gp4_color);
+		video->updateColor(&sdl_color, i, surface_type);
 	}
 
 	if (video->isScreen(surface_type)) {
