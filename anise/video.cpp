@@ -5,7 +5,13 @@ Video::Video(Memory *memory, Option *option)
 	this->memory = memory;
 	this->option = option;
 
-	sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, SDL_SWSURFACE);
+	if (option->is_fullscreen) {
+		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, SDL_SWSURFACE | SDL_FULLSCREEN);
+	}
+	else {
+		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, SDL_SWSURFACE);
+	}
+
 	if (sdl_screen == NULL) {
 		PRINT("[Video::Video()] unable to set %dx%dx%d video mode: %s\n", VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, SDL_GetError());
 	}
@@ -198,8 +204,8 @@ void Video::fadeScreen()
 		setColor(i, intermediate_palette[i]);
 	}
 
-	SDL_Surface *old_screen = SDL_CreateRGBSurface(SDL_HWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
-	SDL_Surface *new_screen = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
+	SDL_Surface *old_screen = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
+	SDL_Surface *new_screen = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
 
 	lockScreen();
 	lockScreen(old_screen);
@@ -238,12 +244,12 @@ void Video::initializeOverlapScreen()
 	if (overlap_old_screen != NULL) {
 		SDL_FreeSurface(overlap_old_screen);
 	}
-	overlap_old_screen = SDL_CreateRGBSurface(SDL_HWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
+	overlap_old_screen = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
 
 	if (overlap_new_screen != NULL) {
 		SDL_FreeSurface(overlap_new_screen);
 	}
-	overlap_new_screen = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
+	overlap_new_screen = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
 
 	lockScreen();
 	lockScreen(overlap_old_screen);
@@ -760,7 +766,7 @@ void Video::dump()
 	SDL_SaveBMP(sdl_screen, "screen.bmp");
 
 	for (int i = 0; i < VIDEO_BUFFER; i++) {
-		SDL_Surface *sdl_buffer = SDL_CreateRGBSurface(SDL_HWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
+		SDL_Surface *sdl_buffer = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
 
 		for (word y = 0; y < VIDEO_HEIGHT; y++) {
 			for (word x = 0; x < VIDEO_WIDTH; x++) {
