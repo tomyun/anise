@@ -10,6 +10,13 @@
 #include "option.h"
 #include "SDL.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#include "resource.h"
+#include "SDL_syswm.h"
+#include "SDL_version.h"
+#endif
+
 class Engine {
 private:
 	// connected objects

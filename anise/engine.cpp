@@ -25,6 +25,22 @@ bool Engine::on()
 
 	SDL_WM_SetCaption(TITLE, NULL);
 
+#ifdef _WIN32
+	SDL_SysWMinfo info;
+	SDL_VERSION(&(info.version));
+	SDL_GetWMInfo(&info);
+
+	HINSTANCE hInstance = GetModuleHandle(NULL);
+	HWND hWnd = info.window;
+
+	int icon_width = GetSystemMetrics(SM_CXSMICON);
+	int icon_height = GetSystemMetrics(SM_CYSMICON);
+
+	HICON icon = (HICON) LoadImage(hInstance, MAKEINTRESOURCE(IDI_ICON_ANISE), IMAGE_ICON, icon_width, icon_height, LR_DEFAULTCOLOR);
+
+	SendMessage(hWnd, WM_SETICON, (WPARAM) ICON_SMALL, (LPARAM) icon);
+#endif
+
 	memory = new Memory(option);
 	video = new Video(memory, option);
 	sound = new Sound(option);
