@@ -2,6 +2,8 @@
 
 Field::Field(Memory *memory, Input *input, Video *video, Option *option)
 {
+	int i;
+
 	this->memory = memory;
 	this->input = input;
 	this->video = video;
@@ -19,11 +21,11 @@ Field::Field(Memory *memory, Input *input, Video *video, Option *option)
 	has_map_created = false;
 	has_map_scrolled = false;
 
-	for (int i = 0; i < SPRITE_LAYERS; i++) {
+	for (i = 0; i < SPRITE_LAYERS; i++) {
 		map_sprite[i] = NULL;
 	}
 #else
-	for (int i = 0; i < VIEW_SPRITES; i++) {
+	for (i = 0; i < VIEW_SPRITES; i++) {
 		for (int j = 0; j < SPRITE_LAYERS; j++) {
 			view[i][j] = 0;
 			view_buffer[i][j] = 0;
@@ -35,7 +37,7 @@ Field::Field(Memory *memory, Input *input, Video *video, Option *option)
 	movement_collision = COLLISION_NOTDETECTED;
 	movement_entrance = ENTRANCE_NOTFOUND;
 
-	for (int i = 0; i < CHARACTER_LOG; i++) {
+	for (i = 0; i < CHARACTER_LOG; i++) {
 		character_log[i].frame = 0;
 		character_log[i].coord_xw = 0;
 		character_log[i].coord_yw = 0;
@@ -48,7 +50,8 @@ Field::Field(Memory *memory, Input *input, Video *video, Option *option)
 Field::~Field()
 {
 #ifdef FIELD_EXPERIMENT
-	for (int i = 0; i < SPRITE_LAYERS; i++) {
+	int i;
+	for (i = 0; i < SPRITE_LAYERS; i++) {
 		if (map_sprite[i] != NULL) {
 			delete[] map_sprite[i];
 		}
@@ -536,7 +539,9 @@ void Field::setEntryInfo(word character_index)
 	data->writeWord(iw_View_CoordXw, view_coord_xw);
 	data->writeWord(iw_View_CoordYw, view_coord_yw);
 
-	for (int i = 0; i < 3; i++) {
+	int i;
+
+	for (i = 0; i < 3; i++) {
 		word character_offset = data->queryWord(header_offset + C5_CHARACTER) + (i * C5_CHARACTER_SIZE);
 
 		data->writeWord(character_offset + CHARACTER_COORD_XW, character_coord_xw);
@@ -544,7 +549,7 @@ void Field::setEntryInfo(word character_index)
 		data->writeByte(character_offset + CHARACTER_FRAME, character_frame);
 	}
 
-	for (int i = 0; i < CHARACTER_LOG; i++) {
+	for (i = 0; i < CHARACTER_LOG; i++) {
 		character_log[i].coord_xw = character_coord_xw;
 		character_log[i].coord_yw = character_coord_yw;
 		character_log[i].frame = character_frame;
@@ -572,8 +577,10 @@ void Field::resetEntryInfo(word character_index)
 	view_rightlimit = data->queryWord(entryinfo_offset + ENTRYINFO_VIEW_RIGHTLIMIT);
 	view_downlimit = data->queryWord(entryinfo_offset + ENTRYINFO_VIEW_DOWNLIMIT);
 
+        int i;
+
 	// write phase
-	for (int i = 1; i < 3; i++) {
+	for (i = 1; i < 3; i++) {
 		character_offset = data->queryWord(header_offset + C5_CHARACTER) + (i * C5_CHARACTER_SIZE);
 
 		data->writeWord(character_offset + CHARACTER_COORD_XW, character_coord_xw);
@@ -581,7 +588,7 @@ void Field::resetEntryInfo(word character_index)
 		data->writeByte(character_offset + CHARACTER_FRAME, character_frame);
 	}
 
-	for (int i = 0; i < CHARACTER_LOG; i++) {
+	for (i = 0; i < CHARACTER_LOG; i++) {
 		character_log[i].coord_xw = character_coord_xw;
 		character_log[i].coord_yw = character_coord_yw;
 		character_log[i].frame = character_frame;

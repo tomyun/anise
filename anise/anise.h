@@ -5,7 +5,9 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string>
-#include <assert.h>
+#ifndef _WIN32_WCE
+	#include <assert.h>
+#endif
 #include "debug.h"
 
 //HACK: isolate experimental code for faster field operation

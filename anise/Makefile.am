@@ -77,7 +77,9 @@ anise_SOURCES = \
 	field.cpp field.h \
 	field_move.cpp \
 	field_path.cpp \
-	option.cpp option.h
+	option.cpp option.h \
+	mfile.cpp mfile.h \
+	ymf262.cpp ymf262.h
 
 EXTRA_DIST = \
 	autogen.sh \

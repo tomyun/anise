@@ -40,6 +40,10 @@ private:
 	word keyboard_status;
 	word mouse_status;
 
+	word mouse_x, mouse_y;
+	bool is_left_clicked;
+	bool is_right_clicked;
+
 	bool is_quit;
 	bool is_capture;
 
@@ -47,8 +51,13 @@ private:
 	byte cursor_image[2][CURSOR_WIDTH * CURSOR_HEIGHT];
 	byte cursor_mask[2][CURSOR_WIDTH * CURSOR_HEIGHT];
 	int current_cursor_frame;
+
+#ifdef _WIN32_WCE_IBEE
+	bool IBEE_key_func;
+#endif
 	
 public:
+	void reset();
 	// constructor & destructor
 	Input(Memory *memory, Timer *timer);
 	~Input();

@@ -166,7 +166,7 @@ private:
 
 public:
 	// constructor & destructor
-	Script(Memory *memory, Timer *timer, Input *input, Sound *sound, Video *video, Option *option);
+	Script(Memory *memory, Timer *timer, Input *input, Sound *sound, Video *video, File *file, Option *option);
 	~Script();
 
 	// methods

@@ -1,4 +1,7 @@
 #include "dialogue.h"
+#if	defined(_WIN32)||defined(_WIN32_WCE)
+	#include <windows.h>
+#endif
 
 Dialogue::Dialogue(Memory *memory, Timer *timer, Input *input, Video *video, Animation *animation, Option *option)
 {
@@ -212,7 +215,11 @@ void Dialogue::delay(word duration)
 				break;
 			}
 
+#if	defined(_WIN32)||defined(_WIN32_WCE)
+			SendMessage(NULL, WM_USER, 0, 0);
+#else
 			timer->delay();
+#endif
 			tick = (word) timer->checkDelayTimer();
 		}
 	}

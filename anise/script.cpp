@@ -1,15 +1,15 @@
 #include "script.h"
 
-Script::Script(Memory *memory, Timer *timer, Input *input, Sound *sound, Video *video, Option *option)
+Script::Script(Memory *memory, Timer *timer, Input *input, Sound *sound, Video *video, File *file, Option *option)
 {
 	this->memory = memory;
 	this->timer = timer;
 	this->input = input;
 	this->sound = sound;
 	this->video = video;
+	this->file = file;
 	this->option = option;
-	
-	file = new File(memory, option);
+
 	image = new Image(memory, video, file);
 	animation = new Animation(memory, timer, input, video);
 	dialogue = new Dialogue(memory, timer, input, video, animation, option);
@@ -31,7 +31,6 @@ Script::~Script()
 	delete dialogue;
 	delete animation;
 	delete image;
-	delete file;
 }
 
 

@@ -151,7 +151,7 @@ SCRIPTCALL Script::op4_displaySelection()
 			}
 		}
 
-		timer->delay();
+		//timer->delay();
 	}
 
 	return RETURN_NORMAL;

@@ -13,6 +13,7 @@ Option::Option()
 		"  -u\t\tUse unpacked game files\n"
 		"  -f\t\tFullscreen mode\n"
 		"  -b[s]\t\tBlurring filter mode (s: scanline)\n"
+		"  -s[0,1,2,4]\tSound freq (0: Off, 1: 11025hz, *2: 22050hz, 4: 44100hz)\n"
 		"\n"
 		"Supported Games:\n"
 		"  nanpa2\tDokyusei 2 (including special version)\n"
@@ -24,7 +25,8 @@ Option::Option()
 		"\n"
 		"Example:\n"
 		"  anise -pC:\\NANPA2 -lK nanpa2\n"
-		"  anise -pC:\\NANPA1 -lj -bs nanpa1\n";
+		"  anise -pC:\\NANPA1 -lj -bs nanpa1\n"
+		"  anise -p=/home/user/nanpa -s4 nanpa1\n";
 
 	this->title = title;
 	this->usage = usage;
@@ -43,6 +45,8 @@ Option::Option()
 	procedure_entry = 0;
 	animation_slot_entry = 0;
 	animation_script_entry = 0;
+
+	sound_freq = 22050;
 }
 
 
@@ -70,10 +74,14 @@ bool Option::initialize(int argc, char *argv[])
 				switch (option[1]) {
 					case 'p':
 						{
-							path_name = option + 2;
+							if(option[2] == '='){ // added linux support(option -p=PATH)
+								path_name = option + 3;
+							} else {
+								path_name = option + 2;
+							}
 
 							//HACK: should be platform independent
-#ifdef _WIN32
+#if defined(_WIN32)||defined(_WIN32_WCE)
 							if (path_name.at(path_name.length() - 1) != '\\') {
 								path_name += '\\';
 							}
@@ -123,6 +131,29 @@ bool Option::initialize(int argc, char *argv[])
 							}
 						}
 						break;
+
+					case 's':
+						{
+							switch (option[2]) {
+								case '0':
+									sound_freq = 0;
+									break;
+
+								case '1':
+									sound_freq = 11025;
+									break;
+
+								case '2':
+									sound_freq = 22050;
+									break;
+
+								case '4':
+									sound_freq = 44100;
+									break;
+							}
+						}
+						break;
+
 				}
 			}
 			else if (strcmp(option, "nanpa2") == 0) {

@@ -7,7 +7,7 @@
 	#define PRINT			printf
 	#define PAUSE			{char ch; scanf("%c", &ch);}
 #else
-	#ifdef _MSC_VER
+	#if defined(_MSC_VER)||defined(_WIN32_WCE)
 		#define PRINT		/##/
 	#else
 		//HACK: for gcc

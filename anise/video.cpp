@@ -6,19 +6,30 @@ Video::Video(Memory *memory, Timer *timer, Option *option)
 	this->timer = timer;
 	this->option = option;
 
+#ifdef _WIN32_WCE
+#ifdef _WIN32_WCE_IBEE
+	sdl_screen = SDL_SetVideoMode(640, 480, 16, SDL_SWSURFACE | SDL_ANYFORMAT | SDL_FULLSCREEN);
+#else
+	sdl_screen = SDL_SetVideoMode(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), 16, SDL_SWSURFACE | SDL_ANYFORMAT | SDL_FULLSCREEN);
+#endif
+#else
 	if (option->is_fullscreen) {
 		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, SDL_SWSURFACE | SDL_ANYFORMAT | SDL_FULLSCREEN);
 	}
 	else {
 		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, SDL_SWSURFACE | SDL_ANYFORMAT);
 	}
+#endif
 
 	if (sdl_screen == NULL) {
 		PRINT_ERROR("[Video::Video()] unable to set %dx%dx%d video mode: %s\n", VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, SDL_GetError());
 	}
 
-	for (int i = 0; i < VIDEO_BUFFER; i++) {
+	int i;
+
+	for (i = 0; i < VIDEO_BUFFER; i++) {
 		sdl_buffer[i] = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_BUFFER_DEPTH, 0, 0, 0, 0);
+		locked[i] = false;
 	}
 
 	const SDL_VideoInfo *video_info = SDL_GetVideoInfo();
@@ -32,7 +43,7 @@ Video::Video(Memory *memory, Timer *timer, Option *option)
 	map_width = 0;
 	map_height = 0;
 
-	for (int i = 0; i < CHARACTER_TOTAL; i++) {
+	for (i = 0; i < CHARACTER_TOTAL; i++) {
 		for (int j = 0; j < 2; j++) {
 			character[i][j] = NULL;
 		}
@@ -41,7 +52,7 @@ Video::Video(Memory *memory, Timer *timer, Option *option)
 	has_character_moved = false;
 #endif
 
-	for (int i = 0; i < VIDEO_COLOR; i++) {
+	for (i = 0; i < VIDEO_COLOR; i++) {
 		screen_palette[i].r = 0;
 		screen_palette[i].g = 0;
 		screen_palette[i].b = 0;
@@ -64,7 +75,9 @@ Video::~Video()
 {
 	SDL_FreeSurface(sdl_screen);
 
-	for (int i = 0; i < VIDEO_BUFFER; i++) {
+	int i;
+
+	for (i = 0; i < VIDEO_BUFFER; i++) {
 		SDL_FreeSurface(sdl_buffer[i]);
 	}
 
@@ -73,7 +86,7 @@ Video::~Video()
 		SDL_FreeSurface(sdl_map);
 	}
 
-	for (int i = 0; i < CHARACTER_TOTAL; i++) {
+	for (i = 0; i < CHARACTER_TOTAL; i++) {
 		for (int j = 0; j < 2; j++) {
 			if (character[i][j] != NULL) {
 				delete character[i][j];
@@ -231,7 +244,8 @@ void Video::updateScreen()
 
 void Video::fadeScreen()
 {
-	for (int i = 0; i < VIDEO_COLOR; i++) {
+	int i;
+	for (i = 0; i < VIDEO_COLOR; i++) {
 		setColor(i, intermediate_palette[i]);
 	}
 
@@ -254,7 +268,7 @@ void Video::fadeScreen()
 	}
 
 	int fade_interval = (int) (SDL_ALPHA_OPAQUE / FADE_LEVEL);
-	for (int i = SDL_ALPHA_OPAQUE - (fade_interval * FADE_LEVEL); i <= SDL_ALPHA_OPAQUE; i += fade_interval) {
+	for (i = SDL_ALPHA_OPAQUE - (fade_interval * FADE_LEVEL); i <= SDL_ALPHA_OPAQUE; i += fade_interval) {
 		SDL_SetAlpha(new_screen, SDL_SRCALPHA, i);
 
 		SDL_BlitSurface(old_screen, NULL, sdl_screen, NULL);
@@ -449,11 +463,41 @@ void Video::blit(byte mode, word source_coord_x0b, word source_coord_y0, word so
 
 void Video::blitDirect(BlitStruct *order)
 {
-	for (word y = 0; y < order->h; y++) {
-		for (word x = 0; x < order->w; x++) {
-			byte color = getPoint(order->source.x + x, order->source.y + y, order->source.surface_type);
-			putPoint(order->destination.x + x, order->destination.y + y, color, order->destination.surface_type);
+	if(!locked[order->destination.surface_type]){
+		lockScreen(sdl_buffer[order->destination.surface_type]);
+		locked[order->destination.surface_type] = true;
+	}
+
+	if((sdl_buffer[order->source.surface_type]->format->BytesPerPixel == 1)&&
+		(sdl_buffer[order->destination.surface_type]->format->BytesPerPixel == 1)){
+
+		word source_pitch = sdl_buffer[order->source.surface_type]->pitch;
+		Uint8 *source = (Uint8 *) ((Uint8 *)(sdl_buffer[order->source.surface_type]->pixels) + (order->source.y * source_pitch) + order->source.x);
+
+		word destination_pitch = sdl_buffer[order->destination.surface_type]->pitch;
+		Uint8 *destination = (Uint8 *) ((Uint8 *)(sdl_buffer[order->destination.surface_type]->pixels) + (order->destination.y * destination_pitch) + order->destination.x);
+
+		for (word y = 0; y < order->h; y++) {
+			Uint8 *srcline = source;
+			Uint8 *destline = destination;
+			for (word x = 0; x < order->w; x++) {
+				*destline++ = *srcline++;
+			}
+			source += source_pitch;
+			destination += destination_pitch;
 		}
+	} else {
+		for (word y = 0; y < order->h; y++) {
+			for (word x = 0; x < order->w; x++) {
+				byte color = getPoint(order->source.x + x, order->source.y + y, order->source.surface_type);
+				putPoint(order->destination.x + x, order->destination.y + y, color, order->destination.surface_type);
+			}
+		}
+	}
+
+	if(locked[order->destination.surface_type]){
+		unlockScreen(sdl_buffer[order->destination.surface_type]);
+		locked[order->destination.surface_type] = false;
 	}
 
 	if (isScreen(order->destination.surface_type)) {
@@ -465,16 +509,60 @@ void Video::blitDirect(BlitStruct *order)
 void Video::blitSwapped(BlitStruct *order)
 {
 	if (isScreen(order->source.surface_type) || isScreen(order->destination.surface_type)) {
-		for (word y = 0; y < order->h; y++) {
-			//HACK: is a meaning of width different here?
-			//for (word x = 0; x < order->w; x++) {
-			for (word x = 0; x < order->w - 8; x++) {
-				byte source_color = getPoint(order->source.x + x, order->source.y + y, order->source.surface_type);
-				byte destination_color = getPoint(order->destination.x + x, order->destination.y + y, order->destination.surface_type);
 
-				putPoint(order->source.x + x, order->source.y + y, destination_color, order->source.surface_type);
-				putPoint(order->destination.x + x, order->destination.y + y, source_color, order->destination.surface_type);
+		if(!locked[order->source.surface_type]){
+			lockScreen(sdl_buffer[order->source.surface_type]);
+			locked[order->source.surface_type] = true;
+		}
+		if(!locked[order->destination.surface_type]){
+			lockScreen(sdl_buffer[order->destination.surface_type]);
+			locked[order->destination.surface_type] = true;
+		}
+
+		if((sdl_buffer[order->source.surface_type]->format->BytesPerPixel == 1)&&
+			(sdl_buffer[order->destination.surface_type]->format->BytesPerPixel == 1)){
+
+			word source_pitch = sdl_buffer[order->source.surface_type]->pitch;
+			Uint8 *source = (Uint8 *) ((Uint8 *)(sdl_buffer[order->source.surface_type]->pixels) + (order->source.y * source_pitch) + order->source.x);
+
+			word destination_pitch = sdl_buffer[order->destination.surface_type]->pitch;
+			Uint8 *destination = (Uint8 *) ((Uint8 *)(sdl_buffer[order->destination.surface_type]->pixels) + (order->destination.y * destination_pitch) + order->destination.x);
+
+			byte temp;
+			for (word y = 0; y < order->h; y++) {
+				Uint8 *srcline = source;
+				Uint8 *destline = destination;
+				//HACK: is a meaning of width different here?
+				//for (word x = 0; x < order->w; x++) {
+				for (word x = 0; x < order->w - 8; x++) {
+					temp = *srcline;
+					*srcline++ = *destline;
+					*destline++ = temp;
+				}
+				source += source_pitch;
+				destination += destination_pitch;
 			}
+		} else {
+			for (word y = 0; y < order->h; y++) {
+				//HACK: is a meaning of width different here?
+				//for (word x = 0; x < order->w; x++) {
+				for (word x = 0; x < order->w - 8; x++) {
+					byte source_color = getPoint(order->source.x + x, order->source.y + y, order->source.surface_type);
+					byte destination_color = getPoint(order->destination.x + x, order->destination.y + y, order->destination.surface_type);
+
+					putPoint(order->source.x + x, order->source.y + y, destination_color, order->source.surface_type);
+					putPoint(order->destination.x + x, order->destination.y + y, source_color, order->destination.surface_type);
+				}
+			}
+		}
+
+		if(locked[order->source.surface_type]){
+			unlockScreen(sdl_buffer[order->source.surface_type]);
+			locked[order->source.surface_type] = false;
+		}
+		if(locked[order->destination.surface_type]){
+			unlockScreen(sdl_buffer[order->destination.surface_type]);
+			locked[order->destination.surface_type] = false;
 		}
 
 		if (isScreen(order->source.surface_type)) {
@@ -492,14 +580,49 @@ void Video::blitSwapped(BlitStruct *order)
 
 void Video::blitMasked(BlitStruct *order)
 {
-	for (word y = 0; y < order->h; y++) {
-		for (word x = 0; x < order->w; x++) {
-			byte color = getPoint(order->source.x + x, order->source.y + y, order->source.surface_type);
+	if(!locked[order->destination.surface_type]){
+		lockScreen(sdl_buffer[order->destination.surface_type]);
+		locked[order->destination.surface_type] = true;
+	}
 
-			if (color != COLOR_KEY) {
-				putPoint(order->destination.x + x, order->destination.y + y, color, order->destination.surface_type);
+	if((sdl_buffer[order->source.surface_type]->format->BytesPerPixel == 1)&&
+		(sdl_buffer[order->destination.surface_type]->format->BytesPerPixel == 1)){
+
+		word source_pitch = sdl_buffer[order->source.surface_type]->pitch;
+		Uint8 *source = (Uint8 *) ((Uint8 *)(sdl_buffer[order->source.surface_type]->pixels) + (order->source.y * source_pitch) + order->source.x);
+
+		word destination_pitch = sdl_buffer[order->destination.surface_type]->pitch;
+		Uint8 *destination = (Uint8 *) ((Uint8 *)(sdl_buffer[order->destination.surface_type]->pixels) + (order->destination.y * destination_pitch) + order->destination.x);
+
+		byte color;
+		for (word y = 0; y < order->h; y++) {
+			Uint8 *srcline = source;
+			Uint8 *destline = destination;
+			for (word x = 0; x < order->w; x++) {
+				color = *srcline++;
+				if(color != COLOR_KEY)
+					*destline++ = color;
+				else
+					destline++;
+			}
+			source += source_pitch;
+			destination += destination_pitch;
+		}
+	} else {
+		for (word y = 0; y < order->h; y++) {
+			for (word x = 0; x < order->w; x++) {
+				byte color = getPoint(order->source.x + x, order->source.y + y, order->source.surface_type);
+
+				if (color != COLOR_KEY) {
+					putPoint(order->destination.x + x, order->destination.y + y, color, order->destination.surface_type);
+				}
 			}
 		}
+	}
+
+	if(locked[order->destination.surface_type]){
+		unlockScreen(sdl_buffer[order->destination.surface_type]);
+		locked[order->destination.surface_type] = false;
 	}
 
 	if (isScreen(order->destination.surface_type)) {
@@ -514,21 +637,64 @@ void Video::blitMerged(byte mode, word foreground_coord_x, word foreground_coord
 	SurfaceType background_type = (SurfaceType) (mode & 1);
 	SurfaceType destination_type = (SurfaceType) ((mode >> 2) & 1);
 
-	for (word y = 0; y < height; y++) {
-		for (word x = 0; x < width; x++) {
-			byte foreground_color = getPoint(foreground_coord_x + x, foreground_coord_y + y, foreground_type);
-			byte background_color = getPoint(background_coord_x + x, background_coord_y + y, background_type);
-			byte color;
+	if(!locked[destination_type]){
+		lockScreen(sdl_buffer[destination_type]);
+		locked[destination_type] = true;
+	}
 
-			if (foreground_color != COLOR_KEY) {
-				color = foreground_color;
-			}
-			else {
-				color = background_color;
-			}
+	if((sdl_buffer[foreground_type]->format->BytesPerPixel == 1)&&
+		(sdl_buffer[background_type]->format->BytesPerPixel == 1)&&
+		(sdl_buffer[destination_type]->format->BytesPerPixel == 1)){
 
-			putPoint(destination_coord_x + x, destination_coord_y + y, color, destination_type);
+		word foreground_pitch = sdl_buffer[foreground_type]->pitch;
+		Uint8 *foreground = (Uint8 *) ((Uint8 *)(sdl_buffer[foreground_type]->pixels) + (foreground_coord_y * foreground_pitch) + foreground_coord_x);
+
+		word background_pitch = sdl_buffer[background_type]->pitch;
+		Uint8 *background = (Uint8 *) ((Uint8 *)(sdl_buffer[background_type]->pixels) + (background_coord_y * background_pitch) + background_coord_x);
+
+		word destination_pitch = sdl_buffer[destination_type]->pitch;
+		Uint8 *destination = (Uint8 *) ((Uint8 *)(sdl_buffer[destination_type]->pixels) + (destination_coord_y * destination_pitch) + destination_coord_x);
+
+		byte foreground_color;
+		byte background_color;
+		for (word y = 0; y < height; y++) {
+			Uint8 *fgline = foreground;
+			Uint8 *bgline = background;
+			Uint8 *destline = destination;
+			for (word x = 0; x < width; x++) {
+				foreground_color = *fgline++;
+				background_color = *bgline++;
+				if(foreground_color != COLOR_KEY)
+					*destline++ = foreground_color;
+				else
+					*destline++ = background_color;
+			}
+			foreground += foreground_pitch;
+			background += background_pitch;
+			destination += destination_pitch;
 		}
+	} else {
+		for (word y = 0; y < height; y++) {
+			for (word x = 0; x < width; x++) {
+				byte foreground_color = getPoint(foreground_coord_x + x, foreground_coord_y + y, foreground_type);
+				byte background_color = getPoint(background_coord_x + x, background_coord_y + y, background_type);
+				byte color;
+
+				if (foreground_color != COLOR_KEY) {
+					color = foreground_color;
+				}
+				else {
+					color = background_color;
+				}
+
+				putPoint(destination_coord_x + x, destination_coord_y + y, color, destination_type);
+			}
+		}
+	}
+
+	if(locked[destination_type]){
+		unlockScreen(sdl_buffer[destination_type]);
+		locked[destination_type] = false;
 	}
 
 	if (isScreen(destination_type)) {
@@ -561,7 +727,7 @@ void Video::createMap()
 	for (int y = 0; y < map_height; y++) {
 		for (int x = 0; x < map_width; x++) {
 			Uint32 sdl_color = getFilteredColor(x, y, SURFACE_MAP);
-			drawPixel(sdl_map, x, y, sdl_color);
+			putPixel(sdl_map, x, y, sdl_color);
 		}
 	}
 	unlockScreen(sdl_map);
@@ -703,46 +869,121 @@ void Video::putSprite(word coord_x, word coord_y, word background_layer, word fo
 	word foreground3_coord_x = (word) ((foreground_layer_3rd & SPRITE_LAYER_MASK) % (VIDEO_WIDTH / SPRITE_SIZE)) * SPRITE_SIZE;
 	word foreground3_coord_y = (word) ((foreground_layer_3rd & SPRITE_LAYER_MASK) / (VIDEO_WIDTH / SPRITE_SIZE)) * SPRITE_SIZE;
 
-	for (word y = 0; y < SPRITE_SIZE; y++) {
-		for (word x = 0; x < SPRITE_SIZE; x++) {
-			byte background_color = getPoint(background_coord_x + x, background_coord_y + y, SURFACE_BUFFER2);
+	if(!locked[surface_type]){
+		lockScreen(sdl_buffer[surface_type]);
+		locked[surface_type] = true;
+	}
 
-			byte foreground1_color;
-			byte foreground2_color;
-			byte foreground3_color;
-			if (option->game_type == GAME_NANPA2) {
-				foreground1_color = getPoint(foreground1_coord_x + x, foreground1_coord_y + y, SURFACE_BUFFER3);
-				foreground2_color = getPoint(foreground2_coord_x + x, foreground2_coord_y + y, SURFACE_BUFFER3);
-				foreground3_color = getPoint(foreground3_coord_x + x, foreground3_coord_y + y, SURFACE_BUFFER3);
-			}
-			else {
-				foreground1_color = getPoint(foreground1_coord_x + x, foreground1_coord_y + y, SURFACE_BUFFER2);
-				foreground2_color = getPoint(foreground2_coord_x + x, foreground2_coord_y + y, SURFACE_BUFFER2);
-				foreground3_color = getPoint(foreground3_coord_x + x, foreground3_coord_y + y, SURFACE_BUFFER2);
-			}
+	if((sdl_buffer[surface_type]->format->BytesPerPixel == 1)&&
+		(sdl_buffer[SURFACE_BUFFER2]->format->BytesPerPixel == 1)&&
+		((option->game_type != GAME_NANPA2)||(sdl_buffer[SURFACE_BUFFER3]->format->BytesPerPixel == 1))){
+		int getbgpitch = sdl_buffer[SURFACE_BUFFER2]->pitch;
+		Uint8 *getbg = (Uint8 *) ((Uint8 *)(sdl_buffer[SURFACE_BUFFER2]->pixels) + (background_coord_y * getbgpitch) + background_coord_x);
 
-			byte color;
-			if (background_color >= COLOR_KEY) {
-				color = background_color & SPRITE_COLOR_MASK;
-			}
-			else if ((foreground_layer_3rd != 0) && (foreground3_color != COLOR_KEY)) {
-				color = foreground3_color & SPRITE_COLOR_MASK;
-			}
-			else if ((foreground_layer_2nd != 0) && (foreground2_color != COLOR_KEY)) {
-				color = foreground2_color & SPRITE_COLOR_MASK;
-			}
-			else if ((foreground_layer_1st != 0) && (foreground1_color != COLOR_KEY)) {
-				color = foreground1_color & SPRITE_COLOR_MASK;
-			}
-			else if (background_color != COLOR_KEY) {
-				color = background_color & SPRITE_COLOR_MASK;
-			}
-			else {
-				continue;
-			}
-
-			putPoint(coord_x + x, coord_y + y, color, surface_type);
+		int getfgpitch;
+		Uint8 *getfg1, *getfg2, *getfg3;
+		if(option->game_type == GAME_NANPA2){
+			getfgpitch = sdl_buffer[SURFACE_BUFFER3]->pitch;
+			getfg1 = (Uint8 *) ((Uint8 *)(sdl_buffer[SURFACE_BUFFER3]->pixels) + (foreground1_coord_y * getfgpitch) + foreground1_coord_x);
+			getfg2 = (Uint8 *) ((Uint8 *)(sdl_buffer[SURFACE_BUFFER3]->pixels) + (foreground2_coord_y * getfgpitch) + foreground2_coord_x);
+			getfg3 = (Uint8 *) ((Uint8 *)(sdl_buffer[SURFACE_BUFFER3]->pixels) + (foreground3_coord_y * getfgpitch) + foreground3_coord_x);
+		} else {
+			getfgpitch = sdl_buffer[SURFACE_BUFFER2]->pitch;
+			getfg1 = (Uint8 *) ((Uint8 *)(sdl_buffer[SURFACE_BUFFER2]->pixels) + (foreground1_coord_y * getfgpitch) + foreground1_coord_x);
+			getfg2 = (Uint8 *) ((Uint8 *)(sdl_buffer[SURFACE_BUFFER2]->pixels) + (foreground2_coord_y * getfgpitch) + foreground2_coord_x);
+			getfg3 = (Uint8 *) ((Uint8 *)(sdl_buffer[SURFACE_BUFFER2]->pixels) + (foreground3_coord_y * getfgpitch) + foreground3_coord_x);
 		}
+
+		int putpitch = sdl_buffer[surface_type]->pitch;
+		Uint8 *put = (Uint8 *) ((Uint8 *)(sdl_buffer[surface_type]->pixels) + (coord_y * putpitch) + coord_x);
+
+		for (word y = 0; y < SPRITE_SIZE; y++) {
+			Uint8 *getbgline = getbg;
+			Uint8 *getfg1line = getfg1;
+			Uint8 *getfg2line = getfg2;
+			Uint8 *getfg3line = getfg3;
+			Uint8 *putline = put;
+			for (word x = 0; x < SPRITE_SIZE; x++) {
+				byte background_color = *getbgline++;
+				byte foreground1_color = *getfg1line++;
+				byte foreground2_color = *getfg2line++;
+				byte foreground3_color = *getfg3line++;
+				byte color;
+				if (background_color >= COLOR_KEY) {
+					color = background_color & SPRITE_COLOR_MASK;
+				}
+				else if ((foreground_layer_3rd != 0) && (foreground3_color != COLOR_KEY)) {
+					color = foreground3_color & SPRITE_COLOR_MASK;
+				}
+				else if ((foreground_layer_2nd != 0) && (foreground2_color != COLOR_KEY)) {
+					color = foreground2_color & SPRITE_COLOR_MASK;
+				}
+				else if ((foreground_layer_1st != 0) && (foreground1_color != COLOR_KEY)) {
+					color = foreground1_color & SPRITE_COLOR_MASK;
+				}
+				else if (background_color != COLOR_KEY) {
+					color = background_color & SPRITE_COLOR_MASK;
+				}
+				else {
+					putline++;
+					continue;
+				}
+
+				*putline++ = color;
+			}
+			getbg += getbgpitch;
+			getfg1 += getfgpitch;
+			getfg2 += getfgpitch;
+			getfg3 += getfgpitch;
+			put += putpitch;
+		}
+	} else {
+		for (word y = 0; y < SPRITE_SIZE; y++) {
+			for (word x = 0; x < SPRITE_SIZE; x++) {
+				byte background_color = getPoint(background_coord_x + x, background_coord_y + y, SURFACE_BUFFER2);
+
+				byte foreground1_color;
+				byte foreground2_color;
+				byte foreground3_color;
+				if (option->game_type == GAME_NANPA2) {
+					foreground1_color = getPoint(foreground1_coord_x + x, foreground1_coord_y + y, SURFACE_BUFFER3);
+					foreground2_color = getPoint(foreground2_coord_x + x, foreground2_coord_y + y, SURFACE_BUFFER3);
+					foreground3_color = getPoint(foreground3_coord_x + x, foreground3_coord_y + y, SURFACE_BUFFER3);
+				}
+				else {
+					foreground1_color = getPoint(foreground1_coord_x + x, foreground1_coord_y + y, SURFACE_BUFFER2);
+					foreground2_color = getPoint(foreground2_coord_x + x, foreground2_coord_y + y, SURFACE_BUFFER2);
+					foreground3_color = getPoint(foreground3_coord_x + x, foreground3_coord_y + y, SURFACE_BUFFER2);
+				}
+
+				byte color;
+				if (background_color >= COLOR_KEY) {
+					color = background_color & SPRITE_COLOR_MASK;
+				}
+				else if ((foreground_layer_3rd != 0) && (foreground3_color != COLOR_KEY)) {
+					color = foreground3_color & SPRITE_COLOR_MASK;
+				}
+				else if ((foreground_layer_2nd != 0) && (foreground2_color != COLOR_KEY)) {
+					color = foreground2_color & SPRITE_COLOR_MASK;
+				}
+				else if ((foreground_layer_1st != 0) && (foreground1_color != COLOR_KEY)) {
+					color = foreground1_color & SPRITE_COLOR_MASK;
+				}
+				else if (background_color != COLOR_KEY) {
+					color = background_color & SPRITE_COLOR_MASK;
+				}
+				else {
+					continue;
+				}
+
+				putPoint(coord_x + x, coord_y + y, color, surface_type);
+			}
+		}
+	}
+
+	if(locked[surface_type]){
+		unlockScreen(sdl_buffer[surface_type]);
+		locked[surface_type] = false;
 	}
 
 	//TODO: which one is better?
@@ -774,9 +1015,13 @@ void Video::putPoint(word coord_x, word coord_y, byte color_index, SurfaceType s
 #ifdef DEBUG
 	if ((coord_x < VIDEO_WIDTH) && (coord_y < VIDEO_HEIGHT)) {
 #endif
-		lockScreen(sdl_buffer[surface_type]);
-		putPixel(sdl_buffer[surface_type], coord_x, coord_y, color_index);
-		unlockScreen(sdl_buffer[surface_type]);
+		if(!locked[surface_type]){
+			lockScreen(sdl_buffer[surface_type]);
+			putPixel(sdl_buffer[surface_type], coord_x, coord_y, color_index);
+			unlockScreen(sdl_buffer[surface_type]);
+		} else {
+			putPixel(sdl_buffer[surface_type], coord_x, coord_y, color_index);
+		}
 #ifdef DEBUG
 	}
 #endif
@@ -1000,7 +1245,8 @@ void Video::drawFont(word coord_x, word coord_y, const byte *font, long int offs
 
 	SurfaceType surface_type = getDrawSurface();
 
-	for (word y = 0; y < height; y++) {
+	word y;
+	for (y = 0; y < height; y++) {
 		for (word x = 0; x < width; x++) {
 			switch (b_Font->readBit()) {
 				case FONT_BACKGROUND:
@@ -1015,7 +1261,7 @@ void Video::drawFont(word coord_x, word coord_y, const byte *font, long int offs
 
 	//HACK: make bold
 	b_Font->set(0, BIT_FLOW_LEFT);
-	for (word y = 0; y < height; y++) {
+	for (y = 0; y < height; y++) {
 		for (word x = 0; x < width; x++) {
 			switch (b_Font->readBit()) {
 				case FONT_FOREGROUND:
@@ -1051,7 +1297,8 @@ void Video::capture()
 		string count_str = count_c_str;
 
 		screen_name = count_str + screen_str + extension_str;
-		for (int i = 0; i <= VIDEO_BUFFER; i++) {
+		int i;
+		for (i = 0; i <= VIDEO_BUFFER; i++) {
 			char index_str[2];
 			sprintf(index_str, "%d", i);
 
@@ -1068,7 +1315,7 @@ void Video::capture()
 		}
 
 		handle = NULL;
-		for (int i = 0; i <= VIDEO_BUFFER; i++) {
+		for (i = 0; i <= VIDEO_BUFFER; i++) {
 			handle = fopen(buffer_name[i].c_str(), "r");
 			if (handle != NULL) {
 				fclose(handle);
@@ -1087,5 +1334,5 @@ void Video::capture()
 		SDL_SaveBMP(sdl_buffer[i], buffer_name[i].c_str());
 	}
 
-	printf("[Video::capture()] screenshots taken: %s and buffers\n", screen_name.c_str());
+	PRINT("[Video::capture()] screenshots taken: %s and buffers\n", screen_name.c_str());
 }

@@ -32,11 +32,12 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib msvcrtd.lib msvcprtd.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)/anise.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;C:\Tom\project\SDL-1.2.7\VisualC7\SDL\Release&quot;;&quot;C:\Tom\project\SDL-1.2.7\VisualC7\SDLmain\Release_NOSTDIO&quot;"
+				IgnoreAllDefaultLibraries="TRUE"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/anise.pdb"
 				SubSystem="1"
@@ -86,11 +87,12 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib msvcrt.lib msvcprt.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)/anise.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;C:\Tom\project\SDL-1.2.7\VisualC7\SDL\Release&quot;;&quot;C:\Tom\project\SDL-1.2.7\VisualC7\SDLmain\Release_NOSTDIO&quot;"
+				IgnoreAllDefaultLibraries="TRUE"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -174,6 +176,9 @@
 				RelativePath=".\memory_segment.cpp">
 			</File>
 			<File
+				RelativePath=".\mfile.cpp">
+			</File>
+			<File
 				RelativePath=".\option.cpp">
 			</File>
 			<File
@@ -199,6 +204,9 @@
 			</File>
 			<File
 				RelativePath=".\video.cpp">
+			</File>
+			<File
+				RelativePath=".\ymf262.cpp">
 			</File>
 			<Filter
 				Name="op"
@@ -390,6 +398,9 @@
 			</File>
 			<File
 				RelativePath=".\memory_segment.h">
+			</File>
+			<File
+				RelativePath=".\mfile.h">
 			</File>
 			<File
 				RelativePath=".\option.h">

@@ -1,6 +1,15 @@
 Project ANISE
 =============
 
+ 2005. 1. 10
+ -----------
+
+   Unreleased
+     * Support '.M' play with OPL3 emulation
+     * Support sound frequency option(and, sound off)
+     * Can be cross-compiled for Windows CE(640x400 or High Resolution)
+
+
  2004. 3. 7
  ----------
 

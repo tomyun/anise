@@ -14,11 +14,13 @@ SCRIPTCALL Script::oput_sprayScreen()
 	byte mask = 0x80;
 	byte current_mask = mask;
 	word masks[16];
-	for (int i = 0; i < 16; i++) {
+	int i;
+
+	for (i = 0; i < 16; i++) {
 		masks[i] = 0;
 	}
 
-	for (int i = 0; i < 128; i++) {
+	for (i = 0; i < 128; i++) {
 		timer->resetSprayTimer();
 
 		for (int sy = 0; sy < scaled_height; sy++) {
@@ -52,7 +54,8 @@ SCRIPTCALL Script::oput_sprayScreen()
 			break;
 		}
 
-		word spray_timer = timer->checkSprayTimer();
+		word spray_timer = 0;
+		//word spray_timer = timer->checkSprayTimer();
 		while (spray_timer < 2) {
 			//TODO: debugmode
 			animation->show();
@@ -60,7 +63,7 @@ SCRIPTCALL Script::oput_sprayScreen()
 				break;
 			}
 
-			timer->delay();
+			//timer->delay();
 			spray_timer = timer->checkSprayTimer();
 		}
 	}

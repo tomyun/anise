@@ -21,7 +21,11 @@
 enum VideoSpecification {
 	VIDEO_WIDTH = 640,
 	VIDEO_HEIGHT = 400,
+#ifdef _WIN32_WCE
+	VIDEO_SCREEN_DEPTH = 16,
+#else
 	VIDEO_SCREEN_DEPTH = 32,
+#endif
 	VIDEO_BUFFER_DEPTH = 8,
 	VIDEO_COLOR = 16,
 	VIDEO_BUFFER = 4
@@ -191,6 +195,7 @@ private:
 
 	SDL_Surface *sdl_screen;
 	SDL_Surface *sdl_buffer[VIDEO_BUFFER];
+	bool locked[VIDEO_BUFFER];
 
 	Uint32 color_red_mask;
 	Uint32 color_blue_mask;
