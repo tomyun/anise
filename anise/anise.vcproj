@@ -124,9 +124,6 @@
 				RelativePath=".\animation.cpp">
 			</File>
 			<File
-				RelativePath=".\config.cpp">
-			</File>
-			<File
 				RelativePath=".\dialogue.cpp">
 			</File>
 			<File
@@ -161,6 +158,9 @@
 			</File>
 			<File
 				RelativePath=".\memory_segment.cpp">
+			</File>
+			<File
+				RelativePath=".\option.cpp">
 			</File>
 			<File
 				RelativePath=".\script.cpp">
@@ -339,9 +339,6 @@
 				RelativePath=".\animation.h">
 			</File>
 			<File
-				RelativePath=".\config.h">
-			</File>
-			<File
 				RelativePath=".\debug.h">
 			</File>
 			<File
@@ -373,6 +370,9 @@
 			</File>
 			<File
 				RelativePath=".\memory_segment.h">
+			</File>
+			<File
+				RelativePath=".\option.h">
 			</File>
 			<File
 				RelativePath=".\resource.h">

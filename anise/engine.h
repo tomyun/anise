@@ -7,7 +7,7 @@
 #include "timer.h"
 #include "input.h"
 #include "script.h"
-#include "config.h"
+#include "option.h"
 #include "SDL.h"
 
 class Engine {
@@ -19,11 +19,11 @@ private:
 	Timer *timer;
 	Input *input;
 	Script *script;
-	Config *config;
+	Option *option;
 
 public:
 	// constructor & destructor
-	Engine(Config *config);
+	Engine(Option *option);
 	~Engine();
 	
 	// methods

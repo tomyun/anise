@@ -1,8 +1,8 @@
 #include "sound.h"
 
-Sound::Sound(Config *config)
+Sound::Sound(Option *option)
 {
-	this->config = config;
+	this->option = option;
 
 	buffer = NULL;
 	length = 0;
@@ -76,9 +76,9 @@ void Sound::load()
 
 	SDL_AudioSpec dummy_spec;
 
-	if (SDL_LoadWAV(config->sound_file_name.data(), &dummy_spec, &buffer, &length) == NULL) {
+	if (SDL_LoadWAV(option->sound_file_name.data(), &dummy_spec, &buffer, &length) == NULL) {
 		//TODO: process error
-		//ERROR("[Sound::load()] unable to load wave file(%s): %s\n", config->sound_file_name, SDL_GetError());
+		//ERROR("[Sound::load()] unable to load wave file(%s): %s\n", option->sound_file_name, SDL_GetError());
 		//exit(1);
 	}
 

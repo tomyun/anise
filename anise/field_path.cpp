@@ -15,7 +15,7 @@
 
 void Field::setPath(word character_offset, word target_coord_xw, word target_coord_yw, bool use_alternative)
 {
-	if (config->game_type != GAME_NANPA2) {
+	if (option->game_type != GAME_NANPA2) {
 		return;
 	}
 

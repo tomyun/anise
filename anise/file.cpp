@@ -1,9 +1,9 @@
 #include "file.h"
 
-File::File(Memory *memory, Config *config)
+File::File(Memory *memory, Option *option)
 {
 	this->memory = memory;
-	this->config = config;
+	this->option = option;
 
 	handle = NULL;
 	is_huge = false;
@@ -29,7 +29,7 @@ void File::open(const char *filename, const char *mode)
 	}
 
 	// concatenate path name with file name
-	name = config->path_name;
+	name = option->path_name;
 	for (int i = 0; i < FILE_NAME_LENGTH; i++) {
 		name += tolower(filename[i]);
 	}
@@ -67,7 +67,7 @@ word File::tell()
 	int file_size = ftell(handle);
 	if (file_size > 0xFFFF) {
 		is_huge = true;
-		config->sound_file_name = name;
+		option->sound_file_name = name;
 
 		return 0;
 	}

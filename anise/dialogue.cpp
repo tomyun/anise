@@ -1,15 +1,15 @@
 #include "dialogue.h"
 
-Dialogue::Dialogue(Memory *memory, Video *video, Timer *timer, Input *input, Animation *animation, Config *config)
+Dialogue::Dialogue(Memory *memory, Video *video, Timer *timer, Input *input, Animation *animation, Option *option)
 {
 	this->memory = memory;
 	this->video = video;
 	this->timer = timer;
 	this->input = input;
 	this->animation = animation;
-	this->config = config;
+	this->option = option;
 
-	if (config->font_type == FONT_GAMEBOX) {
+	if (option->font_type == FONT_GAMEBOX) {
 		code_newline_first = 0x94;
 		code_newline_second = 0x45;
 	}
@@ -33,13 +33,13 @@ Dialogue::~Dialogue()
 bool Dialogue::initialize()
 {
 	//HACK: should be substituted
-	string name = config->path_name;
-	name += config->font_file_name;
+	string name = option->path_name;
+	name += option->font_file_name;
 
 	FILE *handle = fopen(name.data(), "rb");
 	if (handle == NULL) {
 		//TODO: process error
-		ERROR("[Dialogue::initialize()] unable to open font file: %s\n", config->font_file_name);
+		ERROR("[Dialogue::initialize()] unable to open font file: %s\n", option->font_file_name);
 		exit(1);
 		return false;
 	}
@@ -53,7 +53,7 @@ bool Dialogue::initialize()
 	size_t read_size = fread((byte*) font, sizeof(byte), size, handle);
 	if (read_size != size) {
 		//TODO: process error
-		ERROR("[Dialogue::intialize()] unable to load font file: %s\n", config->font_file_name);
+		ERROR("[Dialogue::intialize()] unable to load font file: %s\n", option->font_file_name);
 		exit(1);
 		return false;
 	}
@@ -134,7 +134,7 @@ void Dialogue::putFullWidthCharacter(byte first_code, byte second_code)
 	word coord_xb = memory->b_SystemVariable->queryWord(iw_Dialogue_CoordXb);
 	word coord_y = memory->b_SystemVariable->queryWord(iw_Dialogue_CoordY);
 	long int offset = NULL;
-	if (config->font_type == FONT_JIS) {
+	if (option->font_type == FONT_JIS) {
 		// calculate font code
 		if ((first_code >= 0x81) && (first_code <= 0x9F)) {
 			first_code = first_code - 0x81;
@@ -160,7 +160,7 @@ void Dialogue::putFullWidthCharacter(byte first_code, byte second_code)
 
 		offset = ((first_code * 0xBC) + second_code + 0x70) * (FONT_FULL_WIDTH / FONT_BPB) * FONT_FULL_HEIGHT;
 	}
-	else if (config->font_type == FONT_JISHAN) {
+	else if (option->font_type == FONT_JISHAN) {
 		//HACK: adjust space size to improve readablity
 		if (first_code == 0x81 && second_code == 0x40) {
 			if (coord_y != 295) {
@@ -216,7 +216,7 @@ void Dialogue::putFullWidthCharacter(byte first_code, byte second_code)
 		// joi10a
 		offset = (code + 0x80) * (FONT_FULL_WIDTH / FONT_BPB) * FONT_FULL_HEIGHT;
 	}
-	else if (config->font_type == FONT_GAMEBOX) {
+	else if (option->font_type == FONT_GAMEBOX) {
 		//HACK: adjust space size to improve readablity
 		if (first_code == 0x91 && second_code == 0x40) {
 			setPosition(coord_xb - 1, NULL);

@@ -4,7 +4,7 @@
 #include "memory.h"
 #include "video.h"
 #include "input.h"
-#include "config.h"
+#include "option.h"
 
 #define VIEW_SPRITES					1000
 #define VIEW_LAYERS						4
@@ -153,7 +153,7 @@ private:
 	Memory *memory;
 	Video *video;
 	Input *input;
-	Config *config;
+	Option *option;
 
 	MemoryBlock *data;
 	MemoryBlock *map;
@@ -228,7 +228,7 @@ private:
 	bool checkPathMark(word coord_xw, word coord_yw, PathDirection direction);
 
 public:
-	Field(Memory *memory, Video *video, Input *input, Config *config);
+	Field(Memory *memory, Video *video, Input *input, Option *option);
 	~Field();
 
 	void initialize();

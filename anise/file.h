@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string>
 #include "memory.h"
-#include "config.h"
+#include "option.h"
 
 using std::string;
 
@@ -15,7 +15,7 @@ using std::string;
 class File {
 private:
 	Memory *memory;
-	Config *config;
+	Option *option;
 
 	FILE *handle;
 	string name;
@@ -24,7 +24,7 @@ private:
 	bool is_huge;
 
 public:
-	File(Memory *memory, Config *config);
+	File(Memory *memory, Option *option);
 	~File();
 
 	void open(const char *filename, const char *mode);

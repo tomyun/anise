@@ -11,7 +11,7 @@
 #include "animation.h"
 #include "dialogue.h"
 #include "field.h"
-#include "config.h"
+#include "option.h"
 #include "script_code.h"
 #include "script_parameter.h"
 #include "script_stack.h"
@@ -49,7 +49,7 @@ private:
 	Animation *animation;
 	Dialogue *dialogue;
 	Field *field;
-	Config *config;
+	Option *option;
 
 	int parse_level;
 
@@ -166,7 +166,7 @@ private:
 
 public:
 	// constructor & destructor
-	Script(Memory *memory, Video *video, Sound *sound, Timer *timer, Input *input, Config *config);
+	Script(Memory *memory, Video *video, Sound *sound, Timer *timer, Input *input, Option *option);
 	~Script();
 
 	// methods

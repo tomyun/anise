@@ -1,20 +1,20 @@
 #include "script.h"
 
-Script::Script(Memory *memory, Video *video, Sound *sound, Timer *timer, Input *input, Config *config)
+Script::Script(Memory *memory, Video *video, Sound *sound, Timer *timer, Input *input, Option *option)
 {
 	this->memory = memory;
 	this->video = video;
 	this->sound = sound;
 	this->timer = timer;
 	this->input = input;
-	this->config = config;
+	this->option = option;
 	
-	file = new File(memory, config);
+	file = new File(memory, option);
 	image = new Image(memory, video, file);
 	animation = new Animation(memory, video, timer, input);
-	dialogue = new Dialogue(memory, video, timer, input, animation, config);
+	dialogue = new Dialogue(memory, video, timer, input, animation, option);
 
-	field = new Field(memory, video, input, config);
+	field = new Field(memory, video, input, option);
 
 	parameter = NULL;
 
@@ -244,16 +244,16 @@ void Script::setOpcodes()
 	opcode_op4_list = opcode_default_op4_list;
 	opcode_opre_list = opcode_default_opre_list;
 
-	if (config->game_type == GAME_NANPA2) {
+	if (option->game_type == GAME_NANPA2) {
 		//TODO: make it work
 		//opcode_op_list[6] = OPCODE(op_null);
 
 		opcode_oput_list = opcode_nanpa2_oput_list;
 	}
-	else if (config->game_type == GAME_NANPA1) {
+	else if (option->game_type == GAME_NANPA1) {
 		opcode_oput_list = opcode_nanpa1_oput_list;
 	}
-	else if (config->game_type == GAME_AISI) {
+	else if (option->game_type == GAME_AISI) {
 		opcode_oput_list = opcode_aisi_oput_list;
 	}
 }

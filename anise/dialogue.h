@@ -29,7 +29,7 @@ private:
 	Timer *timer;
 	Input *input;
 	Animation *animation;
-	Config *config;
+	Option *option;
 
 	byte *font;
 	long int size;
@@ -40,7 +40,7 @@ private:
 	word previous_code;
 
 public:
-	Dialogue(Memory *memory, Video *video, Timer *timer,  Input *input, Animation *animation, Config *config);
+	Dialogue(Memory *memory, Video *video, Timer *timer,  Input *input, Animation *animation, Option *option);
 	~Dialogue();
 
 	bool initialize();

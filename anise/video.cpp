@@ -1,9 +1,9 @@
 #include "video.h"
 
-Video::Video(Memory *memory, Config *config)
+Video::Video(Memory *memory, Option *option)
 {
 	this->memory = memory;
-	this->config = config;
+	this->option = option;
 
 	sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, SDL_HWSURFACE | SDL_DOUBLEBUF);
 	if (sdl_screen == NULL) {
@@ -478,7 +478,7 @@ void Video::putSprite(word coord_x, word coord_y, word background_layer, word fo
 			byte foreground1_color;
 			byte foreground2_color;
 			byte foreground3_color;
-			if (config->game_type == GAME_NANPA2) {
+			if (option->game_type == GAME_NANPA2) {
 				foreground1_color = getPoint(SURFACE_BUFFER3, foreground1_coord_x + x, foreground1_coord_y + y);
 				foreground2_color = getPoint(SURFACE_BUFFER3, foreground2_coord_x + x, foreground2_coord_y + y);
 				foreground3_color = getPoint(SURFACE_BUFFER3, foreground3_coord_x + x, foreground3_coord_y + y);

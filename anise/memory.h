@@ -4,7 +4,7 @@
 #include "memory_segment.h"
 #include "memory_block.h"
 #include "memory_index.h"
-#include "config.h"
+#include "option.h"
 
 #define SEGMENT_SIZE			0xFFFF
 
@@ -20,7 +20,7 @@
 
 class Memory {
 private:
-	Config *config;
+	Option *option;
 
 public:
 	// segments and blocks
@@ -55,7 +55,7 @@ public:
 	word flag_entry;
 
 	// constructor & destructor
-	Memory(Config *config);
+	Memory(Option *option);
 	~Memory();
 
 	// methods

@@ -1,8 +1,8 @@
 #include "memory.h"
 
-Memory::Memory(Config *config)
+Memory::Memory(Option *option)
 {
-	this->config = config;
+	this->option = option;
 
 	initialize();
 }
@@ -30,7 +30,7 @@ Memory::~Memory()
 bool Memory::initialize()
 {
 	// set default values
-	variable_size = config->variable_size;
+	variable_size = option->variable_size;
 
 	script_entry = SCRIPT_ENTRY;
 	script_name_entry = script_entry + SCRIPT_SIZE;
@@ -38,10 +38,10 @@ bool Memory::initialize()
 	base_variable_entry = variable_entry + variable_size;
 	system_variable_entry = base_variable_entry + BASE_VARIABLE_SIZE;
 	heap_entry = system_variable_entry + SYSTEM_VARIABLE_SIZE;
-	selection_item_entry = config->selection_item_entry;
-	procedure_entry = config->procedure_entry;
-	animation_slot_entry = config->animation_slot_entry;
-	animation_script_entry = config->animation_script_entry;
+	selection_item_entry = option->selection_item_entry;
+	procedure_entry = option->procedure_entry;
+	animation_slot_entry = option->animation_slot_entry;
+	animation_script_entry = option->animation_script_entry;
 	flag_entry = script_name_entry;
 
 	// make memory segments

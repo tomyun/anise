@@ -1,13 +1,13 @@
 #ifndef SOUND_H
 #define SOUND_H
 
-#include "config.h"
+#include "option.h"
 #include "SDL.h"
 #include "SDL_audio.h"
 
 class Sound {
 private:
-	Config *config;
+	Option *option;
 
 	SDL_AudioSpec spec;
 	Uint8 *buffer;
@@ -20,7 +20,7 @@ private:
 	void mix(Uint8 *stream, int stream_length);
 
 public:
-	Sound(Config *config);
+	Sound(Option *option);
 	~Sound();
 
 	void load();

@@ -2,19 +2,19 @@
 
 int main(int argc, char *argv[])
 {
-	Config *config = new Config();
-	if (config->initialize(argc, argv) == false) {
+	Option *option = new Option();
+	if (option->initialize(argc, argv) == false) {
 		//TODO: process error
 		exit(1);
 	}
 
-	Engine *engine = new Engine(config);
+	Engine *engine = new Engine(option);
 	engine->on();
 	engine->run();
 	engine->off();
 
 	delete engine;
-	delete config;
+	delete option;
 
 	return 0;
 }

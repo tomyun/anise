@@ -2,7 +2,7 @@
 #define VIDEO_H
 
 #include "memory.h"
-#include "config.h"
+#include "option.h"
 #include "SDL_video.h"
 #include "SDL_endian.h"
 #include "SDL_error.h"
@@ -75,7 +75,7 @@ struct BlitStruct {
 class Video {
 private:
 	Memory *memory;
-	Config *config;
+	Option *option;
 
 	SDL_Surface *sdl_screen;
 	byte screen[VIDEO_WIDTH * VIDEO_HEIGHT];
@@ -100,7 +100,7 @@ private:
 	void drawPixel(SDL_Surface *sdl_surface, int x, int y, Uint32 sdl_color);
 
 public:
-	Video(Memory *memory, Config *config);
+	Video(Memory *memory, Option *option);
 	~Video();
 
 	void setColor(byte color_index, word color);

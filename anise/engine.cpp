@@ -1,8 +1,8 @@
 #include "engine.h"
 
-Engine::Engine(Config *config)
+Engine::Engine(Option *option)
 {
-	this->config = config;
+	this->option = option;
 }
 
 
@@ -25,13 +25,13 @@ bool Engine::on()
 
 	SDL_WM_SetCaption(TITLE, NULL);
 
-	memory = new Memory(config);
-	video = new Video(memory, config);
-	sound = new Sound(config);
+	memory = new Memory(option);
+	video = new Video(memory, option);
+	sound = new Sound(option);
 	timer = new Timer(video);
 	input = new Input(memory, timer);
 
-	script = new Script(memory, video, sound, timer, input, config);
+	script = new Script(memory, video, sound, timer, input, option);
 
 	return true;
 }
@@ -53,7 +53,7 @@ bool Engine::off()
 
 bool Engine::run()
 {
-	script->load(config->script_file_name);
+	script->load(option->script_file_name);
 	SCRIPTCALL condition = script->parse();
 	
 	PAUSE;
