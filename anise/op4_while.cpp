@@ -17,6 +17,9 @@ SCRIPTCALL Script::op4_while()
 
 				return RETURN_NORMAL;
 			}
+			else if (condition == RETURN_EXIT) {
+				return RETURN_EXIT;
+			}
 		}
 		else {
 			skipScriptBlock();
