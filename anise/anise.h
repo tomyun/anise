@@ -8,6 +8,9 @@
 #include <assert.h>
 #include "debug.h"
 
+//HACK: isolate experimental code for faster field operation
+//#define FIELD_EXPERIMENT
+
 #define NONE				0xFFFF
 
 #define MASK_UPPER_BYTE		0xF0
