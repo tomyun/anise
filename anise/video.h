@@ -1,12 +1,13 @@
 #ifndef VIDEO_H
 #define VIDEO_H
 
+#include "anise.h"
 #include "memory.h"
+#include "timer.h"
 #include "option.h"
 #include "SDL_video.h"
 #include "SDL_endian.h"
 #include "SDL_error.h"
-#include "SDL_timer.h"
 
 #define FADE_LEVEL			8
 #define FONT_BPB			8
@@ -76,6 +77,7 @@ struct BlitStruct {
 class Video {
 private:
 	Memory *memory;
+	Timer *timer;
 	Option *option;
 
 	SDL_Surface *sdl_screen;
@@ -105,7 +107,7 @@ private:
 	void drawPixel(SDL_Surface *sdl_surface, int x, int y, Uint32 sdl_color);
 
 public:
-	Video(Memory *memory, Option *option);
+	Video(Memory *memory, Timer *timer, Option *option);
 	~Video();
 
 	void setColor(byte color_index, word color);

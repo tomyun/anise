@@ -1,8 +1,9 @@
 #include "video.h"
 
-Video::Video(Memory *memory, Option *option)
+Video::Video(Memory *memory, Timer *timer, Option *option)
 {
 	this->memory = memory;
+	this->timer = timer;
 	this->option = option;
 
 	if (option->is_fullscreen) {
@@ -287,34 +288,43 @@ void Video::initializeOverlapScreen()
 
 void Video::overlapScreen()
 {
-	int overlap_interval = (int) (SDL_ALPHA_OPAQUE / overlap_level);
-	int overlap_initial = SDL_ALPHA_OPAQUE - (overlap_interval * overlap_level);
-	SDL_SetAlpha(overlap_new_screen, SDL_SRCALPHA, overlap_initial + (overlap_interval * overlap_current_level));
+	if (overlap_inuse) {
+		if (timer->checkOverlapTimer() < overlap_delay) {
+			return;
+		}
+		else {
+			timer->resetOverlapTimer();
+		}
 
-	lockScreen();
-	lockScreen(overlap_old_screen);
-	lockScreen(overlap_new_screen);
+		int overlap_interval = (int) (SDL_ALPHA_OPAQUE / overlap_level);
+		int overlap_initial = SDL_ALPHA_OPAQUE - (overlap_interval * overlap_level);
+		SDL_SetAlpha(overlap_new_screen, SDL_SRCALPHA, overlap_initial + (overlap_interval * overlap_current_level));
 
-	SDL_BlitSurface(overlap_old_screen, NULL, sdl_screen, NULL);
-	SDL_BlitSurface(overlap_new_screen, NULL, sdl_screen, NULL);
+		lockScreen();
+		lockScreen(overlap_old_screen);
+		lockScreen(overlap_new_screen);
 
-	SDL_UpdateRect(sdl_screen, 0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
+		SDL_BlitSurface(overlap_old_screen, NULL, sdl_screen, NULL);
+		SDL_BlitSurface(overlap_new_screen, NULL, sdl_screen, NULL);
 
-	unlockScreen();
-	unlockScreen(overlap_old_screen);
-	unlockScreen(overlap_new_screen);
+		SDL_UpdateRect(sdl_screen, 0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
 
-	overlap_current_level++;
-	if (overlap_current_level == overlap_level) {
-		overlap_inuse = false;
+		unlockScreen();
+		unlockScreen(overlap_old_screen);
+		unlockScreen(overlap_new_screen);
 
-		SDL_FreeSurface(overlap_old_screen);
-		SDL_FreeSurface(overlap_new_screen);
+		overlap_current_level++;
+		if (overlap_current_level == overlap_level) {
+			overlap_inuse = false;
 
-		overlap_old_screen = NULL;
-		overlap_new_screen = NULL;
+			SDL_FreeSurface(overlap_old_screen);
+			SDL_FreeSurface(overlap_new_screen);
 
-		updateScreen();
+			overlap_old_screen = NULL;
+			overlap_new_screen = NULL;
+
+			updateScreen();
+		}
 	}
 }
 
