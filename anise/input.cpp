@@ -10,6 +10,15 @@ Input::Input(Memory *memory, Timer *timer)
 
 	is_quit = false;
 
+	for (int i = 0; i < 2; i++) {
+		for (int y = 0; y < CURSOR_HEIGHT; y++) {
+			for (int x = 0; x < CURSOR_WIDTH; x++) {
+				cursor_image[i][(y * CURSOR_WIDTH) + x] = 0;
+				cursor_mask[i][(y * CURSOR_WIDTH) + x] = 0;
+			}
+		}
+	}
+
 	cursor[CURSOR_FIRSTFRAME] = NULL;
 	cursor[CURSOR_SECONDFRAME] = NULL;
 
