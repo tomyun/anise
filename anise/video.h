@@ -240,11 +240,14 @@ public:
 
 	void setColor(byte index, word gp4_color);
 	//Uint32 getColor(byte color_index);
-	Uint32 convertColor(word color);
+	//Uint32 convertColor(word color);
 	//void splitColor(word color, Uint8 *color_red, Uint8 *color_green, Uint8 *color_blue);
 	void splitColor(SDL_Color *sdl_color, word gp4_color);
+	void updateColor(SDL_Color *sdl_color, int index, SurfaceType surface_type = SURFACE_SCREEN);
+
 	void setIntermediateColor(byte index, word gp4_color);
 	word getIntermediateColor(byte index);
+
 	void setIntermediatePalette();
 	void setPalette();
 
