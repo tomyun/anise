@@ -34,7 +34,6 @@ Dialogue::Dialogue(Memory *memory, Video *video, Timer *timer, Input *input, Ani
 
 Dialogue::~Dialogue()
 {
-	delete font;
 }
 
 
