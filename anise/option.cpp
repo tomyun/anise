@@ -9,7 +9,7 @@ Option::Option()
 		"\n"
 		"Options:\n"
 		"  -p\t\tPath to the game\n"
-		"  -l[j,k,K,s]\tLanguage (j: Japanese, *k: Korean, K: Korean (gamebox), s: Sagwanamu)\n"
+		"  -l[j,k,K,s]\tLanguage (j: Japanese, *k: Korean, K: GameBox, s: SagwaNamu)\n"
 		"  -u\t\tUse unpacked game files\n"
 		"  -f\t\tFullscreen mode\n"
 		"  -b[s]\t\tBlurring filter mode (s: scanline)\n"
@@ -269,6 +269,18 @@ bool Option::initialize(int argc, char *argv[])
 			return false;
 		}
 		else {
+#ifdef _WIN32_WCE
+			if (path_name.length() == 0) {
+				wchar_t exePath[MAX_PATH];
+				char path[MAX_PATH];
+
+				GetModuleFileName(NULL, exePath, MAX_PATH);
+				wchar_t *pathEnd = wcsrchr(exePath, '\\');
+				*++pathEnd = '\0';
+				WideCharToMultiByte(CP_OEMCP, 0, exePath, -1, path, MAX_PATH, NULL, NULL);
+				path_name = path;
+			}
+#endif
 			return true;
 		}
 	}
