@@ -1,4 +1,3 @@
-#include <math.h>
 #include "script.h"
 
 #define NUMBER_SCRIPT_SIZE	12
@@ -7,6 +6,17 @@
 #define JIS_ZERO			(0x824F - ZERO_CONVERT_CODE)
 #define GAMEBOX_ZERO		(0x9450 - ZERO_CONVERT_CODE)
 #define ASCII_ZERO			0x30
+
+int power(int base, int exponent)
+{
+	int number = 1;
+	for (int i = 0; i < exponent; i++) {
+		number = number * base;
+	}
+
+	return number;
+}
+
 
 SCRIPTCALL Script::op_displayNumber()
 {
@@ -45,7 +55,7 @@ SCRIPTCALL Script::op_displayNumber()
 	}
 
 	for (int i = length; i > 0; i--) {
-		int digit = (int) pow(10, length - 1);
+		int digit = power(10, length - 1);
 		int count = number / digit;
 		number = number % digit;
 
