@@ -6,7 +6,7 @@ File::File(Memory *memory, Option *option)
 	this->option = option;
 
 	handle = NULL;
-	is_huge = false;
+	size = 0;
 }
 
 
@@ -31,7 +31,12 @@ void File::open(const char *filename, const char *mode)
 	// concatenate path name with file name
 	name = option->path_name;
 	for (int i = 0; i < FILE_NAME_LENGTH; i++) {
-		name += tolower(filename[i]);
+		if (filename[i] != '\0') {
+			name += tolower(filename[i]);
+		}
+		else {
+			break;
+		}
 	}
 
 	handle = fopen(name.data(), mode);
@@ -41,13 +46,28 @@ void File::open(const char *filename, const char *mode)
 		exit(1);
 	}
 
-	//TODO: put filename into name
-
 	seek(0, SEEK_END);
 	size = tell();
 	seek(0, SEEK_SET);
 
 	memory->b_SystemVariable->writeWord(iw_File_Size, size);
+
+	// check if it is a music file
+	string extension = name.substr(name.size() - M_FILE_EXTENSION_LENGTH);
+	if (extension == M_FILE_EXTENSION) {
+		string wav_file_name = name.substr(0, name.size() - M_FILE_EXTENSION_LENGTH);
+		wav_file_name.append(WAV_FILE_EXTENSION);
+
+		FILE *wav_file_handle = fopen(wav_file_name.c_str(), FILE_READ);
+		if (wav_file_handle) {
+			option->sound_file_name = wav_file_name;
+
+			fclose(wav_file_handle);
+		}
+		else {
+			option->sound_file_name = name;
+		}
+	}
 }
 
 
@@ -66,14 +86,9 @@ word File::tell()
 {
 	int file_size = ftell(handle);
 	if (file_size > 0xFFFF) {
-		is_huge = true;
-		option->sound_file_name = name;
-
 		return 0;
 	}
 	else {
-		is_huge = false;
-
 		return (word) file_size;
 	}
 }
