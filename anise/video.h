@@ -95,8 +95,12 @@ public:
 
 private:
 	// SDL related methods
+	void lockScreen(SDL_Surface *surface);
 	void lockScreen();
+
+	void unlockScreen(SDL_Surface *surface);
 	void unlockScreen();
+
 	void drawPixel(SDL_Surface *sdl_surface, int x, int y, Uint32 sdl_color);
 
 public:
