@@ -708,48 +708,79 @@ void Video::drawPixel(SDL_Surface *sdl_surface, int x, int y, Uint32 sdl_color)
 Uint32 Video::getFilteredColor(word coord_x, word coord_y)
 {
 	if (option->is_filter) {
+#define FACTOR	((FILTER_RADIUS * 2) + 1)
+		Uint32 color[FACTOR * FACTOR];
+
+		Uint8 color_red[FACTOR * FACTOR];
+		Uint8 color_green[FACTOR * FACTOR];
+		Uint8 color_blue[FACTOR * FACTOR];
+
+		for (int dy = -FILTER_RADIUS; dy <= FILTER_RADIUS; dy++) {
+			for (int dx = -FILTER_RADIUS; dx <= FILTER_RADIUS; dx++) {
+				int offset = (FILTER_RADIUS + dy) * FACTOR + (FILTER_RADIUS + dx);
+
+				byte color_index = getPoint(coord_x + dx, coord_y + dy);
+				if (color_index == COLOR_NONE) {
+					color[offset] = -1;
+				}
+				else {
+					color[offset] = getColor(color_index);
+					SDL_GetRGB(color[offset], sdl_screen->format, &color_red[offset], &color_green[offset], &color_blue[offset]);
+				}
+			}
+		}
+
 		int color_red_sum = 0;
 		int color_green_sum = 0;
 		int color_blue_sum = 0;
 
 		int count = 0;
 
-		for (int dy = -FILTER_RADIUS; dy <= FILTER_RADIUS; dy++) {
-			for (int dx = -FILTER_RADIUS; dx <= FILTER_RADIUS; dx++) {
-				byte color_index = getPoint(coord_x + dx, coord_y + dy);
-				if (color_index != COLOR_NONE) {
-					Uint32 color = getColor(color_index);
-					Uint8 color_red, color_green, color_blue;
-					SDL_GetRGB(color, sdl_screen->format, &color_red, &color_green, &color_blue);
+		if ((color[0] != 0) || (color[1] != 0) || (color[2] != 0)) {
+			for (int i = 0; i <= 2; i++) {
+				if (color[i] != -1) {
+					color_red_sum += color_red[i];
+					color_green_sum += color_green[i];
+					color_blue_sum += color_blue[i];
 
-					//HACK: to stress original color
-					if ((dx == 0) && (dy == 0)) {
-						color_red_sum += color_red * 5;
-						color_green_sum += color_green * 5;
-						color_blue_sum += color_blue * 5;
-
-						count += 5;
-					}
-					else {
-						color_red_sum += color_red;
-						color_green_sum += color_green;
-						color_blue_sum += color_blue;
-
-						count++;
-					}
+					count++;
 				}
 			}
 		}
 
-		Uint8 filtered_color_red = 0;
-		Uint8 filtered_color_green = 0;
-		Uint8 filtered_color_blue = 0;
+		for (int i = 3; i <= 5; i++) {
+			if (color[i] != -1) {
+				color_red_sum += color_red[i];
+				color_green_sum += color_green[i];
+				color_blue_sum += color_blue[i];
 
-		if (count > 0) {
-			filtered_color_red = (Uint8) (color_red_sum / count);
-			filtered_color_green = (Uint8) (color_green_sum / count);
-			filtered_color_blue = (Uint8) (color_blue_sum / count);
+				count++;
+			}
 		}
+
+		if (color[4] != -1) {
+			color_red_sum += color_red[4] * 4;
+			color_green_sum += color_green[4] * 4;
+			color_blue_sum += color_blue[4] * 4;
+
+			count += 4;
+		}
+
+		if ((color[6] != 0) || (color[7] != 0) || (color[8] != 0)) {
+			for (int i = 6; i <= 8; i++) {
+				if (color[i] != -1) {
+					color_red_sum += color_red[i];
+					color_green_sum += color_green[i];
+					color_blue_sum += color_blue[i];
+
+					count++;
+				}
+			}
+		}
+
+		Uint8 filtered_color_red = (Uint8) (color_red_sum / count);
+		Uint8 filtered_color_green = (Uint8) (color_green_sum / count);
+		Uint8 filtered_color_blue = (Uint8) (color_blue_sum / count);
 
 		return SDL_MapRGB(sdl_screen->format, filtered_color_red, filtered_color_green, filtered_color_blue);
 	}
