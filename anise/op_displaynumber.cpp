@@ -20,28 +20,26 @@ SCRIPTCALL Script::op_displayNumber()
 
 	MemoryBlock *b_DisplayNumberScript = new MemoryBlock(0, NUMBER_SCRIPT_SIZE);
 
-	//TODO: can't this be eliminated?
 	if (length == 0) {
 		if (number >= 10000) {
 			length = 5;
 		}
-		if (number >= 1000) {
+		else if (number >= 1000) {
 			length = 4;
 		}
-		if (number >= 100) {
+		else if (number >= 100) {
 			length = 3;
 		}
-		if (number >= 10) {
+		else if (number >= 10) {
 			length = 2;
 		}
-		if (number >= 1) {
+		else if (number >= 1) {
 			length = 1;
 		}
 	}
 
 	word index = 0;
 
-	//TODO: can't this be inside for loop?
 	if (font_size != FULLSIZE_CHARACTER) {
 		b_DisplayNumberScript->writeByte(index++, CODE_OP_HALFSIZECHARACTER);
 	}
@@ -67,9 +65,13 @@ SCRIPTCALL Script::op_displayNumber()
 			byte code = count + ASCII_ZERO;
 
 			b_DisplayNumberScript->writeByte(index++, code);
-			b_DisplayNumberScript->writeByte(index++, CODE_OP_HALFSIZECHARACTER);
 		}
 	}
+
+	if (font_size != FULLSIZE_CHARACTER) {
+		b_DisplayNumberScript->writeByte(index++, CODE_OP_HALFSIZECHARACTER);
+	}
+
 	b_DisplayNumberScript->writeByte(index, CODE_BLOCK_END);
 
 	MemoryBlock *b_MainScript = memory->b_Script;
