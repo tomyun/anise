@@ -10339,3 +10339,66 @@ void Dialogue::initializeJisHanFont()
 	code_newline_first = 0x81;
 	code_newline_second = 0x93;
 }
+
+
+int Dialogue::getJisHanFontOffset(byte first_code, byte second_code)
+{
+	//HACK: adjust space size to improve readablity
+	if (first_code == 0x81 && second_code == 0x40) {
+		word coord_xb = memory->b_SystemVariable->queryWord(iw_Dialogue_CoordXb);
+		word coord_y = memory->b_SystemVariable->queryWord(iw_Dialogue_CoordY);
+
+		if (coord_y != 295) {
+			setPosition(coord_xb - 1, NONE);
+		}
+	}
+
+	// calculate font code
+	word code = (first_code << 8) + second_code;
+	code = code - 0x8398;
+
+	//TODO: clean it up
+	if (code <= 4) {
+		int josa_type = (int) code;
+		if ((previous_code != (0x82F1 - 0x8140)) && (previous_code != (0x8393 - 0x8140))) {
+			int table_index = (int) (previous_code & MASK_LOWER_WORD);
+			previous_code = previous_code - (0x8A40 - 0x8140);
+			if (previous_code < (0x9691 - 0x8A40 + 1)) {
+				byte table_offset_index = (previous_code & MASK_UPPER_WORD) >> 8;
+				int table_offset = (table_index << 3) + (table_offset_index * 24);
+
+			}
+
+			// bx1
+		}
+
+		// bx0
+	}
+
+	// g16
+	code = code + 0x8398 - 0x8140;
+	previous_code = code;
+
+	first_code = (byte) ((code & MASK_UPPER_WORD) >> 8);
+	second_code = (byte) (code & MASK_LOWER_WORD);
+
+	// joi10
+	if (first_code >= 7) {
+		first_code = first_code - 3;
+	}
+
+	// joi10b
+	if (second_code < 0xBD) {
+		code = (first_code * 0xBD) + second_code;
+		if (code >= (4841 - 128)) {
+			code = 0x00;
+		}
+	}
+	else {
+		code = 0x00;
+	}
+
+	// joi10a
+	int offset = (code + 0x80) * (FONT_FULL_WIDTH / FONT_BPB) * FONT_FULL_HEIGHT;
+	return offset;
+}
