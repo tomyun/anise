@@ -65,7 +65,7 @@ enum {
 	SILKYS_SONG = 1
 };
 
-const default_tempo = 120;
+const int default_tempo = 120;
 
 BYTE *MFile = NULL;
 BYTE *MFilePreset;
@@ -139,9 +139,9 @@ WORD getWord(void){
 	return ret | (WORD(getByte()) << 8);
 }
 
-short int getInt16(void){
+short getInt16(void){
 	WORD ret = getByte();
-	return short int(ret | (short int(getByte()) << 8));
+	return short(ret | (short(getByte()) << 8));
 }
 
 void setPreset(int id){

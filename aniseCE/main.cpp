@@ -6,7 +6,11 @@ static FILE *stdout_file;
 static FILE *stderr_file;
 #endif
 
+#if defined(_WIN32)||defined(_WIN32_WCE)
 int SDL_main(int argc, char *argv[])
+#else
+int main(int argc, char *argv[])
+#endif
 {
 #if defined(_WIN32_WCE)
 //	char *new_argv[] = { "anise.exe", "-p\\Storage Card\\Nanpa2", "-lK", "-f", "nanpa2" };
