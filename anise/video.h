@@ -23,7 +23,7 @@ enum VideoSpecification {
 	VIDEO_HEIGHT = 400,
 	VIDEO_COLOR_DEPTH = 32,
 	VIDEO_COLOR = 16,
-	VIDEO_BUFFER = 3
+	VIDEO_BUFFER = 4
 };
 
 
@@ -189,9 +189,11 @@ private:
 	Option *option;
 
 	SDL_Surface *sdl_screen;
+	SDL_Surface *sdl_buffer[VIDEO_BUFFER];
+/*
 	byte screen[VIDEO_WIDTH * VIDEO_HEIGHT];
 	byte buffer[VIDEO_BUFFER][VIDEO_WIDTH * VIDEO_HEIGHT];
-
+*/
 	Uint32 color_red_mask;
 	Uint32 color_blue_mask;
 	Uint32 color_green_mask;
@@ -207,7 +209,8 @@ private:
 	bool has_character_moved;
 #endif
 
-	Uint32 sdl_palette[VIDEO_COLOR];
+	SDL_Color screen_palette[VIDEO_COLOR];
+	//Uint32 sdl_palette[VIDEO_COLOR];
 	word intermediate_palette[VIDEO_COLOR];
 
 	SDL_Surface *overlap_old_screen;
@@ -227,28 +230,31 @@ private:
 	void unlockScreen(SDL_Surface *surface);
 	void unlockScreen();
 
-	void drawPixel(SDL_Surface *sdl_surface, int x, int y, Uint32 sdl_color);
+	Uint32 getPixel(SDL_Surface *sdl_surface, int coord_x, int coord_y);
+	void putPixel(SDL_Surface *sdl_surface, int coord_x, int coord_y, Uint32 sdl_color);
+	//void drawPixel(SDL_Surface *sdl_surface, int x, int y, Uint32 sdl_color);
 
 public:
 	Video(Memory *memory, Timer *timer, Option *option);
 	~Video();
 
-	void setColor(byte color_index, word color);
-	Uint32 getColor(byte color_index);
+	void setColor(byte index, word gp4_color);
+	//Uint32 getColor(byte color_index);
 	Uint32 convertColor(word color);
-	void splitColor(word color, Uint8 *color_red, Uint8 *color_green, Uint8 *color_blue);
-	void setIntermediateColor(byte color_index, word color);
-	word getIntermediateColor(byte color_index);
+	//void splitColor(word color, Uint8 *color_red, Uint8 *color_green, Uint8 *color_blue);
+	void splitColor(SDL_Color *sdl_color, word gp4_color);
+	void setIntermediateColor(byte index, word gp4_color);
+	word getIntermediateColor(byte index);
 	void setIntermediatePalette();
 	void setPalette();
 
 	void drawBox(byte mode, word coord_x0b, word coord_y0, word coord_x1b, word coord_y1);
 	void clearScreen();
 
-	byte* getSurface(SurfaceType surface_type);
+	//byte* getSurface(SurfaceType surface_type);
 	SurfaceType getDrawSurface();
 
-	bool isScreen(byte *surface);
+	//bool isScreen(byte *surface);
 	bool isScreen(SurfaceType surface_type);
 
 	void updateScreen(word coord_x, word coord_y, word width, word height);
