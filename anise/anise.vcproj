@@ -272,6 +272,9 @@
 					RelativePath=".\op4_callscript.cpp">
 				</File>
 				<File
+					RelativePath=".\op4_changeslot.cpp">
+				</File>
+				<File
 					RelativePath=".\op4_checkclick.cpp">
 				</File>
 				<File
