@@ -31,4 +31,5 @@ public:
 	void play();
 	void stop();
 };
+
 #endif
