@@ -30,6 +30,9 @@ enum FontType {
 
 class Config {
 public:
+	const char *title;
+	const char *usage;
+
 	GameType game_type;
 	FontType font_type;
 
