@@ -62,6 +62,28 @@ void File::open(const char *filename, bool is_flag)
 			}
 		}
 
+		//HACK: support .wav files
+		//HACK: script files in crescent have .m extension
+		if (option->game_type != GAME_CRESCENT) {
+			string file_name = concatenatePath(filename);
+			string file_extension = file_name.substr(file_name.size() - M_FILE_EXTENSION_LENGTH);
+			if (file_extension == M_FILE_EXTENSION) {
+				option->sound_file_name = file_name.substr(0, file_name.size() - M_FILE_EXTENSION_LENGTH);
+
+				string wav_file_name = option->sound_file_name;
+				wav_file_name.append(WAV_FILE_EXTENSION);
+
+				FILE *wav_file_handle = fopen(wav_file_name.c_str(), FILE_READ);
+				if (wav_file_handle) {
+					option->sound_file_extension = WAV_FILE_EXTENSION;
+					fclose(wav_file_handle);
+				}
+				else {
+					option->sound_file_extension = M_FILE_EXTENSION;
+				}
+			}
+		}
+
 		if (is_hms) {
 			openDirect(hms_file_name.c_str(), FILE_READ);
 		}
@@ -98,26 +120,6 @@ void File::openDirect(const char *filename, const char *mode)
 	seek(0, SEEK_SET);
 
 	memory->b_SystemVariable->writeWord(iw_File_Size, size);
-
-	//HACK: script files in crescent have .m extension
-	if (option->game_type != GAME_CRESCENT) {
-		// check if it is a music file
-		string file_extension = name.substr(name.size() - M_FILE_EXTENSION_LENGTH);
-		if (file_extension == M_FILE_EXTENSION) {
-			string wav_file_name = name.substr(0, name.size() - M_FILE_EXTENSION_LENGTH);
-			wav_file_name.append(WAV_FILE_EXTENSION);
-
-			FILE *wav_file_handle = fopen(wav_file_name.c_str(), FILE_READ);
-			if (wav_file_handle) {
-				option->sound_file_name = wav_file_name;
-
-				fclose(wav_file_handle);
-			}
-			else {
-				option->sound_file_name = name;
-			}
-		}
-	}
 }
 
 
