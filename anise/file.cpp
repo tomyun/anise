@@ -8,6 +8,8 @@ File::File(Memory *memory, Option *option)
 	handle = NULL;
 	size = 0;
 
+	is_hms = false;
+
 	packed_slot_index = 0;
 
 	for (int i = 0; i < FILE_PACKED_SLOTS; i++) {
@@ -41,7 +43,29 @@ void File::open(const char *filename, bool is_flag)
 		openDirect(filename, FILE_READ_WRITE);
 	}
 	else {
-		if (option->is_unpacked) {
+		//HACK: support .hms files
+		string hms_file_name;
+		if (option->font_type == FONT_JISHAN) {
+			string file_name = concatenatePath(filename);
+			string file_extension = file_name.substr(file_name.size() - MES_FILE_EXTENSION_LENGTH);
+			if (file_extension == MES_FILE_EXTENSION) {
+				hms_file_name = file_name.substr(option->path_name.size(), (file_name.size() - option->path_name.size()) - MES_FILE_EXTENSION_LENGTH);
+				hms_file_name.append(HMS_FILE_EXTENSION);
+
+				string hms_file_name_with_path = option->path_name + hms_file_name;
+
+				FILE *hms_file_handle = fopen(hms_file_name_with_path.c_str(), FILE_READ);
+				if (hms_file_handle) {
+					is_hms = true;
+					fclose(hms_file_handle);
+				}
+			}
+		}
+
+		if (is_hms) {
+			openDirect(hms_file_name.c_str(), FILE_READ);
+		}
+		else if (option->is_unpacked) {
 			openDirect(filename, FILE_READ);
 		}
 		else {
@@ -243,7 +267,11 @@ bool File::load(MemoryBlock *memory_block, word offset, bool is_flag)
 	byte *raw = memory_block->getRaw();
 
 	FILE *file_handle;
-	if (is_flag || option->is_unpacked) {
+	if (is_hms) {
+		is_hms = false;
+		file_handle = handle;
+	}
+	else if (is_flag || option->is_unpacked) {
 		file_handle = handle;
 	}
 	else {

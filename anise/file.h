@@ -19,7 +19,7 @@ using std::string;
 
 #define HMS_FILE_EXTENSION		".hms"
 #define MES_FILE_EXTENSION		".mes"
-#define MES_FILE_EXTENSION_LENGTH	3
+#define MES_FILE_EXTENSION_LENGTH	4
 
 #define M_FILE_EXTENSION		".m"
 #define M_FILE_EXTENSION_LENGTH		2
@@ -34,6 +34,8 @@ private:
 	FILE *handle;
 	string name;
 	word size;
+
+	bool is_hms;
 
 	int packed_slot_index;
 	FILE *packed_handle[FILE_PACKED_SLOTS];
