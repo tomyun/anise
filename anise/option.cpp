@@ -26,14 +26,6 @@ Option::Option()
 	game_type = GAME_UNKNOWN;
 	font_type = FONT_JISHAN;
 
-	for (int i = 0; i < FILE_NAME_LENGTH; i++) {
-		script_file_name[i] = 0;
-		font_file_name[i] = 0;
-	}
-
-	//TODO: move this to proper position
-	sprintf(font_file_name, "jishan.fnt");
-
 	variable_size = 0;
 	selection_item_entry = 0;
 	procedure_entry = 0;
@@ -69,9 +61,15 @@ bool Option::initialize(int argc, char *argv[])
 							path_name = option + 2;
 
 							//HACK: should be platform independent
+#ifdef _WIN32
 							if (path_name.at(path_name.length() - 1) != '\\') {
 								path_name += '\\';
 							}
+#else
+							if (path_name.at(path_name.length() - 1) != '/') {
+								path_name += '/';
+							}
+#endif
 						}
 						break;
 
@@ -82,21 +80,18 @@ bool Option::initialize(int argc, char *argv[])
 								case 'j':
 									{
 										font_type = FONT_JIS;
-										sprintf(font_file_name, "jis.fnt");
 									}
 									break;
 
 								case 'k':
 									{
 										font_type = FONT_JISHAN;
-										sprintf(font_file_name, "jishan.fnt");
 									}
 									break;
 
 								case 'K':
 									{
 										font_type = FONT_GAMEBOX;
-										sprintf(font_file_name, "jishan.fnt");
 									}
 									break;
 							}
@@ -107,7 +102,7 @@ bool Option::initialize(int argc, char *argv[])
 			else if (strcmp(option, "nanpa2") == 0) {
 				game_type = GAME_NANPA2;
 
-				sprintf(script_file_name, "start.mes");
+				script_file_name = "start.mes";
 
 				variable_size = 1024;
 				selection_item_entry = 0xED7C;
@@ -118,7 +113,7 @@ bool Option::initialize(int argc, char *argv[])
 			else if (strcmp(option, "nanpa1") == 0) {
 				game_type = GAME_NANPA1;
 
-				sprintf(script_file_name, "start.mes");
+				script_file_name = "start.mes";
 
 				variable_size = 512;
 				selection_item_entry = 0xED76;
@@ -129,7 +124,7 @@ bool Option::initialize(int argc, char *argv[])
 			else if (strcmp(option, "aisi") == 0) {
 				game_type = GAME_AISI;
 
-				sprintf(script_file_name, "main.mes");
+				script_file_name = "main.mes";
 
 				variable_size = 512;
 				selection_item_entry = 0xED78;
@@ -140,7 +135,7 @@ bool Option::initialize(int argc, char *argv[])
 			else if (strcmp(option, "crescent") == 0) {
 				game_type = GAME_CRESCENT;
 
-				sprintf(script_file_name, "start.m");
+				script_file_name = "start.m";
 
 				//HACK: same as aisi
 				variable_size = 512;

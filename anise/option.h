@@ -42,8 +42,7 @@ public:
 	FontType font_type;
 
 	string path_name;
-	char script_file_name[FILE_NAME_LENGTH];
-	char font_file_name[FILE_NAME_LENGTH];
+	string script_file_name;
 	string sound_file_name;
 
 	word variable_size;
