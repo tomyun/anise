@@ -23,6 +23,18 @@ Video::Video(Memory *memory, Timer *timer, Option *option)
 	color_blue_mask = video_info->vfmt->Bmask;
 	color_alpha_mask = video_info->vfmt->Amask;
 
+	sdl_map = NULL;
+	map_width = 0;
+	map_height = 0;
+
+	for (int i = 0; i < CHARACTER_TOTAL; i++) {
+		for (int j = 0; j < 2; j++) {
+			character[i][j] = NULL;
+		}
+	}
+
+	has_character_moved = false;
+
 	overlap_old_screen = NULL;
 	overlap_new_screen = NULL;
 
@@ -37,6 +49,18 @@ Video::Video(Memory *memory, Timer *timer, Option *option)
 Video::~Video()
 {
 	SDL_FreeSurface(sdl_screen);
+
+	if (sdl_map != NULL) {
+		SDL_FreeSurface(sdl_map);
+	}
+
+	for (int i = 0; i < CHARACTER_TOTAL; i++) {
+		for (int j = 0; j < 2; j++) {
+			if (character[i][j] != NULL) {
+				delete character[i][j];
+			}
+		}
+	}
 }
 
 
@@ -145,6 +169,9 @@ byte* Video::getSurface(byte surface_type)
 		case SURFACE_BUFFER3:
 		default:
 			surface = buffer[2];
+			break;
+		case SURFACE_MAP:
+			surface = map;
 			break;
 	}
 
@@ -499,7 +526,130 @@ void Video::blitMerged(byte mode, word foreground_coord_x, word foreground_coord
 }
 
 
-void Video::putSprite(word coord_x, word coord_y, word background_layer, word foreground_layer_1st, word foreground_layer_2nd, word foreground_layer_3rd)
+void Video::initializeMap(word width, word height)
+{
+	if (sdl_map != NULL) {
+		SDL_FreeSurface(sdl_map);
+	}
+	if (map != NULL) {
+		delete map;
+	}
+
+	map_width = width;
+	map_height = height;
+
+	sdl_map = SDL_CreateRGBSurface(SDL_SWSURFACE, map_width, map_height, VIDEO_COLOR_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
+	map = new byte[map_width * map_height];
+}
+
+
+void Video::createMap()
+{
+	lockScreen(sdl_map);
+	for (int y = 0; y < map_height; y++) {
+		for (int x = 0; x < map_width; x++) {
+			Uint32 sdl_color = getFilteredColor(x, y, SURFACE_MAP);
+			drawPixel(sdl_map, x, y, sdl_color);
+		}
+	}
+	unlockScreen(sdl_map);
+}
+
+
+void Video::drawMap(SDL_Rect *map_region, SDL_Rect *screen_region)
+{
+	SDL_BlitSurface(sdl_map, map_region, sdl_screen, screen_region);
+	SDL_UpdateRect(sdl_screen, screen_region->x, screen_region->y, screen_region->w, screen_region->h);
+}
+
+
+void Video::updateCharacter(int index, CharacterSprite *new_character)
+{
+	if ((character[index][SPRITE_PREVIOUS] != NULL) && (character[index][SPRITE_CURRENT] != NULL)) {
+		word previous_coord_xw = character[index][SPRITE_PREVIOUS]->coord_xw;
+		word previous_coord_yw = character[index][SPRITE_PREVIOUS]->coord_yw;
+
+		if ((previous_coord_xw != 0) && (previous_coord_yw != 0)) {
+			if (character[index][SPRITE_CURRENT]->compare(new_character)) {
+				return;
+			}
+		}
+	}
+
+    has_character_moved = true;
+
+	if (character[index][SPRITE_PREVIOUS] != NULL) {
+		delete character[index][SPRITE_PREVIOUS];
+	}
+	character[index][SPRITE_PREVIOUS] = character[index][SPRITE_CURRENT];
+
+	character[index][SPRITE_CURRENT] = new_character;
+}
+
+
+void Video::drawCharacter(word view_coord_xw, word view_coord_yw, word view_margin_xw, word view_margin_y, bool is_forced)
+{
+	if (has_character_moved || is_forced) {
+		for (int i = 0; i < CHARACTER_TOTAL; i++) {
+			// recover character's previous region if it exists
+			if (character[i][SPRITE_PREVIOUS] != NULL) {
+				word widthw = character[i][SPRITE_PREVIOUS]->widthw;
+				word heightw = character[i][SPRITE_PREVIOUS]->heightw;
+
+				word coord_x = ((character[i][SPRITE_PREVIOUS]->coord_xw - view_coord_xw) + view_margin_xw) * SPRITE_SIZE;
+				word coord_y = ((character[i][SPRITE_PREVIOUS]->coord_yw - view_coord_yw) * SPRITE_SIZE) + view_margin_y;
+
+				for (word yw = 0; yw < heightw; yw++) {
+					for (word xw = 0; xw < widthw; xw++) {
+						word background_layer = character[i][SPRITE_PREVIOUS]->background_layer[(yw * widthw) + xw];
+						word foreground_layer_1st = character[i][SPRITE_PREVIOUS]->foreground_layer_1st[(yw * widthw) + xw];
+						word foreground_layer_2nd = character[i][SPRITE_PREVIOUS]->foreground_layer_2nd[(yw * widthw) + xw];
+						word foreground_layer_3rd = character[i][SPRITE_PREVIOUS]->foreground_layer_3rd[(yw * widthw) + xw];
+
+						if (foreground_layer_3rd != 0) {
+							foreground_layer_3rd = 0;
+						}
+						else if (foreground_layer_2nd != 0) {
+							foreground_layer_2nd = 0;
+						}
+						else if (foreground_layer_1st != 0) {
+							foreground_layer_1st = 0;
+						}
+
+						putSprite(coord_x + (xw * SPRITE_SIZE), coord_y + (yw * SPRITE_SIZE), background_layer, foreground_layer_1st, foreground_layer_2nd, foreground_layer_3rd);
+						updateScreen(coord_x + (xw * SPRITE_SIZE), coord_y + (yw * SPRITE_SIZE), SPRITE_SIZE, SPRITE_SIZE);
+					}
+				}
+			}
+
+			// draw character at current region
+			if (character[i][SPRITE_CURRENT] != NULL) {
+				word widthw = character[i][SPRITE_CURRENT]->widthw;
+				word heightw = character[i][SPRITE_CURRENT]->heightw;
+
+				word coord_x = ((character[i][SPRITE_CURRENT]->coord_xw - view_coord_xw) + view_margin_xw) * SPRITE_SIZE;
+				word coord_y = ((character[i][SPRITE_CURRENT]->coord_yw - view_coord_yw) * SPRITE_SIZE) + view_margin_y;
+
+				for (word yw = 0; yw < heightw; yw++) {
+					for (word xw = 0; xw < widthw; xw++) {
+						word background_layer = character[i][SPRITE_CURRENT]->background_layer[(yw * widthw) + xw];
+						word foreground_layer_1st = character[i][SPRITE_CURRENT]->foreground_layer_1st[(yw * widthw) + xw];
+						word foreground_layer_2nd = character[i][SPRITE_CURRENT]->foreground_layer_2nd[(yw * widthw) + xw];
+						word foreground_layer_3rd = character[i][SPRITE_CURRENT]->foreground_layer_3rd[(yw * widthw) + xw];
+
+						putSprite(coord_x + (xw * SPRITE_SIZE), coord_y + (yw * SPRITE_SIZE), background_layer, foreground_layer_1st, foreground_layer_2nd, foreground_layer_3rd);
+						updateScreen(coord_x + (xw * SPRITE_SIZE), coord_y + (yw * SPRITE_SIZE), SPRITE_SIZE, SPRITE_SIZE);
+					}
+				}
+			}
+		}
+
+		has_character_moved = false;
+	}
+}
+
+
+void Video::putSprite(word coord_x, word coord_y, word background_layer, word foreground_layer_1st, word foreground_layer_2nd, word foreground_layer_3rd, byte surface_type)
 {
 	word background_coord_x = (word) ((background_layer & SPRITE_LAYER_MASK) % (VIDEO_WIDTH / SPRITE_SIZE)) * SPRITE_SIZE;
 	word background_coord_y = (word) ((background_layer & SPRITE_LAYER_MASK) / (VIDEO_WIDTH / SPRITE_SIZE)) * SPRITE_SIZE;
@@ -548,7 +698,7 @@ void Video::putSprite(word coord_x, word coord_y, word background_layer, word fo
 				continue;
 			}
 
-			putPoint(coord_x + x, coord_y + y, color);
+			putPoint(surface_type, coord_x + x, coord_y + y, color);
 		}
 	}
 
@@ -559,9 +709,20 @@ void Video::putSprite(word coord_x, word coord_y, word background_layer, word fo
 
 void Video::putPoint(byte surface_type, word coord_x, word coord_y, byte color_index)
 {
-	if (((coord_x >= 0) && (coord_x < VIDEO_WIDTH)) && ((coord_y >= 0) && (coord_y < VIDEO_HEIGHT))) {
+	word max_coord_x;
+	word max_coord_y;
+	if (surface_type == SURFACE_MAP) {
+		max_coord_x = map_width;
+		max_coord_y = map_height;
+	}
+	else {
+		max_coord_x = VIDEO_WIDTH;
+		max_coord_y = VIDEO_HEIGHT;
+	}
+
+	if (((coord_x >= 0) && (coord_x < max_coord_x)) && ((coord_y >= 0) && (coord_y < max_coord_y))) {
 		byte *surface = getSurface(surface_type);
-		surface[(coord_y * VIDEO_WIDTH) + coord_x] = color_index;
+		surface[(coord_y * max_coord_x) + coord_x] = color_index;
 	}
 	else {
 		//TODO: process error
@@ -578,12 +739,23 @@ void Video::putPoint(word coord_x, word coord_y, byte color_index)
 
 byte Video::getPoint(byte surface_type, word coord_x, word coord_y)
 {
-	if (((coord_x >= 0) && (coord_x < VIDEO_WIDTH)) && ((coord_y >= 0) && (coord_y < VIDEO_HEIGHT))) {
-		byte *surface = getSurface(surface_type);
-		return surface[(coord_y * VIDEO_WIDTH) + coord_x];
+	word max_coord_x;
+	word max_coord_y;
+	if (surface_type == SURFACE_MAP) {
+		max_coord_x = map_width;
+		max_coord_y = map_height;
 	}
 	else {
-		PRINT_ERROR("[Video::getPoint()] out of bound: st = %d, x = %d, y = %d\n", surface_type, coord_x, coord_y);
+		max_coord_x = VIDEO_WIDTH;
+		max_coord_y = VIDEO_HEIGHT;
+	}
+
+	if (((coord_x >= 0) && (coord_x < max_coord_x)) && ((coord_y >= 0) && (coord_y < max_coord_y))) {
+		byte *surface = getSurface(surface_type);
+		return surface[(coord_y * max_coord_x) + coord_x];
+	}
+	else {
+		PRINT_ERROR("[Video::getPoint()] out of bound: type = %d, coord_x = %d, coord_y = %d\n", surface_type, coord_x, coord_y);
 		return COLOR_NONE;
 	}
 }
@@ -629,70 +801,71 @@ void Video::unlockScreen()
 
 void Video::drawPixel(SDL_Surface *sdl_surface, int x, int y, Uint32 sdl_color)
 {
-	if ((x >= 0) && (x < VIDEO_WIDTH) && (y >= 0) && (y < VIDEO_HEIGHT)) {
-		switch (sdl_surface->format->BytesPerPixel) {
-			case 1:
-				{
-					Uint8 *buffer;
-					buffer = ((Uint8*) sdl_surface->pixels) + (y * sdl_surface->pitch) + x;
-					*buffer = sdl_color;
+	switch (sdl_surface->format->BytesPerPixel) {
+		case 1:
+			{
+				Uint8 *buffer;
+				buffer = ((Uint8*) sdl_surface->pixels) + (y * sdl_surface->pitch) + x;
+				*buffer = sdl_color;
+			}
+			break;
+		
+		case 2:
+			{
+				Uint16 *buffer;
+				buffer = ((Uint16*) sdl_surface->pixels) + (y * sdl_surface->pitch / 2) + x;
+				*buffer = sdl_color;
+			}
+			break;
+		
+		case 3:
+			{
+				Uint8 *buffer;
+				buffer = ((Uint8*) sdl_surface->pixels) + (y * sdl_surface->pitch) + (x * 3);
+				if (SDL_BYTEORDER == SDL_LIL_ENDIAN) {
+					buffer[0] = sdl_color;
+					buffer[1] = sdl_color >> 8;
+					buffer[2] = sdl_color >> 16;
 				}
-				break;
-			
-			case 2:
-				{
-					Uint16 *buffer;
-					buffer = ((Uint16*) sdl_surface->pixels) + (y * sdl_surface->pitch / 2) + x;
-					*buffer = sdl_color;
+				else {
+					buffer[2] = sdl_color;
+					buffer[1] = sdl_color >> 8;
+					buffer[0] = sdl_color >> 16;
 				}
-				break;
-			
-			case 3:
-				{
-					Uint8 *buffer;
-					buffer = ((Uint8*) sdl_surface->pixels) + (y * sdl_surface->pitch) + (x * 3);
-					if (SDL_BYTEORDER == SDL_LIL_ENDIAN) {
-						buffer[0] = sdl_color;
-						buffer[1] = sdl_color >> 8;
-						buffer[2] = sdl_color >> 16;
-					}
-					else {
-						buffer[2] = sdl_color;
-						buffer[1] = sdl_color >> 8;
-						buffer[0] = sdl_color >> 16;
-					}
-				}
-				break;
-			
-			case 4:
-				{
-					Uint32 *buffer;
-					buffer = ((Uint32*) sdl_surface->pixels) + (y * sdl_surface->pitch / 4) + x;
-					//TODO: check this
-					//buffer = ((Uint32*) sdl_surface->pixels) + (y * sdl_surface->pitch) + (x << 2);
-					*buffer = sdl_color;
-				}
-				break;
-		}
-	}
-	else {
-		PRINT_ERROR("[Video::drawPixel()] out of bound: x = %d, y = %d\n", x, y);
-		PAUSE;
+			}
+			break;
+		
+		case 4:
+			{
+				Uint32 *buffer;
+				//buffer = ((Uint32*) sdl_surface->pixels) + (y * sdl_surface->pitch / 4) + x;
+				buffer = ((Uint32*) sdl_surface->pixels) + (y * sdl_surface->w) + x;
+				*buffer = sdl_color;
+			}
+			break;
 	}
 }
 
 
-Uint32 Video::getFilteredColor(word coord_x, word coord_y)
+Uint32 Video::getFilteredColor(word coord_x, word coord_y, byte surface_type)
 {
 	if (option->is_filter) {
+		word max_coord_x;
+		if (surface_type == SURFACE_MAP) {
+			max_coord_x = map_width;
+		}
+		else {
+			max_coord_x = VIDEO_WIDTH;
+		}
+
 		int color_red_sum = 0;
 		int color_green_sum = 0;
 		int color_blue_sum = 0;
 
 		int count = 0;
 		for (int dx = -FILTER_RADIUS; dx <= FILTER_RADIUS; dx++) {
-			if (((coord_x + dx) >= 0) && ((coord_x + dx) < VIDEO_WIDTH)) {
-				byte color_index = getPoint(coord_x + dx, coord_y);
+			if (((coord_x + dx) >= 0) && ((coord_x + dx) < max_coord_x)) {
+				byte color_index = getPoint(surface_type, coord_x + dx, coord_y);
 				Uint32 color = getColor(color_index);
 
 				Uint8 color_red, color_green, color_blue;
@@ -730,7 +903,7 @@ Uint32 Video::getFilteredColor(word coord_x, word coord_y)
 		return SDL_MapRGB(sdl_screen->format, filtered_color_red, filtered_color_green, filtered_color_blue);
 	}
 	else {
-		return getColor(getPoint(coord_x, coord_y));
+		return getColor(getPoint(surface_type, coord_x, coord_y));
 	}
 }
 
