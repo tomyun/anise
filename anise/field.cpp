@@ -142,6 +142,7 @@ void Field::loadC5File()
 
 void Field::initializeMap()
 {
+/*
 	for (word yw = 0; yw < view_heightw; yw++) {
 		if (yw >= map_heightw) {
 			break;
@@ -154,14 +155,13 @@ void Field::initializeMap()
 
 			word sprite_index = data->queryWord(calculateMapOffset(view_coord_xw + xw, view_coord_yw + yw));
 
-/*
 			view[(yw * view_widthw) + xw][0] = sprite_index;
 			view[(yw * view_widthw) + xw][1] = 0;
 			view[(yw * view_widthw) + xw][2] = 0;
 			view[(yw * view_widthw) + xw][3] = 0;
-*/
 		}
 	}
+*/
 }
 
 
@@ -217,6 +217,11 @@ void Field::setCharactersOnMap()
 		character->foreground_layer_2nd = new word[character_widthw * character_heightw];
 		character->foreground_layer_3rd = new word[character_widthw * character_heightw];
 
+		character->neighbour_background_layer = new word[character_heightw * 2];
+		character->neighbour_foreground_layer_1st = new word[character_heightw * 2];
+		character->neighbour_foreground_layer_2nd = new word[character_heightw * 2];
+		character->neighbour_foreground_layer_3rd = new word[character_heightw * 2];
+
 		for (word yw = 0; yw < character_heightw; yw++) {
 			if (character_coord_yw + yw < view_coord_yw) {
 				continue;
@@ -246,7 +251,6 @@ void Field::setCharactersOnMap()
 				else if (map_sprite[3][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw)] == 0) {
 					character->foreground_layer_3rd[(yw * character_widthw) + xw] = sprite_index;
 				}
-
 /*
 				if (view[((character_coord_yw - view_coord_yw + yw) * view_widthw) + (character_coord_xw - view_coord_xw + xw)][1] == 0) {
 					view[((character_coord_yw - view_coord_yw + yw) * view_widthw) + (character_coord_xw - view_coord_xw + xw)][1] = sprite_index;
@@ -258,6 +262,19 @@ void Field::setCharactersOnMap()
 					view[((character_coord_yw - view_coord_yw + yw) * view_widthw) + (character_coord_xw - view_coord_xw + xw)][3] = sprite_index;
 				}
 */
+				//HACK: to support graphic filter
+				if (xw == 0) {
+					character->neighbour_background_layer[yw * 2] = map_sprite[0][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw) - FILTER_RADIUS];
+					character->neighbour_foreground_layer_1st[yw * 2] = map_sprite[1][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw) - FILTER_RADIUS];
+					character->neighbour_foreground_layer_2nd[yw * 2] = map_sprite[2][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw) - FILTER_RADIUS];
+					character->neighbour_foreground_layer_3rd[yw * 2] = map_sprite[3][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw) - FILTER_RADIUS];
+				}
+				else if (xw == (character_widthw - 1)) {
+					character->neighbour_background_layer[(yw * 2) + 1] = map_sprite[0][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw) + FILTER_RADIUS];
+					character->neighbour_foreground_layer_1st[(yw * 2) + 1] = map_sprite[1][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw) + FILTER_RADIUS];
+					character->neighbour_foreground_layer_2nd[(yw * 2) + 1] = map_sprite[2][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw) + FILTER_RADIUS];
+					character->neighbour_foreground_layer_3rd[(yw * 2) + 1] = map_sprite[3][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw) + FILTER_RADIUS];
+				}
 			}
 		}
 

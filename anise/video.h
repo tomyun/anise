@@ -73,6 +73,12 @@ enum CharacterSpriteType {
 };
 
 
+enum CharacterSpriteNeighbor {
+	SPRITE_LEFT = 0,
+	SPRITE_RIGHT = 1
+};
+
+
 struct BlitStruct {
 	struct BlitPlane {		
 		word x, y;
@@ -96,6 +102,12 @@ public:
 	word *foreground_layer_2nd;
 	word *foreground_layer_3rd;
 
+	//HACK: only appliable when FILTER_RADIUS is 1
+	word *neighbour_background_layer;
+	word *neighbour_foreground_layer_1st;
+	word *neighbour_foreground_layer_2nd;
+	word *neighbour_foreground_layer_3rd;
+
 	CharacterSprite()
 	{
 		coord_xw = 0;
@@ -108,6 +120,11 @@ public:
 		foreground_layer_1st = NULL;
 		foreground_layer_2nd = NULL;
 		foreground_layer_3rd = NULL;
+
+		neighbour_background_layer = NULL;
+		neighbour_foreground_layer_1st = NULL;
+		neighbour_foreground_layer_2nd = NULL;
+		neighbour_foreground_layer_3rd = NULL;
 	}
 	
 	
@@ -124,6 +141,19 @@ public:
 		}
 		if (foreground_layer_3rd != NULL) {
 			delete[] foreground_layer_3rd;
+		}
+
+		if (neighbour_background_layer != NULL) {
+			delete [] neighbour_background_layer;
+		}
+		if (neighbour_foreground_layer_1st != NULL) {
+			delete [] neighbour_foreground_layer_1st;
+		}
+		if (neighbour_foreground_layer_2nd != NULL) {
+			delete [] neighbour_foreground_layer_2nd;
+		}
+		if (neighbour_foreground_layer_3rd != NULL) {
+			delete [] neighbour_foreground_layer_3rd;
 		}
 	}
 
