@@ -5,7 +5,18 @@ Config::Config()
 	static const char title[] = "ANISE beta 3";
 	static const char usage[] =
 		" - A Newly Implemented Scripting Engine for ai5v\n"
-		"Usage: anise [GAME] [DIRECTORY]\n";
+		"\n"
+		"Usage: anise [OPTIONS] ... [GAME]\n"
+		"\n"
+		"Options:\n"
+		"  -p		Path to the game\n"
+		"  -l		Select language (j: Japanese, k: *Korean, K: Korean (gamebox))\n"
+		"\n"
+		"Supported Games:\n"
+		"  nanpa2	Dokyusei 2\n"
+		"\n"
+		"Example:\n"
+		"  anise -pC:\\NANPA2 -lK nanpa2\n";
 
 	this->title = title;
 	this->usage = usage;
@@ -18,7 +29,7 @@ Config::Config()
 		font_file_name[i] = NULL;
 	}
 
-	//TODO: move this to proper position (make '~h' options work)
+	//TODO: move this to proper position
 	sprintf(font_file_name, "jishan.fnt");
 
 	variable_size = NULL;
@@ -48,18 +59,44 @@ bool Config::initialize(int argc, char *argv[])
 		for (int i = 1; i < argc; i++) {
 			char *option = argv[i];
 
-			if ((strcmp(option, "nanpa2") == 0) || (strcmp(option, "nanpa2h") == 0) || (strcmp(option, "nanpa2gb") == 0)) {
+			if (option[0] == '-') {
+				switch (option[1]) {
+					case 'p':
+						{
+							path_name = option + 2;
+						}
+						break;
+
+					case 'l':
+						{
+							//TODO: need clean up
+							switch (option[2]) {
+								case 'j':
+									{
+										sprintf(font_file_name, "jis.fnt");
+									}
+									break;
+
+								case 'h':
+									{
+										sprintf(font_file_name, "jishan.fnt");
+									}
+									break;
+
+								case 'H':
+									{
+										sprintf(font_file_name, "jishan.fnt");
+									}
+									break;
+							}
+						}
+						break;
+				}
+			}
+			else if (strcmp(option, "nanpa2") == 0) {
 				game_type = GAME_NANPA2;
 
 				sprintf(script_file_name, "start.mes");
-
-				//TODO: make them exclusive
-				if ((strcmp(option, "nanpa2h") == 0)) {
-					sprintf(font_file_name, "jishan.fnt");
-				}
-				else if ((strcmp(option, "nanpa2gb") == 0)) {
-					sprintf(font_file_name, "jishan.fnt");
-				}
 
 				variable_size = 1024;
 				selection_item_entry = 0xED7C;
