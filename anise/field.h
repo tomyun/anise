@@ -5,31 +5,46 @@
 #include "video.h"
 #include "input.h"
 
-#define VIEW_SPRITES			1000
-#define VIEW_LAYERS				4
-#define TILE_SIZE				8
-#define CHARACTER_LOG			10
-#define C5_CHARACTER_SIZE		16
-#define C5_ENTRANCE_SIZE		10
-#define C5_ENTRYINFO_SIZE		18
+#define VIEW_SPRITES					1000
+#define VIEW_LAYERS						4
+#define TILE_SIZE						8
+#define CHARACTER_LOG					10
+#define C5_CHARACTER_SIZE				16
+#define C5_ENTRANCE_SIZE				10
+#define C5_ENTRYINFO_SIZE				18
 
-#define COLLISION_NOTDETECTED	NONE
-#define ENTRANCE_NOTFOUND		NONE
-#define PATH_NOTFOUND			NONE
+#define COLLISION_NOTDETECTED			NONE
+#define ENTRANCE_NOTFOUND				NONE
+#define PATH_NOTFOUND					NONE
 
-#define SUBMAP_COORDX_START		248
-#define SUBMAP_COORDX_END		392
-#define SUBMAP_COORDY_START		288
-#define SUBMAP_COORDY_END		320
-#define SUBMAP_CLICKED			0xFFFE
+#define PATH_FOUND						0
 
-#define MAP_WALL				0x80
+#define SUBMAP_COORDX_START				248
+#define SUBMAP_COORDX_END				392
+#define SUBMAP_COORDY_START				288
+#define SUBMAP_COORDY_END				320
+#define SUBMAP_CLICKED					0xFFFE
 
-#define CHARACTER_FRAME_MASK	0x01
+#define MAP_WALL_MASK					0x80
 
-#define CHARACTER_CLICK_RANGE	48
+#define PATH_MARK_CLOSED				0xFF
+#define PATH_MARK_OPENED				0xFE
+#define PATH_MARK_INITIAL				0xFD
+#define PATH_MARK_CHARACTER				0x00
 
-#define MP_RLE_MASK				0x4000
+#define PATH_SEQUENCE_DEFAULT			0xFFFF
+#define PATH_SEQUENCE_DOWN_MASK			0x0001
+#define PATH_SEQUENCE_RIGHT_MASK		0x0010
+#define PATH_SEQUENCE_HORIZONTAL_MASK	0x0100
+#define PATH_SEQUENCE_MASK				0x0111
+
+#define PATH_ORTHOGONAL_THRESHOLD		3
+
+#define CHARACTER_FRAME_MASK			0x01
+
+#define CHARACTER_CLICK_RANGE			48
+
+#define MP_RLE_MASK						0x4000
 
 enum C5Struct {
 	C5_FUNCTION3_0 = 0x28,
@@ -184,8 +199,11 @@ private:
 	bool moveCharacterRight(word character_offset);
 	void toggleFrame(word character_offset);
 
-	void setPath(word character_offset, word destination_coord_xw, word destination_coord_yw, bool use_alternatve);
+	void setPath(word character_offset, word target_coord_xw, word target_coord_yw, bool use_alternatve);
+	word calculatePathOffset(word coord_xw, word coord_yw);
+	byte getPathMark(word coord_xw, word coord_yw);
 	void initializePath(word character_offset);
+	bool generatePath(word character_offset, word coord_xw, word coord_yw, word mark, word sequence);
 	void moveCharacterOnPath(word character_offset);
 
 	void saveCharacterLog(word character_offset, byte character_frame, word character_coord_xw, word character_coord_yw);
@@ -211,7 +229,7 @@ public:
 	void setCharacterOperationOffset(word character_index, word character_operation_offset);
 	void activateCharacter(word character_index, word flag);
 	void unpackMPFile(word mp_offset);
-	void function16();
+	void copyMapBlock(word source_coord_x0w, word source_coord_y0w, word source_coord_x1w, word source_coord_y1w, word destination_coord_xw, word destination_coord_yw);
 	word makeSetPath(word character_index);
 	void clearPathFoundStatus();
 };
