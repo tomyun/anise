@@ -27,7 +27,13 @@ dnl Check for SDL
 SDL_VERSION=1.2.0
 AM_PATH_SDL($SDL_VERSION, :, AC_MSG_ERROR([*** SDL version $SDL_VERSION is not found]))
 CFLAGS="$CFLAGS $SDL_CFLAGS"
-LIBS="$LIBS $SDL_LIBS"
+
+#HACK: avoid link error when cross-compiling for Zaurus
+if test -z "$QPEDIR"; then
+	LIBS="$LIBS $SDL_LIBS"
+else
+	LIBS="$LIBS $SDL_LIBS -Wl,rpath-link,$QPEDIR/lib"
+fi
 
 dnl Checks for header files.
 AC_HEADER_STDC
