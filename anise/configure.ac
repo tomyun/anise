@@ -1,7 +1,7 @@
 AC_PREREQ(2.53)
 
 dnl Process this file with autoconf to produce a configure script.
-#AC_INIT([Project ANISE], [beta8-20040216-linux], [tomyun@yonsei.ac.kr], anise)
+#AC_INIT([Project ANISE], [beta9-20040226-linux], [tomyun@yonsei.ac.kr], anise)
 #AC_CONFIG_SRCDIR(anise.h)
 AC_INIT(anise.h)
 
@@ -11,7 +11,7 @@ AC_CANONICAL_TARGET
 
 dnl Initialize for automake
 #AM_INIT_AUTOMAKE(1.6)
-AM_INIT_AUTOMAKE(anise, [beta8-20040216-linux])
+AM_INIT_AUTOMAKE(anise, [beta9-20040226-linux])
 
 dnl Checks for programs.
 AC_PROG_CPP
