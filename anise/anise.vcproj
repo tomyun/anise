@@ -136,6 +136,12 @@
 				RelativePath=".\field.cpp">
 			</File>
 			<File
+				RelativePath=".\field_move.cpp">
+			</File>
+			<File
+				RelativePath=".\field_path.cpp">
+			</File>
+			<File
 				RelativePath=".\file.cpp">
 			</File>
 			<File
