@@ -1,13 +1,15 @@
 #ifndef DIALOGUE_H
 #define DIALOGUE_H
 
-#include <string>
 #include "memory.h"
 #include "video.h"
 #include "timer.h"
 #include "input.h"
 #include "animation.h"
 #include "script_code.h"
+#include "font_jis.h"
+#include "font_jishan.h"
+#include "font_gamebox.h"
 
 using std::string;
 
@@ -31,7 +33,7 @@ private:
 	Animation *animation;
 	Option *option;
 
-	byte *font;
+	const byte *font;
 	long int size;
 
 	byte code_newline_first;
@@ -39,17 +41,18 @@ private:
 
 	word previous_code;
 
+	void updatePosition();
+	void breakNewLine();
+
 public:
-	Dialogue(Memory *memory, Video *video, Timer *timer,  Input *input, Animation *animation, Option *option);
+	Dialogue(Memory *memory, Video *video, Timer *timer, Input *input, Animation *animation, Option *option);
 	~Dialogue();
 
-	bool initialize();
 	void putHalfWidthCharacters();
 	void putStandardText();
 	void putPredefinedText();
 	void putFullWidthCharacter(byte first_code, byte second_code);
-	void updatePosition();
-	void breakNewLine();
+
 	void setPosition(word coord_xb, word coord_y);
 	void setPosition();
 	void getPosition(word *coord_xb, word *coord_y);
