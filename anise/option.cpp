@@ -12,8 +12,10 @@ Option::Option()
 		"  -l		Select language (j: Japanese, k: *Korean, K: Korean (gamebox))\n"
 		"\n"
 		"Supported Games:\n"
-		"  nanpa2	Dokyusei 2\n"
+		"  nanpa2	Dokyusei 2 (including special version)\n"
 		"  nanpa1	Dokyusei 1\n"
+		"  aisi		Aisi\n"
+		"  crescent	Crescent\n"
 		"\n"
 		"Example:\n"
 		"  anise -pC:\\NANPA2 -lK nanpa2\n";
@@ -129,6 +131,18 @@ bool Option::initialize(int argc, char *argv[])
 
 				sprintf(script_file_name, "main.mes");
 
+				variable_size = 512;
+				selection_item_entry = 0xED78;
+				procedure_entry = 0xEDA4;
+				animation_slot_entry = 0xF302;
+				animation_script_entry = 0x8000;
+			}
+			else if (strcmp(option, "crescent") == 0) {
+				game_type = GAME_CRESCENT;
+
+				sprintf(script_file_name, "start.m");
+
+				//HACK: same as aisi
 				variable_size = 512;
 				selection_item_entry = 0xED78;
 				procedure_entry = 0xEDA4;
