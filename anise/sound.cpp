@@ -81,12 +81,21 @@ void Sound::mix(Uint8 *stream, int stream_length)
 
 void Sound::load()
 {
+	if (option->sound_file_extension != WAV_FILE_EXTENSION) {
+		if (option->sound_file_extension == M_FILE_EXTENSION) {
+			if (((option->game_type == GAME_NANPA2) && (option->font_type == FONT_GAMEBOX)) == false) {
+				return;
+			}
+		}
+		else {
+			return;
+		}
+	}
+
 	if (buffer != NULL) {
 		SDL_FreeWAV(buffer);
 		buffer = NULL;
 	}
-
-	SDL_AudioSpec dummy_spec;
 
 	if (file_name != option->sound_file_name) {
 		file_name = option->sound_file_name + option->sound_file_extension;
@@ -122,6 +131,7 @@ void Sound::load()
 				}
 		}
 
+		SDL_AudioSpec dummy_spec;
 		if (SDL_LoadWAV(file_name.c_str(), &dummy_spec, &buffer, &length) == NULL) {
 			PRINT_ERROR("[Sound::load()] unable to load wave file(%s): %s\n", file_name.c_str(), SDL_GetError());
 		}

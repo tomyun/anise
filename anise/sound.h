@@ -2,6 +2,7 @@
 #define SOUND_H
 
 #include "anise.h"
+#include "file.h"
 #include "option.h"
 #include "SDL.h"
 #include "SDL_audio.h"
