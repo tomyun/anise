@@ -264,7 +264,10 @@ bool File::load(MemoryBlock *memory_block, word offset, bool is_flag)
 {
 	PRINT("[File::load()]\n");
 
-	//assert(offset < memory_block->getSize());
+	if (offset + size > memory_block->getSize()) {
+		PRINT_ERROR("[File::load()] out of bound: offset = %d, size = %d, memory_block->size = %d\n", offset, size, memory_block->getSize());
+		return false;
+	}
 
 	byte *raw = memory_block->getRaw();
 
