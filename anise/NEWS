@@ -1,6 +1,19 @@
 Project ANISE
 =============
 
+ 2004. 2. 16
+ -----------
+
+   beta 8 Released
+     * Can be cross-compiled for Zaurus SL-C7X0/860 series
+     * Implement Korean Josa processing for 'Dokyusei 2 -Retail-'
+     * Support archive file(elf?.dat) in 'Dokyusei 1'
+     * Clip blitting region and it eliminates screen crash
+     * Reimplement internal video routines and it gains some more speed
+     * Fix invalid framebuffer locking
+     * Support blur filter mode and scanline mode
+
+
  2004. 2. 5
  ----------
 
