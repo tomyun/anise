@@ -10,7 +10,7 @@ Option::Option()
 		"Options:\n"
 		"  -p\t\tPath to the game\n"
 		"  -l[j,k,K]\tLanguage (j: Japanese, *k: Korean, K: Korean (gamebox))\n"
-		"  -u\t\tUnpacked game files\n"
+		"  -u\t\tUse unpacked game files\n"
 		"  -f\t\tFullscreen mode\n"
 		"  -b[s]\t\tBlurring filter mode (s: scanline)\n"
 		"\n"
@@ -21,7 +21,8 @@ Option::Option()
 		"  crescent\tCrescent\n"
 		"\n"
 		"Example:\n"
-		"  anise -pC:\\NANPA2 -lK nanpa2\n";
+		"  anise -pC:\\NANPA2 -lK nanpa2\n"
+		"  anise -pC:\\NANPA1 -lj -bs nanpa1\n";
 
 	this->title = title;
 	this->usage = usage;
