@@ -4,7 +4,7 @@
 #include "anise.h"
 #include "SDL_timer.h"
 
-#define TIMER_INTERVAL	10
+#define TIMER_INTERVAL	16
 
 class Timer {
 private:

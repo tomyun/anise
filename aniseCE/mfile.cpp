@@ -8,10 +8,18 @@
 #define chWord(x) (chInfo[ch].word[x])
 #define OPLWrt(x, y) YMF262Write(0, x, y)
 
+#ifndef INLINE
+	#ifndef _WIN32_WCE
+		#define INLINE inline
+	#else
+		#define INLINE inline
+	#endif
+#endif
+
 //#define MFILE_TEMPO 1.25 // Original
 #define MFILE_TEMPO 1.20
 
-const int MFILE_Buffering = 50;
+const int MFILE_Buffering = 200;
 
 const unsigned char operParam[4] = {0x08, 0x0A, 0x09, 0x0D};
 const unsigned char volumeParam[16] = {
@@ -216,7 +224,7 @@ void MFile::setDepth(unsigned char depth){
 	OPLWrt(0x01, depth);
 }
 
-void MFile::OpCode(unsigned char op){
+INLINE void MFile::OpCode(unsigned char op){
 	switch(op){
 	case 0x81:
 		setPreset(getByte());
@@ -406,7 +414,7 @@ void MFile::OpCode(unsigned char op){
 	}
 }
 
-void MFile::NoteToFreq(void){
+INLINE void MFile::NoteToFreq(void){
 	chWord(0x0B) = noteFreqParam[chByte(0x0A) + baseNote];
 	chStatus |= 0x02;
 }
@@ -459,7 +467,7 @@ void MFile::setupMusic(void){
 }
 
 
-void MFile::NoteOnSub(void){
+INLINE void MFile::NoteOnSub(void){
 	int base_vol = char(chByte(0x3F)) - char(chByte(0x4E));
 	if(base_vol < 0){
 		base_vol = 0;
@@ -483,7 +491,7 @@ void MFile::NoteOnSub(void){
 	}
 }
 
-void MFile::NoteOn(void){
+INLINE void MFile::NoteOn(void){
 	if(!(chStatus & 0x80))return;
 	unsigned short note = 0;
 	if(!(chStatus & 0x02)){
@@ -598,7 +606,7 @@ void MFile::NoteOn(void){
 	}
 }
 
-void MFile::NoteOff(void){
+INLINE void MFile::NoteOff(void){
 	if(chStatus & 0x01){
 		chStatus &= 0xF8;
 		OutPortOp(0xA0, chByte(0x0E));
@@ -606,7 +614,7 @@ void MFile::NoteOff(void){
 	}
 }
 
-void MFile::PlaySound(void){
+INLINE void MFile::PlaySound(void){
 	if(!(chStatus & 0x80))return;
 
 	if((chStatus & 0x01)&&(!(chStatus & 0x04))&&

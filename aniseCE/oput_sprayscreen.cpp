@@ -54,7 +54,8 @@ SCRIPTCALL Script::oput_sprayScreen()
 			break;
 		}
 
-		word spray_timer = timer->checkSprayTimer();
+		word spray_timer = 0;
+		//word spray_timer = timer->checkSprayTimer();
 		while (spray_timer < 2) {
 			//TODO: debugmode
 			animation->show();
@@ -62,7 +63,7 @@ SCRIPTCALL Script::oput_sprayScreen()
 				break;
 			}
 
-			timer->delay();
+			//timer->delay();
 			spray_timer = timer->checkSprayTimer();
 		}
 	}

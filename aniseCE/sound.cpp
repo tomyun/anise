@@ -28,15 +28,15 @@ Sound::Sound(File *file, Option *option)
 	WAVEFORMATEX	wfex;
 
 	int samples = 2048 * int(option->sound_freq / 11025);
-	wave_buf = (BYTE *)malloc(samples * 4);
+	wave_buf = (BYTE *)malloc(samples * BUFFER_COUNT);
 	if (wave_buf == NULL) {
 		//TODO: process error
 		PRINT_ERROR("[Sound::Sound()] unable to malloc sound buffer\n");
 		exit(1);
 	}
 
-	ZeroMemory(wave_buf, samples * 4);
-	for (i=0; i<4; i++) {
+	ZeroMemory(wave_buf, samples * BUFFER_COUNT);
+	for (i=0; i<BUFFER_COUNT; i++) {
 		ZeroMemory(wh + i, sizeof(WAVEHDR));
 		wh[i].lpData = (char *)wave_buf + (samples * i);
 		wh[i].dwBufferLength = samples;
@@ -53,7 +53,7 @@ Sound::Sound(File *file, Option *option)
 	hwave = 0;
 	if (waveOutOpen(&hwave, WAVE_MAPPER, &wfex, (DWORD)callback, (DWORD)this, CALLBACK_FUNCTION) == MMSYSERR_NOERROR)
 	{
-		for (i=0; i<4; i++) {
+		for (i=0; i<BUFFER_COUNT; i++) {
 			waveOutPrepareHeader(hwave, wh + i, sizeof(WAVEHDR));
 			waveOutWrite(hwave, wh + i, sizeof(WAVEHDR));
 		}
@@ -100,7 +100,7 @@ Sound::~Sound()
 	int		i;
 	int		retry = 10;
 
-	for (i=0; i<4; i++) {
+	for (i=0; i<BUFFER_COUNT; i++) {
 		waveOutUnprepareHeader(hwave, wh + i, sizeof(WAVEHDR));
 		wh[i].lpData = NULL;
 	}

@@ -14,6 +14,9 @@ private:
 	MemoryBlock *memory;
 
 	struct ChannelInfo{
+		unsigned char port;
+		unsigned char op;
+
 		unsigned char status;
 		unsigned short filePos;
 		unsigned char delay;
@@ -23,9 +26,8 @@ private:
 		unsigned char spkch;
 		unsigned char volume;
 		unsigned char subVol[4];
+
 		unsigned char byte[100];
-		unsigned char port;
-		unsigned char op;
 		short int word[100];
 	} chInfo[6];
 

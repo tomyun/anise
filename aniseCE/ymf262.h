@@ -4,10 +4,12 @@
 #define HAS_YMF262 1
 #define _ANISE_BUF
 
-#ifndef _WIN32_WCE
-	#define INLINE inline
-#else
-	#define INLINE inline
+#ifndef INLINE
+	#ifndef _WIN32_WCE
+		#define INLINE inline
+	#else
+		#define INLINE inline
+	#endif
 #endif
 
 #define BUILD_YMF262 (HAS_YMF262)

@@ -1,14 +1,6 @@
 #include "input.h"
 #include "video.h"
 
-#ifdef _WIN32_WCE
-	#define _WIN32_WCE_IBEE // for IBEE
-#endif
-
-#ifdef _WIN32_WCE_IBEE
-static bool IBEE_key_func = false;
-#endif
-
 Input::Input(Memory *memory, Timer *timer)
 {
 	this->memory = memory;
@@ -36,6 +28,10 @@ Input::Input(Memory *memory, Timer *timer)
 	cursor[CURSOR_SECONDFRAME] = NULL;
 
 	current_cursor_frame = 0;
+
+#ifdef _WIN32_WCE_IBEE
+	IBEE_key_func = false;
+#endif
 
 	hideCursor();
 }

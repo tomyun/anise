@@ -11,6 +11,7 @@
 
 #ifdef _WIN32_WCE
 	#include <windows.h>
+	#define BUFFER_COUNT 8
 #endif
 
 class Sound {
@@ -24,7 +25,7 @@ private:
 #ifdef _WIN32_WCE
 	HWAVEOUT hwave;
 	BYTE *wave_buf;
-	WAVEHDR wh[4];
+	WAVEHDR wh[BUFFER_COUNT];
 #else
 	SDL_AudioSpec spec;
 #endif

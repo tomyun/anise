@@ -96,7 +96,9 @@ void File::open(const char *filename, bool is_flag)
 	}
 }
 
-
+#ifdef _WIN32_WCE_SIG3 // NK : Temporary(for Network shared folder)
+const TCHAR BasePath[10] = {0x005C, 0x30CD, 0x30C3, 0x30C8, 0x30EF, 0x30FC, 0x30AF, 0x005C, 0}; // '\Network\' (Japanese)
+#endif
 void File::openDirect(const char *filename, const char *mode)
 {
 	PRINT("[File::openDirect()] %s\n", filename);
@@ -109,7 +111,21 @@ void File::openDirect(const char *filename, const char *mode)
 	// concatenate path name with file name
 	name = concatenatePath(filename);
 
+#ifdef _WIN32_WCE_SIG3 // NK : Temporary(for Network shared folder)
+	if(name.c_str()[0] == '\\'){
+		handle = fopen(name.c_str(), mode);
+	} else {
+		TCHAR widefile[MAX_PATH], widename[MAX_PATH], widemode[10];
+		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, name.c_str(), -1, widefile, MAX_PATH);
+		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, mode, -1, widemode, 10);
+		wcscpy(widename, BasePath);
+		wcscat(widename, widefile);
+
+		handle = _wfopen(widename, widemode);
+	}
+#else
 	handle = fopen(name.c_str(), mode);
+#endif
 	if (handle == NULL) {
 		PRINT_ERROR("[File::openDirect()] fopen() failed: %s\n", name.c_str());
 		exit(1);
@@ -135,7 +151,20 @@ void File::initializeDAT(int slot_index, int packed_index)
 	string filename = option->packed_file_name + packed_index_c_str + option->packed_file_extension;
 	string packed_name = concatenatePath(filename.c_str());
 
+#ifdef _WIN32_WCE_SIG3 // NK : Temporary(for Network shared folder)
+	if(packed_name.c_str()[0] == '\\'){
+		packed_handle[slot_index] = fopen(packed_name.c_str(), FILE_READ);
+	} else {
+		TCHAR widefile[MAX_PATH], widename[MAX_PATH];
+		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, packed_name.c_str(), -1, widefile, MAX_PATH);
+		wcscpy(widename, BasePath);
+		wcscat(widename, widefile);
+
+		packed_handle[slot_index] = _wfopen(widename, _T(FILE_READ));
+	}
+#else
 	packed_handle[slot_index] = fopen(packed_name.c_str(), FILE_READ);
+#endif
 	packed_entry_offset[slot_index] = 0;
 
 	fseek(packed_handle[slot_index], 500, SEEK_SET);

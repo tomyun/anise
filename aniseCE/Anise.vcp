@@ -31,6 +31,8 @@ CFG=Anise - Win32 (WCE MIPS) Debug
 !MESSAGE "Anise - Win32 (WCE ARM) Debug" (based on "Win32 (WCE ARM) Application")
 !MESSAGE "Anise - Win32 (WCE x86em) Release" (based on "Win32 (WCE x86em) Application")
 !MESSAGE "Anise - Win32 (WCE x86em) Debug" (based on "Win32 (WCE x86em) Application")
+!MESSAGE "Anise - Win32 (WCE ARM) IBEE Release" (based on "Win32 (WCE ARM) Application")
+!MESSAGE "Anise - Win32 (WCE ARM) Sig3 Release" (based on "Win32 (WCE ARM) Application")
 !MESSAGE 
 
 # Begin Project
@@ -370,6 +372,78 @@ LINK32=link.exe
 # ADD BASE LINK32 commctrl.lib coredll.lib $(CEx86Corelibc) /nologo /stack:0x10000,0x1000 /subsystem:windows /debug /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /windowsce:emulation /MACHINE:IX86
 # ADD LINK32 $(CEx86Corelibc) commctrl.lib coredll.lib SDL.lib /nologo /stack:0x10000,0x1000 /subsystem:windows /debug /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /windowsce:emulation /MACHINE:IX86
 
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "ARMIBEE Release"
+# PROP BASE Intermediate_Dir "ARMIBEE Release"
+# PROP BASE CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "IBEERel"
+# PROP Intermediate_Dir "IBEERel"
+# PROP CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /YX /Oxs /M$(CECrtMT) /Zm200 /c
+# SUBTRACT BASE CPP /Fr
+# ADD CPP /nologo /W3 /O2 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_WIN32_WCE_IBEE" /YX /Oxs /M$(CECrtMT) /Zm200 /c
+# SUBTRACT CPP /Fr
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 SDL.lib commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+# ADD LINK32 SDL.lib commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "ARMSig3 Release"
+# PROP BASE Intermediate_Dir "ARMSig3 Release"
+# PROP BASE CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "SIG3Rel"
+# PROP Intermediate_Dir "SIG3Rel"
+# PROP CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_WIN32_WCE_IBEE" /YX /Oxs /M$(CECrtMT) /Zm200 /c
+# SUBTRACT BASE CPP /Fr
+# ADD CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_WIN32_WCE_SIG3" /YX /Oxs /M$(CECrtMT) /Zm200 /c
+# SUBTRACT CPP /Fr
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 SDL.lib commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+# ADD LINK32 SDL.lib commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+
 !ENDIF 
 
 # Begin Target
@@ -384,6 +458,8 @@ LINK32=link.exe
 # Name "Anise - Win32 (WCE ARM) Debug"
 # Name "Anise - Win32 (WCE x86em) Release"
 # Name "Anise - Win32 (WCE x86em) Debug"
+# Name "Anise - Win32 (WCE ARM) IBEE Release"
+# Name "Anise - Win32 (WCE ARM) Sig3 Release"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -709,6 +785,7 @@ DEP_CPP_OP_AN=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -717,7 +794,6 @@ DEP_CPP_OP_AN=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_AN=\
 	".\DL.h"\
@@ -743,7 +819,6 @@ NODEP_CPP_OP_AN=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -894,6 +969,108 @@ NODEP_CPP_OP_AN=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_AN=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_AN=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_AN=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_AN=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -1218,6 +1395,7 @@ DEP_CPP_OP_CA=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -1226,7 +1404,6 @@ DEP_CPP_OP_CA=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_CA=\
 	".\DL.h"\
@@ -1252,7 +1429,6 @@ NODEP_CPP_OP_CA=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -1403,6 +1579,108 @@ NODEP_CPP_OP_CA=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_CA=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_CA=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_CA=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_CA=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -1727,6 +2005,7 @@ DEP_CPP_OP_CAL=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -1735,7 +2014,6 @@ DEP_CPP_OP_CAL=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_CAL=\
 	".\DL.h"\
@@ -1761,7 +2039,6 @@ NODEP_CPP_OP_CAL=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -1912,6 +2189,108 @@ NODEP_CPP_OP_CAL=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_CAL=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_CAL=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_CAL=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_CAL=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -2236,6 +2615,7 @@ DEP_CPP_OP_CL=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -2244,7 +2624,6 @@ DEP_CPP_OP_CL=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_CL=\
 	".\DL.h"\
@@ -2270,7 +2649,6 @@ NODEP_CPP_OP_CL=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -2421,6 +2799,108 @@ NODEP_CPP_OP_CL=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_CL=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_CL=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_CL=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_CL=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -2745,6 +3225,7 @@ DEP_CPP_OP_DE=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -2753,7 +3234,6 @@ DEP_CPP_OP_DE=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_DE=\
 	".\DL.h"\
@@ -2779,7 +3259,6 @@ NODEP_CPP_OP_DE=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -2930,6 +3409,108 @@ NODEP_CPP_OP_DE=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_DE=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_DE=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_DE=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_DE=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -3254,6 +3835,7 @@ DEP_CPP_OP_DEL=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -3262,7 +3844,6 @@ DEP_CPP_OP_DEL=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_DEL=\
 	".\DL.h"\
@@ -3288,7 +3869,6 @@ NODEP_CPP_OP_DEL=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -3439,6 +4019,108 @@ NODEP_CPP_OP_DEL=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_DEL=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_DEL=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_DEL=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_DEL=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -3763,6 +4445,7 @@ DEP_CPP_OP_DI=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -3771,7 +4454,6 @@ DEP_CPP_OP_DI=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_DI=\
 	".\DL.h"\
@@ -3797,7 +4479,6 @@ NODEP_CPP_OP_DI=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -3948,6 +4629,108 @@ NODEP_CPP_OP_DI=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_DI=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_DI=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_DI=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_DI=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -4272,6 +5055,7 @@ DEP_CPP_OP_IF=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -4280,7 +5064,6 @@ DEP_CPP_OP_IF=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_IF=\
 	".\DL.h"\
@@ -4306,7 +5089,6 @@ NODEP_CPP_OP_IF=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -4457,6 +5239,108 @@ NODEP_CPP_OP_IF=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_IF=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_IF=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_IF=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_IF=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -4781,6 +5665,7 @@ DEP_CPP_OP_MA=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -4789,7 +5674,6 @@ DEP_CPP_OP_MA=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_MA=\
 	".\DL.h"\
@@ -4815,7 +5699,6 @@ NODEP_CPP_OP_MA=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -4966,6 +5849,108 @@ NODEP_CPP_OP_MA=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_MA=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_MA=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_MA=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_MA=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -5290,6 +6275,7 @@ DEP_CPP_OP_MAK=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -5298,7 +6284,6 @@ DEP_CPP_OP_MAK=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_MAK=\
 	".\DL.h"\
@@ -5324,7 +6309,6 @@ NODEP_CPP_OP_MAK=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -5475,6 +6459,108 @@ NODEP_CPP_OP_MAK=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_MAK=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_MAK=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_MAK=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_MAK=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -5799,6 +6885,7 @@ DEP_CPP_OP_NU=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -5807,7 +6894,6 @@ DEP_CPP_OP_NU=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_NU=\
 	".\DL.h"\
@@ -5833,7 +6919,6 @@ NODEP_CPP_OP_NU=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -5984,6 +7069,108 @@ NODEP_CPP_OP_NU=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_NU=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_NU=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_NU=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_NU=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -6308,6 +7495,7 @@ DEP_CPP_OP_SA=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -6316,7 +7504,6 @@ DEP_CPP_OP_SA=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_SA=\
 	".\DL.h"\
@@ -6342,7 +7529,6 @@ NODEP_CPP_OP_SA=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -6493,6 +7679,108 @@ NODEP_CPP_OP_SA=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_SA=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_SA=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_SA=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_SA=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -6817,6 +8105,7 @@ DEP_CPP_OP_SAV=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -6825,7 +8114,6 @@ DEP_CPP_OP_SAV=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_SAV=\
 	".\DL.h"\
@@ -6851,7 +8139,6 @@ NODEP_CPP_OP_SAV=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -7002,6 +8289,108 @@ NODEP_CPP_OP_SAV=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_SAV=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_SAV=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_SAV=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_SAV=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -7326,6 +8715,7 @@ DEP_CPP_OP_SE=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -7334,7 +8724,6 @@ DEP_CPP_OP_SE=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_SE=\
 	".\DL.h"\
@@ -7360,7 +8749,6 @@ NODEP_CPP_OP_SE=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -7511,6 +8899,108 @@ NODEP_CPP_OP_SE=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_SE=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_SE=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_SE=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_SE=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -7835,6 +9325,7 @@ DEP_CPP_OP_SET=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -7843,7 +9334,6 @@ DEP_CPP_OP_SET=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_SET=\
 	".\DL.h"\
@@ -7869,7 +9359,6 @@ NODEP_CPP_OP_SET=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -8020,6 +9509,108 @@ NODEP_CPP_OP_SET=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_SET=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_SET=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_SET=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_SET=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -8344,6 +9935,7 @@ DEP_CPP_OP_SETD=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -8352,7 +9944,6 @@ DEP_CPP_OP_SETD=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_SETD=\
 	".\DL.h"\
@@ -8378,7 +9969,6 @@ NODEP_CPP_OP_SETD=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -8529,6 +10119,108 @@ NODEP_CPP_OP_SETD=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_SETD=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_SETD=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_SETD=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_SETD=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -8853,6 +10545,7 @@ DEP_CPP_OP_UT=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -8861,7 +10554,6 @@ DEP_CPP_OP_UT=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_UT=\
 	".\DL.h"\
@@ -8887,7 +10579,6 @@ NODEP_CPP_OP_UT=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -9038,6 +10729,108 @@ NODEP_CPP_OP_UT=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_UT=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_UT=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_UT=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_UT=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -9362,6 +11155,7 @@ DEP_CPP_OP_WA=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -9370,7 +11164,6 @@ DEP_CPP_OP_WA=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP_WA=\
 	".\DL.h"\
@@ -9396,7 +11189,6 @@ NODEP_CPP_OP_WA=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -9547,6 +11339,108 @@ NODEP_CPP_OP_WA=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP_WA=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_WA=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP_WA=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP_WA=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -9875,6 +11769,7 @@ DEP_CPP_OP4_B=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -9883,7 +11778,6 @@ DEP_CPP_OP4_B=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_B=\
 	".\DL.h"\
@@ -9909,7 +11803,6 @@ NODEP_CPP_OP4_B=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -10060,6 +11953,108 @@ NODEP_CPP_OP4_B=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_B=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_B=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_B=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_B=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -10384,6 +12379,7 @@ DEP_CPP_OP4_BL=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -10392,7 +12388,6 @@ DEP_CPP_OP4_BL=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_BL=\
 	".\DL.h"\
@@ -10418,7 +12413,6 @@ NODEP_CPP_OP4_BL=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -10569,6 +12563,108 @@ NODEP_CPP_OP4_BL=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_BL=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_BL=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_BL=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_BL=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -10893,6 +12989,7 @@ DEP_CPP_OP4_BLI=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -10901,7 +12998,6 @@ DEP_CPP_OP4_BLI=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_BLI=\
 	".\DL.h"\
@@ -10927,7 +13023,6 @@ NODEP_CPP_OP4_BLI=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -11078,6 +13173,108 @@ NODEP_CPP_OP4_BLI=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_BLI=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_BLI=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_BLI=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_BLI=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -11402,6 +13599,7 @@ DEP_CPP_OP4_BR=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -11410,7 +13608,6 @@ DEP_CPP_OP4_BR=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_BR=\
 	".\DL.h"\
@@ -11436,7 +13633,6 @@ NODEP_CPP_OP4_BR=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -11587,6 +13783,108 @@ NODEP_CPP_OP4_BR=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_BR=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_BR=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_BR=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_BR=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -11911,6 +14209,7 @@ DEP_CPP_OP4_C=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -11919,7 +14218,6 @@ DEP_CPP_OP4_C=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_C=\
 	".\DL.h"\
@@ -11945,7 +14243,6 @@ NODEP_CPP_OP4_C=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -12096,6 +14393,108 @@ NODEP_CPP_OP4_C=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_C=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_C=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_C=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_C=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -12420,6 +14819,7 @@ DEP_CPP_OP4_CH=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -12428,7 +14828,6 @@ DEP_CPP_OP4_CH=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_CH=\
 	".\DL.h"\
@@ -12454,7 +14853,6 @@ NODEP_CPP_OP4_CH=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -12605,6 +15003,108 @@ NODEP_CPP_OP4_CH=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_CH=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_CH=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_CH=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_CH=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -12929,6 +15429,7 @@ DEP_CPP_OP4_CHE=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -12937,7 +15438,6 @@ DEP_CPP_OP4_CHE=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_CHE=\
 	".\DL.h"\
@@ -12963,7 +15463,6 @@ NODEP_CPP_OP4_CHE=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -13114,6 +15613,108 @@ NODEP_CPP_OP4_CHE=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_CHE=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_CHE=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_CHE=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_CHE=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -13438,6 +16039,7 @@ DEP_CPP_OP4_CO=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -13446,7 +16048,6 @@ DEP_CPP_OP4_CO=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_CO=\
 	".\DL.h"\
@@ -13472,7 +16073,6 @@ NODEP_CPP_OP4_CO=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -13623,6 +16223,108 @@ NODEP_CPP_OP4_CO=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_CO=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_CO=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_CO=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_CO=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -13947,6 +16649,7 @@ DEP_CPP_OP4_D=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -13955,7 +16658,6 @@ DEP_CPP_OP4_D=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_D=\
 	".\DL.h"\
@@ -13981,7 +16683,6 @@ NODEP_CPP_OP4_D=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -14132,6 +16833,108 @@ NODEP_CPP_OP4_D=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_D=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_D=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_D=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_D=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -14456,6 +17259,7 @@ DEP_CPP_OP4_DR=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -14464,7 +17268,6 @@ DEP_CPP_OP4_DR=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_DR=\
 	".\DL.h"\
@@ -14490,7 +17293,6 @@ NODEP_CPP_OP4_DR=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -14641,6 +17443,108 @@ NODEP_CPP_OP4_DR=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_DR=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_DR=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_DR=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_DR=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -14965,6 +17869,7 @@ DEP_CPP_OP4_DRA=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -14973,7 +17878,6 @@ DEP_CPP_OP4_DRA=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_DRA=\
 	".\DL.h"\
@@ -14999,7 +17903,6 @@ NODEP_CPP_OP4_DRA=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -15150,6 +18053,108 @@ NODEP_CPP_OP4_DRA=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_DRA=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_DRA=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_DRA=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_DRA=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -15474,6 +18479,7 @@ DEP_CPP_OP4_DU=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -15482,7 +18488,6 @@ DEP_CPP_OP4_DU=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_DU=\
 	".\DL.h"\
@@ -15508,7 +18513,6 @@ NODEP_CPP_OP4_DU=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -15659,6 +18663,108 @@ NODEP_CPP_OP4_DU=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_DU=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_DU=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_DU=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_DU=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -15983,6 +19089,7 @@ DEP_CPP_OP4_F=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -15991,7 +19098,6 @@ DEP_CPP_OP4_F=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_F=\
 	".\DL.h"\
@@ -16017,7 +19123,6 @@ NODEP_CPP_OP4_F=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -16168,6 +19273,108 @@ NODEP_CPP_OP4_F=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_F=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_F=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_F=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_F=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -16492,6 +19699,7 @@ DEP_CPP_OP4_I=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -16500,7 +19708,6 @@ DEP_CPP_OP4_I=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_I=\
 	".\DL.h"\
@@ -16526,7 +19733,6 @@ NODEP_CPP_OP4_I=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -16677,6 +19883,108 @@ NODEP_CPP_OP4_I=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_I=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_I=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_I=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_I=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -17001,6 +20309,7 @@ DEP_CPP_OP4_J=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -17009,7 +20318,6 @@ DEP_CPP_OP4_J=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_J=\
 	".\DL.h"\
@@ -17035,7 +20343,6 @@ NODEP_CPP_OP4_J=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -17186,6 +20493,108 @@ NODEP_CPP_OP4_J=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_J=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_J=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_J=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_J=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -17510,6 +20919,7 @@ DEP_CPP_OP4_L=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -17518,7 +20928,6 @@ DEP_CPP_OP4_L=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_L=\
 	".\DL.h"\
@@ -17544,7 +20953,6 @@ NODEP_CPP_OP4_L=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -17695,6 +21103,108 @@ NODEP_CPP_OP4_L=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_L=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_L=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_L=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_L=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -18019,6 +21529,7 @@ DEP_CPP_OP4_LO=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -18027,7 +21538,6 @@ DEP_CPP_OP4_LO=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_LO=\
 	".\DL.h"\
@@ -18053,7 +21563,6 @@ NODEP_CPP_OP4_LO=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -18204,6 +21713,108 @@ NODEP_CPP_OP4_LO=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_LO=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_LO=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_LO=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_LO=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -18528,6 +22139,7 @@ DEP_CPP_OP4_M=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -18536,7 +22148,6 @@ DEP_CPP_OP4_M=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_M=\
 	".\DL.h"\
@@ -18562,7 +22173,6 @@ NODEP_CPP_OP4_M=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -18713,6 +22323,108 @@ NODEP_CPP_OP4_M=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_M=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_M=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_M=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_M=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -19037,6 +22749,7 @@ DEP_CPP_OP4_MO=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -19045,7 +22758,6 @@ DEP_CPP_OP4_MO=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_MO=\
 	".\DL.h"\
@@ -19071,7 +22783,6 @@ NODEP_CPP_OP4_MO=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -19222,6 +22933,108 @@ NODEP_CPP_OP4_MO=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_MO=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_MO=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_MO=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_MO=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -19546,6 +23359,7 @@ DEP_CPP_OP4_P=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -19554,7 +23368,6 @@ DEP_CPP_OP4_P=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_P=\
 	".\DL.h"\
@@ -19580,7 +23393,6 @@ NODEP_CPP_OP4_P=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -19731,6 +23543,108 @@ NODEP_CPP_OP4_P=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_P=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_P=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_P=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_P=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -20055,6 +23969,7 @@ DEP_CPP_OP4_S=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -20063,7 +23978,6 @@ DEP_CPP_OP4_S=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_S=\
 	".\DL.h"\
@@ -20089,7 +24003,6 @@ NODEP_CPP_OP4_S=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -20240,6 +24153,108 @@ NODEP_CPP_OP4_S=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_S=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_S=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_S=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_S=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -20564,6 +24579,7 @@ DEP_CPP_OP4_W=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -20572,7 +24588,6 @@ DEP_CPP_OP4_W=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OP4_W=\
 	".\DL.h"\
@@ -20598,7 +24613,6 @@ NODEP_CPP_OP4_W=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -20749,6 +24763,108 @@ NODEP_CPP_OP4_W=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OP4_W=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_W=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OP4_W=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OP4_W=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -21077,6 +25193,7 @@ DEP_CPP_OPUT_=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -21085,7 +25202,6 @@ DEP_CPP_OPUT_=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OPUT_=\
 	".\DL.h"\
@@ -21111,7 +25227,6 @@ NODEP_CPP_OPUT_=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -21262,6 +25377,108 @@ NODEP_CPP_OPUT_=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OPUT_=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OPUT_=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OPUT_=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OPUT_=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -21586,6 +25803,7 @@ DEP_CPP_OPUT_O=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -21594,7 +25812,6 @@ DEP_CPP_OPUT_O=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OPUT_O=\
 	".\DL.h"\
@@ -21620,7 +25837,6 @@ NODEP_CPP_OPUT_O=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -21771,6 +25987,108 @@ NODEP_CPP_OPUT_O=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OPUT_O=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OPUT_O=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OPUT_O=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OPUT_O=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -22095,6 +26413,7 @@ DEP_CPP_OPUT_S=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -22103,7 +26422,6 @@ DEP_CPP_OPUT_S=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OPUT_S=\
 	".\DL.h"\
@@ -22129,7 +26447,6 @@ NODEP_CPP_OPUT_S=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -22280,6 +26597,108 @@ NODEP_CPP_OPUT_S=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OPUT_S=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OPUT_S=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OPUT_S=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OPUT_S=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -22604,6 +27023,7 @@ DEP_CPP_OPUT_SW=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -22612,7 +27032,6 @@ DEP_CPP_OPUT_SW=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OPUT_SW=\
 	".\DL.h"\
@@ -22638,7 +27057,6 @@ NODEP_CPP_OPUT_SW=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -22789,6 +27207,108 @@ NODEP_CPP_OPUT_SW=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OPUT_SW=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OPUT_SW=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OPUT_SW=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OPUT_SW=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -23113,6 +27633,7 @@ DEP_CPP_OPUT_U=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -23121,7 +27642,6 @@ DEP_CPP_OPUT_U=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_OPUT_U=\
 	".\DL.h"\
@@ -23147,7 +27667,6 @@ NODEP_CPP_OPUT_U=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -23298,6 +27817,108 @@ NODEP_CPP_OPUT_U=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OPUT_U=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OPUT_U=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_OPUT_U=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_OPUT_U=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -23666,6 +28287,78 @@ NODEP_CPP_ANIMA=\
 	".\SDL_timer.h"\
 	".\SDL_types.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_ANIMA=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_ANIMA=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_ANIMA=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_ANIMA=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -24055,6 +28748,82 @@ NODEP_CPP_DIALO=\
 	".\SDL_video.h"\
 	
 
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_DIALO=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\script_code.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_DIALO=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_DIALO=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\script_code.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_DIALO=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
 !ENDIF 
 
 # End Source File
@@ -24440,6 +29209,82 @@ NODEP_CPP_DIALOG=\
 	".\SDL_timer.h"\
 	".\SDL_types.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_DIALOG=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\script_code.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_DIALOG=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_DIALOG=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\script_code.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_DIALOG=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -24829,6 +29674,82 @@ NODEP_CPP_DIALOGU=\
 	".\SDL_video.h"\
 	
 
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_DIALOGU=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\script_code.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_DIALOGU=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_DIALOGU=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\script_code.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_DIALOGU=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
 !ENDIF 
 
 # End Source File
@@ -25216,6 +30137,82 @@ NODEP_CPP_DIALOGUE=\
 	".\SDL_video.h"\
 	
 
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_DIALOGUE=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\script_code.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_DIALOGUE=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_DIALOGUE=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\script_code.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_DIALOGUE=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
 !ENDIF 
 
 # End Source File
@@ -25551,6 +30548,7 @@ DEP_CPP_ENGIN=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -25559,7 +30557,6 @@ DEP_CPP_ENGIN=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_ENGIN=\
 	".\DL.h"\
@@ -25586,7 +30583,6 @@ NODEP_CPP_ENGIN=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -25743,6 +30739,112 @@ NODEP_CPP_ENGIN=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_ENGIN=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\engine.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_ENGIN=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_syswm.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_ENGIN=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\engine.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_ENGIN=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_syswm.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -26112,6 +31214,78 @@ NODEP_CPP_FIELD=\
 	".\SDL_video.h"\
 	
 
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_FIELD=\
+	".\anise.h"\
+	".\debug.h"\
+	".\field.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_FIELD=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_FIELD=\
+	".\anise.h"\
+	".\debug.h"\
+	".\field.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_FIELD=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
 !ENDIF 
 
 # End Source File
@@ -26477,6 +31651,78 @@ NODEP_CPP_FIELD_=\
 	".\SDL_timer.h"\
 	".\SDL_types.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_FIELD_=\
+	".\anise.h"\
+	".\debug.h"\
+	".\field.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_FIELD_=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_FIELD_=\
+	".\anise.h"\
+	".\debug.h"\
+	".\field.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_FIELD_=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -26846,6 +32092,78 @@ NODEP_CPP_FIELD_P=\
 	".\SDL_video.h"\
 	
 
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_FIELD_P=\
+	".\anise.h"\
+	".\debug.h"\
+	".\field.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_FIELD_P=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_FIELD_P=\
+	".\anise.h"\
+	".\debug.h"\
+	".\field.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_FIELD_P=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
 !ENDIF 
 
 # End Source File
@@ -26971,6 +32289,32 @@ DEP_CPP_FILE_=\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE x86em) Debug"
+
+DEP_CPP_FILE_=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_FILE_=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
 
 DEP_CPP_FILE_=\
 	".\anise.h"\
@@ -27278,6 +32622,64 @@ NODEP_CPP_IMAGE=\
 	".\SDL_timer.h"\
 	".\SDL_types.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_IMAGE=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\image.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_IMAGE=\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_main.h"\
+	".\DL_mutex.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_IMAGE=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\image.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_IMAGE=\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_main.h"\
+	".\DL_mutex.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -27599,6 +33001,76 @@ NODEP_CPP_INPUT=\
 	".\SDL_timer.h"\
 	".\SDL_types.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_INPUT=\
+	".\anise.h"\
+	".\debug.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_INPUT=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_INPUT=\
+	".\anise.h"\
+	".\debug.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_INPUT=\
+	".\DL_active.h"\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -27936,6 +33408,7 @@ DEP_CPP_MAIN_=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -27944,7 +33417,6 @@ DEP_CPP_MAIN_=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_MAIN_=\
 	".\DL.h"\
@@ -27971,7 +33443,6 @@ NODEP_CPP_MAIN_=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -28128,6 +33599,112 @@ NODEP_CPP_MAIN_=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_MAIN_=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\engine.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_MAIN_=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_syswm.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_MAIN_=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\engine.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_MAIN_=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_syswm.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -28257,6 +33834,30 @@ DEP_CPP_MEMOR=\
 	".\option.h"\
 	
 
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_MEMOR=\
+	".\anise.h"\
+	".\debug.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_MEMOR=\
+	".\anise.h"\
+	".\debug.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	
+
 !ENDIF 
 
 # End Source File
@@ -28337,6 +33938,22 @@ DEP_CPP_MEMORY=\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE x86em) Debug"
+
+DEP_CPP_MEMORY=\
+	".\anise.h"\
+	".\debug.h"\
+	".\memory_block.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_MEMORY=\
+	".\anise.h"\
+	".\debug.h"\
+	".\memory_block.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
 
 DEP_CPP_MEMORY=\
 	".\anise.h"\
@@ -28433,6 +34050,24 @@ DEP_CPP_MEMORY_=\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE x86em) Debug"
+
+DEP_CPP_MEMORY_=\
+	".\anise.h"\
+	".\debug.h"\
+	".\memory_block.h"\
+	".\memory_segment.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_MEMORY_=\
+	".\anise.h"\
+	".\debug.h"\
+	".\memory_block.h"\
+	".\memory_segment.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
 
 DEP_CPP_MEMORY_=\
 	".\anise.h"\
@@ -28569,28 +34204,30 @@ DEP_CPP_MFILE=\
 	".\mfile.h"\
 	".\option.h"\
 	".\ymf262.h"\
-	{$(INCLUDE)}"begin_code.h"\
-	{$(INCLUDE)}"close_code.h"\
-	{$(INCLUDE)}"SDL.h"\
-	{$(INCLUDE)}"SDL_active.h"\
-	{$(INCLUDE)}"SDL_audio.h"\
-	{$(INCLUDE)}"SDL_byteorder.h"\
-	{$(INCLUDE)}"SDL_cdrom.h"\
-	{$(INCLUDE)}"SDL_error.h"\
-	{$(INCLUDE)}"SDL_events.h"\
-	{$(INCLUDE)}"SDL_getenv.h"\
-	{$(INCLUDE)}"SDL_joystick.h"\
-	{$(INCLUDE)}"SDL_keyboard.h"\
-	{$(INCLUDE)}"SDL_keysym.h"\
-	{$(INCLUDE)}"SDL_main.h"\
-	{$(INCLUDE)}"SDL_mouse.h"\
-	{$(INCLUDE)}"SDL_mutex.h"\
-	{$(INCLUDE)}"SDL_quit.h"\
-	{$(INCLUDE)}"SDL_rwops.h"\
-	{$(INCLUDE)}"SDL_timer.h"\
-	{$(INCLUDE)}"SDL_types.h"\
-	{$(INCLUDE)}"SDL_version.h"\
-	{$(INCLUDE)}"SDL_video.h"\
+	
+NODEP_CPP_MFILE=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -28606,28 +34243,30 @@ DEP_CPP_MFILE=\
 	".\mfile.h"\
 	".\option.h"\
 	".\ymf262.h"\
-	{$(INCLUDE)}"begin_code.h"\
-	{$(INCLUDE)}"close_code.h"\
-	{$(INCLUDE)}"SDL.h"\
-	{$(INCLUDE)}"SDL_active.h"\
-	{$(INCLUDE)}"SDL_audio.h"\
-	{$(INCLUDE)}"SDL_byteorder.h"\
-	{$(INCLUDE)}"SDL_cdrom.h"\
-	{$(INCLUDE)}"SDL_error.h"\
-	{$(INCLUDE)}"SDL_events.h"\
-	{$(INCLUDE)}"SDL_getenv.h"\
-	{$(INCLUDE)}"SDL_joystick.h"\
-	{$(INCLUDE)}"SDL_keyboard.h"\
-	{$(INCLUDE)}"SDL_keysym.h"\
-	{$(INCLUDE)}"SDL_main.h"\
-	{$(INCLUDE)}"SDL_mouse.h"\
-	{$(INCLUDE)}"SDL_mutex.h"\
-	{$(INCLUDE)}"SDL_quit.h"\
-	{$(INCLUDE)}"SDL_rwops.h"\
-	{$(INCLUDE)}"SDL_timer.h"\
-	{$(INCLUDE)}"SDL_types.h"\
-	{$(INCLUDE)}"SDL_version.h"\
-	{$(INCLUDE)}"SDL_video.h"\
+	
+NODEP_CPP_MFILE=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE x86em) Release"
@@ -28664,6 +34303,84 @@ DEP_CPP_MFILE=\
 	
 NODEP_CPP_MFILE=\
 	".\SDL.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_MFILE=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\ymf262.h"\
+	
+NODEP_CPP_MFILE=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_MFILE=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\ymf262.h"\
+	
+NODEP_CPP_MFILE=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -28746,6 +34463,22 @@ DEP_CPP_OPTIO=\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE x86em) Debug"
+
+DEP_CPP_OPTIO=\
+	".\anise.h"\
+	".\debug.h"\
+	".\option.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_OPTIO=\
+	".\anise.h"\
+	".\debug.h"\
+	".\option.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
 
 DEP_CPP_OPTIO=\
 	".\anise.h"\
@@ -29075,6 +34808,7 @@ DEP_CPP_SCRIP=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -29083,7 +34817,6 @@ DEP_CPP_SCRIP=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_SCRIP=\
 	".\DL.h"\
@@ -29109,7 +34842,6 @@ NODEP_CPP_SCRIP=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -29260,6 +34992,108 @@ NODEP_CPP_SCRIP=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_SCRIP=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_SCRIP=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_SCRIP=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_SCRIP=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -29584,6 +35418,7 @@ DEP_CPP_SCRIPT=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -29592,7 +35427,6 @@ DEP_CPP_SCRIPT=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_SCRIPT=\
 	".\DL.h"\
@@ -29618,7 +35452,6 @@ NODEP_CPP_SCRIPT=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -29769,6 +35602,108 @@ NODEP_CPP_SCRIPT=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_SCRIPT=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_SCRIPT=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_SCRIPT=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_SCRIPT=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -29918,6 +35853,34 @@ DEP_CPP_SCRIPT_=\
 	".\script_parameter.h"\
 	
 
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_SCRIPT_=\
+	".\anise.h"\
+	".\debug.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_SCRIPT_=\
+	".\anise.h"\
+	".\debug.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	
+
 !ENDIF 
 
 # End Source File
@@ -29998,6 +35961,22 @@ DEP_CPP_SCRIPT_S=\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE x86em) Debug"
+
+DEP_CPP_SCRIPT_S=\
+	".\anise.h"\
+	".\debug.h"\
+	".\script_stack.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_SCRIPT_S=\
+	".\anise.h"\
+	".\debug.h"\
+	".\script_stack.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
 
 DEP_CPP_SCRIPT_S=\
 	".\anise.h"\
@@ -30327,6 +36306,7 @@ DEP_CPP_SCRIPT_V=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\script.h"\
 	".\script_code.h"\
@@ -30335,7 +36315,6 @@ DEP_CPP_SCRIPT_V=\
 	".\sound.h"\
 	".\timer.h"\
 	".\video.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_SCRIPT_V=\
 	".\DL.h"\
@@ -30361,7 +36340,6 @@ NODEP_CPP_SCRIPT_V=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -30512,6 +36490,108 @@ NODEP_CPP_SCRIPT_V=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_SCRIPT_V=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_SCRIPT_V=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_SCRIPT_V=\
+	".\animation.h"\
+	".\anise.h"\
+	".\debug.h"\
+	".\dialogue.h"\
+	".\field.h"\
+	".\file.h"\
+	".\image.h"\
+	".\input.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\script.h"\
+	".\script_code.h"\
+	".\script_parameter.h"\
+	".\script_stack.h"\
+	".\sound.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_SCRIPT_V=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -30759,9 +36839,9 @@ DEP_CPP_SOUND=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
+	".\mfile.h"\
 	".\option.h"\
 	".\sound.h"\
-	".\ymf262.h"\
 	
 NODEP_CPP_SOUND=\
 	".\DL.h"\
@@ -30786,8 +36866,6 @@ NODEP_CPP_SOUND=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
-	".\opl3.h"\
-	".\wavemng.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
@@ -30902,6 +36980,84 @@ NODEP_CPP_SOUND=\
 	".\SDL_types.h"\
 	".\SDL_version.h"\
 	".\SDL_video.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_SOUND=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\sound.h"\
+	
+NODEP_CPP_SOUND=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_SOUND=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
+	".\sound.h"\
+	
+NODEP_CPP_SOUND=\
+	".\DL.h"\
+	".\DL_active.h"\
+	".\DL_audio.h"\
+	".\DL_byteorder.h"\
+	".\DL_cdrom.h"\
+	".\DL_error.h"\
+	".\DL_events.h"\
+	".\DL_getenv.h"\
+	".\DL_joystick.h"\
+	".\DL_keyboard.h"\
+	".\DL_keysym.h"\
+	".\DL_main.h"\
+	".\DL_mouse.h"\
+	".\DL_mutex.h"\
+	".\DL_quit.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_version.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -31059,6 +37215,36 @@ NODEP_CPP_TIMER=\
 	".\SDL_main.h"\
 	".\SDL_timer.h"\
 	".\SDL_types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_TIMER=\
+	".\anise.h"\
+	".\debug.h"\
+	".\timer.h"\
+	
+NODEP_CPP_TIMER=\
+	".\DL_main.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_TIMER=\
+	".\anise.h"\
+	".\debug.h"\
+	".\timer.h"\
+	
+NODEP_CPP_TIMER=\
+	".\DL_main.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
 	
 
 !ENDIF 
@@ -31338,6 +37524,60 @@ NODEP_CPP_VIDEO=\
 	".\SDL_video.h"\
 	
 
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_VIDEO=\
+	".\anise.h"\
+	".\debug.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_VIDEO=\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_main.h"\
+	".\DL_mutex.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
+
+DEP_CPP_VIDEO=\
+	".\anise.h"\
+	".\debug.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\option.h"\
+	".\timer.h"\
+	".\video.h"\
+	
+NODEP_CPP_VIDEO=\
+	".\DL_byteorder.h"\
+	".\DL_endian.h"\
+	".\DL_error.h"\
+	".\DL_main.h"\
+	".\DL_mutex.h"\
+	".\DL_rwops.h"\
+	".\DL_timer.h"\
+	".\DL_types.h"\
+	".\DL_video.h"\
+	".\egin_code.h"\
+	".\lose_code.h"\
+	
+
 !ENDIF 
 
 # End Source File
@@ -31400,6 +37640,18 @@ DEP_CPP_YMF26=\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE x86em) Debug"
+
+DEP_CPP_YMF26=\
+	".\ymf262.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+DEP_CPP_YMF26=\
+	".\ymf262.h"\
+	
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
 
 DEP_CPP_YMF26=\
 	".\ymf262.h"\
@@ -31531,6 +37783,10 @@ SOURCE=.\anise.rc
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE x86em) Release"
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE x86em) Debug"
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) IBEE Release"
+
+!ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Sig3 Release"
 
 !ENDIF 
 

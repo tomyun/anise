@@ -16,6 +16,10 @@ int main(int argc, char *argv[])
 //	char *new_argv[] = { "anise.exe", "-p\\Storage Card\\Nanpa2", "-lK", "-f", "nanpa2" };
 //	int new_argc = 5;
 //	#define _ARG
+//	char *new_argv[] = { "anise.exe", "-p=PDAGame\\ANISE\\Nanpa", "-s2", "-f", "nanpa1" };
+	char *new_argv[] = { "anise.exe", "-p=PDAGame\\ANISE\\Nanpa2JK", "-s1", "-f", "nanpa2" };
+	int new_argc = 5;
+	#define _ARG
 #elif defined(_WIN32)
 //	char *new_argv[] = { "anise.exe", "-pC:\\Games\\Nanpa2", "-lK", "nanpa2" };
 //	int new_argc = 4;
