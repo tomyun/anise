@@ -374,7 +374,7 @@ void Script::load(const char *filename)
 	//TODO: need this?
 	//b_Script->clear();
 
-	file->open(filename, FILE_READ);
+	file->open(filename);
 	file->load(b_Script, script_offset);
 	file->close();
 
@@ -420,7 +420,7 @@ SCRIPTCALL Script::parse()
 				word script_offset = memory->b_SystemVariable->queryWord(iwpo_Script);
 				MemoryBlock *b_Script = memory->s_Core->get(&script_offset);
 
-				file->open(memory->b_ScriptName->queryString(memory->script_name_entry, SCRIPT_NAME_SIZE), FILE_READ);
+				file->open(memory->b_ScriptName->queryString(memory->script_name_entry, SCRIPT_NAME_SIZE));
 				file->load(b_Script, script_offset);
 				file->close();
 			}

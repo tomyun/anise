@@ -11,7 +11,7 @@ SCRIPTCALL Script::op4_loadFile()
 	MemorySegment *segment = memory->getCurrentSegment();
 	MemoryBlock *memory_block = segment->get(&offset);
 
-	file->open(filename, FILE_READ);
+	file->open(filename);
 	file->load(memory_block, offset);
 	file->close();
 

@@ -27,7 +27,7 @@ SCRIPTCALL Script::op4_manipulateFlag()
 				memory->b_SystemVariable->andByte(ibf_DisabledStatus, DISABLE_FLAG_RESET);
 
 				MemoryBlock *b_Flag = new MemoryBlock(0, FLAG_SIZE);
-				file->open(flag_filename, FILE_READ);
+				file->open(flag_filename, true);
 				file->load(b_Flag, 0);
 				file->close();
 				memory->loadFlag(b_Flag);
@@ -40,7 +40,7 @@ SCRIPTCALL Script::op4_manipulateFlag()
 				//memory->b_SystemVariable->writeWord(iwpo_Selection_Item, 0xED7C);
 
 				char *filename = memory->b_ScriptName->queryString(0, SCRIPT_NAME_SIZE);
-				file->open(filename, FILE_READ);
+				file->open(filename, true);
 				file->load(memory->b_Script, 0);
 				file->close();
 				delete filename;
@@ -54,7 +54,7 @@ SCRIPTCALL Script::op4_manipulateFlag()
 
 		case FLAG_WRITE:
 			{
-				file->open(flag_filename, FILE_WRITE);
+				file->open(flag_filename, true);
 				file->store(memory->b_ScriptName);
 				file->store(memory->b_Variable);
 				file->store(memory->b_BaseVariable);
@@ -70,7 +70,7 @@ SCRIPTCALL Script::op4_manipulateFlag()
 				memory->b_SystemVariable->andByte(ibf_DisabledStatus, DISABLE_FLAG_RESET);
 
 				MemoryBlock *b_Flag = new MemoryBlock(0, FLAG_SIZE);
-				file->open(flag_filename, FILE_READ);
+				file->open(flag_filename, true);
 				file->load(b_Flag, 0);
 				file->close();
 				memory->loadFlag(b_Flag);

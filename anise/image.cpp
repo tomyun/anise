@@ -166,7 +166,7 @@ void Image::load(const char *filename)
 	b_Image = segment->get(&image_offset);
 
 	if (filename != NULL) {
-		file->open(filename, FILE_READ);
+		file->open(filename);
 		file->load(b_Image, image_offset);
 		file->close();
 	}
