@@ -17,6 +17,7 @@ private:
 	Uint32 length;
 	int current_length;
 
+	bool is_effect;
 	bool is_playing;
 
 	static void callback(void *unused, Uint8 *stream, int stream_length);

@@ -8,6 +8,7 @@ Sound::Sound(Option *option)
 	length = 0;
 	current_length = 0;
 
+	is_effect = false;
 	is_playing = false;
 
 	spec.channels = 1;
@@ -55,10 +56,12 @@ void Sound::mix(Uint8 *stream, int stream_length)
 		stream += remain_length;
 		stream_length -= remain_length;
 
-		current_buffer = buffer;
-		remain_length = length;
+		if (!is_effect) {
+			current_buffer = buffer;
+			remain_length = length;
 
-		current_length = 0;
+			current_length = 0;
+		}
 	}
 
 	SDL_MixAudio(stream, current_buffer, stream_length, SDL_MIX_MAXVOLUME);
@@ -78,6 +81,26 @@ void Sound::load()
 
 	if (file_name != option->sound_file_name) {
 		file_name = option->sound_file_name;
+
+		//HACK: check music file whether it is an effect file that should be played just one time
+		string raw_name = file_name.substr(option->path_name.size());
+		if ((raw_name == "chime.") ||
+			(raw_name == "cockoo.m") ||
+			(raw_name == "damage.m") ||
+			(raw_name == "elf.m") ||
+			(raw_name == "gcrash3.m") ||
+			(raw_name == "halley.m") ||
+			(raw_name == "se7_1.m") ||
+			(raw_name == "se7_2.m") ||
+			(raw_name == "se11.m") ||
+			(raw_name == "shot_me.m") ||
+			(raw_name == "spoon.m") ||
+			(raw_name == "tennis.m")) {
+				is_effect = true;
+			}
+		else {
+			is_effect = false;
+		}
 
 		if (SDL_LoadWAV(option->sound_file_name.c_str(), &dummy_spec, &buffer, &length) == NULL) {
 			//TODO: process error
