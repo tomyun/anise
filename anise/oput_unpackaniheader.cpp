@@ -16,6 +16,8 @@ enum UnpackANIHeaderDecode {
 
 SCRIPTCALL Script::oput_unpackAniHeader()
 {
+	deleteParameter();
+
 	word source_offset = ANI_ENTRY_OFFSET;
 	word destination_offset = memory->b_SystemVariable->queryWord(iwpo_AnimationScript);
 
@@ -84,8 +86,6 @@ SCRIPTCALL Script::oput_unpackAniHeader()
 
 	//TODO: save return value, is this necessary?
 	memory->b_BaseVariable->writeWord(iw_Selection, gp4_entry);
-
-	deleteParameter();
 
 	return RETURN_NORMAL;
 }

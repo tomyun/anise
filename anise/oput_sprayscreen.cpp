@@ -2,6 +2,8 @@
 
 SCRIPTCALL Script::oput_sprayScreen()
 {
+	deleteParameter();
+
 	word coord_x = memory->b_SystemVariable->queryWord(iw_GP4File_CoordXb) << 3;
 	word coord_y = memory->b_SystemVariable->queryWord(iw_GP4File_CoordY);
 	word width = memory->b_SystemVariable->queryWord(iw_GP4File_Widthb) << 3;
@@ -57,8 +59,6 @@ SCRIPTCALL Script::oput_sprayScreen()
 			spray_timer = timer->checkSprayTimer();
 		}
 	}
-
-	deleteParameter();
 
 	return RETURN_NORMAL;
 }

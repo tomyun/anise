@@ -13,6 +13,8 @@ SCRIPTCALL Script::oput_overlapScreen()
 	word parameter_2 = parameter->get(2);
 	word parameter_3 = parameter->get(3);
 
+	deleteParameter();
+
 	word return_value = NULL;
 	switch (mode) {
 		case OVERLAP_SET:
@@ -91,8 +93,6 @@ SCRIPTCALL Script::oput_overlapScreen()
 	}
 
 	memory->b_BaseVariable->writeWord(iw_Selection, return_value);
-
-	deleteParameter();
 
 	return RETURN_NORMAL;
 }
