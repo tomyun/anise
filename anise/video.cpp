@@ -780,7 +780,7 @@ void Video::putPoint(word coord_x, word coord_y, byte color_index, SurfaceType s
 		//TODO: process error
 		PRINT_ERROR("[Video::putPoint()] out of bound: st = %d, x = %d, y = %d, c = %d\n", surface_type, coord_x, coord_y, color_index);
 	}
-#endif DEBUG
+#endif
 }
 
 
