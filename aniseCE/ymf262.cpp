@@ -600,6 +600,7 @@ using namespace std;
 
 deque<int>OPL3_WrtBuf;
 OPL3_GETBUF OPL3_GetBuf = NULL;
+void *OPL3_GetBuf_Param = NULL;
 // Using ANISE Only
 #endif
 
@@ -2557,6 +2558,13 @@ void YMF262Shutdown(void)
 		YMF262[i] = NULL;
 	}
 	YMF262NumChips = 0;
+
+#ifdef _ANISE_BUF
+// Using ANISE Only(Buffered Write)
+	OPL3_WrtBuf.clear();
+	OPL3_GetBuf = NULL;
+// Using ANISE Only
+#endif
 }
 void YMF262ResetChip(int which)
 {
@@ -2605,9 +2613,10 @@ void YMF262SetUpdateHandler(int which,OPL3_UPDATEHANDLER UpdateHandler,int param
 	OPL3SetUpdateHandler(YMF262[which], UpdateHandler, param);
 }
 #ifdef _ANISE_BUF
-void YMF262SetGetBuf(OPL3_GETBUF GetBuf)
+void YMF262SetGetBuf(OPL3_GETBUF GetBuf, void *pointer)
 {
 	OPL3_GetBuf = GetBuf;
+	OPL3_GetBuf_Param = pointer;
 }
 
 void YMF262BufferClear(void)
@@ -2664,7 +2673,7 @@ void YMF262UpdateOne(int which, INT16 *buffer, int length)
 			while(getbuf){
 				if(OPL3_WrtBuf.empty()){
 					if(OPL3_GetBuf){
-						getbuf = OPL3_GetBuf();
+						getbuf = OPL3_GetBuf(OPL3_GetBuf_Param);
 					} else {
 						getbuf = false;
 						delay = 0;

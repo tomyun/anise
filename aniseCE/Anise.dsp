@@ -343,7 +343,7 @@ SOURCE=.\memory_segment.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opl3.cpp
+SOURCE=.\mfile.cpp
 # End Source File
 # Begin Source File
 
@@ -451,7 +451,7 @@ SOURCE=.\memory_segment.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opl3.h
+SOURCE=.\mfile.h
 # End Source File
 # Begin Source File
 

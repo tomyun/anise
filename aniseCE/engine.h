@@ -25,6 +25,7 @@ private:
 	Timer *timer;
 	Input *input;
 	Sound *sound;
+	File *file;
 	Video *video;
 	Script *script;
 	Option *option;

@@ -1,6 +1,14 @@
 #include "input.h"
 #include "video.h"
 
+#ifdef _WIN32_WCE
+	#define _WIN32_WCE_IBEE // for IBEE
+#endif
+
+#ifdef _WIN32_WCE_IBEE
+static bool IBEE_key_func = false;
+#endif
+
 Input::Input(Memory *memory, Timer *timer)
 {
 	this->memory = memory;
@@ -53,7 +61,104 @@ bool Input::refreshKeyboard()
 			is_quit = true;
 
 			return false;
+#ifdef _WIN32_WCE_IBEE
+		case SDL_KEYUP:
+			//printf("Key Up : %d\n", event.key.keysym.sym);
+			switch (event.key.keysym.sym) {
+				case SDLK_PAGEDOWN:
+					IBEE_key_func = false;
+					break;
 
+				case SDLK_RETURN:
+					keyboard_status &= ~(INPUT_OK | INPUT_CTRL);
+					break;
+
+				case SDLK_PAGEUP:
+					keyboard_status &= ~INPUT_CANCEL;
+					break;
+
+				case SDLK_UP:
+					keyboard_status &= ~INPUT_UP;
+					break;
+
+				case SDLK_DOWN:
+					keyboard_status &= ~INPUT_DOWN;
+					break;
+
+				case SDLK_LEFT:
+					keyboard_status &= ~INPUT_LEFT;
+					break;
+
+				case SDLK_RIGHT:
+					keyboard_status &= ~INPUT_RIGHT;
+					break;
+
+				case SDLK_END:
+					keyboard_status &= ~INPUT_END;
+					break;
+
+				case SDLK_RSHIFT:
+				case SDLK_LSHIFT:
+					keyboard_status &= ~INPUT_SHIFT;
+					break;
+			};
+
+			break;
+
+		case SDL_KEYDOWN:
+			//printf("Key Down : %d\n", event.key.keysym.sym);
+			switch (event.key.keysym.sym) {
+				case SDLK_PAGEDOWN:
+					IBEE_key_func = true;
+					break;
+
+				case SDLK_RETURN:
+					if(!IBEE_key_func){
+						keyboard_status |= INPUT_OK;
+					} else {
+						keyboard_status |= INPUT_CTRL;
+					};
+					break;
+
+				case SDLK_PAGEUP:
+					if(!IBEE_key_func){
+						keyboard_status |= INPUT_CANCEL;
+					} else {
+						is_quit = true;
+					};
+					break;
+
+				case SDLK_UP:
+					keyboard_status |= INPUT_UP;
+					break;
+
+				case SDLK_DOWN:
+					keyboard_status |= INPUT_DOWN;
+					break;
+
+				case SDLK_LEFT:
+					keyboard_status |= INPUT_LEFT;
+					break;
+
+				case SDLK_RIGHT:
+					keyboard_status |= INPUT_RIGHT;
+					break;
+
+				case SDLK_END:
+					keyboard_status |= INPUT_END;
+					break;
+
+				case SDLK_RSHIFT:
+				case SDLK_LSHIFT:
+					keyboard_status |= INPUT_SHIFT;
+					break;
+
+				case SDLK_HOME:
+					is_capture = true;
+					break;
+			};
+			break;
+#else
 		case SDL_KEYUP:
 			//printf("Key Up : %d\n", event.key.keysym.sym);
 			switch (event.key.keysym.sym) {
@@ -85,7 +190,6 @@ bool Input::refreshKeyboard()
 
 				case SDLK_RCTRL:
 				case SDLK_LCTRL:
-				case SDLK_PAGEDOWN:
 					keyboard_status &= ~INPUT_CTRL;
 					break;
 
@@ -111,6 +215,7 @@ bool Input::refreshKeyboard()
 
 				case SDLK_ESCAPE:
 				case SDLK_INSERT:
+				case SDLK_PAGEUP:
 					keyboard_status |= INPUT_CANCEL;
 					break;
 
@@ -150,12 +255,11 @@ bool Input::refreshKeyboard()
 					break;
 
 				case SDLK_DELETE:
-				case SDLK_PAGEUP:
 					is_quit = true;
 					break;
 			};
 			break;
-
+#endif
 		case SDL_MOUSEMOTION:
 		case SDL_MOUSEBUTTONDOWN:
 		case SDL_MOUSEBUTTONUP:

@@ -4,6 +4,7 @@
 #include "anise.h"
 #include "file.h"
 #include "option.h"
+#include "mfile.h"
 
 #include "SDL.h"
 #include "SDL_audio.h"
@@ -12,10 +13,10 @@
 	#include <windows.h>
 #endif
 
-#include "ymf262.h"
-
 class Sound {
 private:
+	File *file;
+	MFile *mfile;
 	Option *option;
 
 	string file_name;
@@ -44,7 +45,7 @@ private:
 	void mix(Uint8 *stream, int stream_length);
 
 public:
-	Sound(Option *option);
+	Sound(File *file, Option *option);
 	~Sound();
 
 	void load();

@@ -38,7 +38,7 @@ typedef void (*OPL3_TIMERHANDLER)(int channel,double interval_Sec);
 typedef void (*OPL3_IRQHANDLER)(int param,int irq);
 typedef void (*OPL3_UPDATEHANDLER)(int param,int min_interval_us);
 #ifdef _ANISE_BUF
-typedef bool (*OPL3_GETBUF)(void);
+typedef bool (*OPL3_GETBUF)(void *pointer);
 #endif
 
 
@@ -56,7 +56,7 @@ void YMF262SetTimerHandler(int which, OPL3_TIMERHANDLER TimerHandler, int channe
 void YMF262SetIRQHandler(int which, OPL3_IRQHANDLER IRQHandler, int param);
 void YMF262SetUpdateHandler(int which, OPL3_UPDATEHANDLER UpdateHandler, int param);
 #ifdef _ANISE_BUF
-void YMF262SetGetBuf(OPL3_GETBUF GetBuf);
+void YMF262SetGetBuf(OPL3_GETBUF GetBuf, void *pointer);
 void YMF262BufferClear(void);
 #endif
 

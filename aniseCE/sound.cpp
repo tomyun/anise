@@ -1,5 +1,4 @@
 #include "sound.h"
-#include "opl3.h"
 
 enum {
 	NONE_FILE = 0,
@@ -8,9 +7,11 @@ enum {
 };
 
 
-Sound::Sound(Option *option)
+Sound::Sound(File *file, Option *option)
 {
+	this->file = file;
 	this->option = option;
+	mfile = NULL;
 
 	is_effect = false;
 
@@ -21,6 +22,7 @@ Sound::Sound(Option *option)
 	current_length = 0;
 	song_type = NONE_FILE;
 
+	if(option->sound_freq == 0)return;
 #ifdef _WIN32_WCE
 	int				i;
 	WAVEFORMATEX	wfex;
@@ -78,17 +80,21 @@ Sound::Sound(Option *option)
 	SDL_PauseAudio(0);
 #endif
 
-	OPL3_init(option->sound_freq);
+	mfile = new MFile(file, option);
 }
 
 
 Sound::~Sound()
 {
+	if(option->sound_freq == 0)return;
+
 	stop();
 
 	if(buffer)
 		free(buffer);
-	OPL3_destroy();
+
+	if(mfile)
+		delete mfile;
 
 #ifdef _WIN32_WCE
 	int		i;
@@ -168,7 +174,7 @@ void Sound::mix(Uint8 *stream, int stream_length)
 		break;
 		}
 	case M_FILE:
-		OPL3_getpcm((short *)stream, stream_length >> 2);
+		mfile->getpcm((short *)stream, stream_length >> 2);
 		break;
 	case NONE_FILE:
 		memset(stream, 0, stream_length);
@@ -178,6 +184,8 @@ void Sound::mix(Uint8 *stream, int stream_length)
 
 void Sound::load()
 {
+	if(option->sound_freq == 0)return;
+
 	stop();
 	song_type = NONE_FILE;
 
@@ -236,10 +244,8 @@ void Sound::load()
 
 		if((strncmp(header, "RIFF", 4) == 0)&&(strncmp(&header[8], "WAVEfmt", 7) == 0)){
 			song_type = WAV_FILE;
-			PRINT("Load Wave File %s\n", file.c_str());
 		} else if((strncmp(header, "MUSIC DRV", 9) == 0)||(strncmp(header, "OPL3 DATA", 9) == 0)){
 			song_type = M_FILE;
-			PRINT("Load M File %s\n", file.c_str());
 		}
 	}
 
@@ -270,6 +276,7 @@ void Sound::load()
 		if(!cvt.buf){
 			song_type = NONE_FILE;
 		} else {
+			PRINT("Load Wave File %s\n", file.c_str());
 			buffer = cvt.buf;
 			length = cvt.len_cvt;
 			current_length = 0;
@@ -277,14 +284,24 @@ void Sound::load()
 		break;
 		}
 	case M_FILE:
-		OPL3_load(file.c_str());
+	case NONE_FILE:{
+		string raw_file = file.substr(option->path_name.size());
+		if(mfile->load(raw_file.c_str())){
+			PRINT("Load M File %s\n", file.c_str());
+			song_type = M_FILE;
+		} else {
+			song_type = NONE_FILE;
+		}
 		break;
+		}
 	}
 }
 
 
 void Sound::play()
 {
+	if(option->sound_freq == 0)return;
+
 	switch(song_type){
 	case WAV_FILE:
 		if (buffer) {
@@ -292,7 +309,7 @@ void Sound::play()
 		}
 		break;
 	case M_FILE:
-		OPL3_play();
+		mfile->play();
 		is_playing = true;
 		break;
 	case NONE_FILE:
@@ -312,12 +329,14 @@ void Sound::play()
 
 void Sound::stop()
 {
+	if(option->sound_freq == 0)return;
+
 	if(is_playing){
 		switch(song_type){
 		case WAV_FILE:
 			break;
 		case M_FILE:
-			OPL3_stop();
+			mfile->stop();
 			break;
 		case NONE_FILE:
 			break;

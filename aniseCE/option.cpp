@@ -13,7 +13,7 @@ Option::Option()
 		"  -u\t\tUse unpacked game files\n"
 		"  -f\t\tFullscreen mode\n"
 		"  -b[s]\t\tBlurring filter mode (s: scanline)\n"
-		"  -s[1,2,4]\tSound Freq (1: 11025hz, *2: 22050hz, 4: 44100hz)\n"
+		"  -s[0,1,2,4]\tSound freq (0: Off, 1: 11025hz, *2: 22050hz, 4: 44100hz)\n"
 		"\n"
 		"Supported Games:\n"
 		"  nanpa2\tDokyusei 2 (including special version)\n"
@@ -130,6 +130,10 @@ bool Option::initialize(int argc, char *argv[])
 					case 's':
 						{
 							switch (option[2]) {
+								case '0':
+									sound_freq = 0;
+									break;
+
 								case '1':
 									sound_freq = 11025;
 									break;

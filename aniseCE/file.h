@@ -66,6 +66,8 @@ public:
 	bool store(MemoryBlock *memory_block);
 
 	void initializeDAT(int slot_index, int packed_index);
+
+	word getSize(){return size;};
 };
 
 #endif

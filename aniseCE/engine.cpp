@@ -49,10 +49,11 @@ bool Engine::on()
 	memory = new Memory(option);
 	timer = new Timer();
 	input = new Input(memory, timer);
-	sound = new Sound(option);
+	file = new File(memory, option);
+	sound = new Sound(file, option);
 	video = new Video(memory, timer, option);
 
-	script = new Script(memory, timer, input, sound, video, option);
+	script = new Script(memory, timer, input, sound, video, file, option);
 
 	return true;
 }
@@ -66,6 +67,7 @@ bool Engine::off()
 	delete input;
 	delete timer;
 	delete memory;
+	delete file;
 
 	SDL_Quit();
 
