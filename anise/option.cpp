@@ -8,10 +8,10 @@ Option::Option()
 		"Usage: anise [OPTIONS] ... [GAME]\n"
 		"\n"
 		"Options:\n"
-		"  -p		Path to the game\n"
-		"  -l		Select language (j: Japanese, k: *Korean, K: Korean (gamebox))\n"
-		"  -f		Fullscreen mode\n"
-//		"  -b		Blur filter mode\n"
+		"  -p			Path to the game\n"
+		"  -l[j,k,K]	Language (j: Japanese, *k: Korean, K: Korean (gamebox))\n"
+		"  -f			Fullscreen mode\n"
+		"  -b[s]		Blurring filter mode (s: scanline)\n"
 		"\n"
 		"Supported Games:\n"
 		"  nanpa2	Dokyusei 2 (including special version)\n"
@@ -30,6 +30,7 @@ Option::Option()
 
 	is_fullscreen = false;
 	is_filter = false;
+	is_scanline = false;
 
 	variable_size = 0;
 	selection_item_entry = 0;
@@ -105,6 +106,9 @@ bool Option::initialize(int argc, char *argv[])
 					case 'b':
 						{
 							is_filter = true;
+							if ((option[2]) == 's') {
+								is_scanline = true;
+							}
 						}
 						break;
 				}

@@ -41,6 +41,7 @@ public:
 
 	bool is_fullscreen;
 	bool is_filter;
+	bool is_scanline;
 
 	string path_name;
 	string script_file_name;
