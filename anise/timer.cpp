@@ -6,6 +6,7 @@ Timer::Timer()
 	frame_timer = 0;
 	delay_timer = 0;
 	overlap_timer = 0;
+	overlap_frame_timer = 0;
 	spray_timer = 0;
 
 	timer_id = SDL_AddTimer(TIMER_INTERVAL, (SDL_NewTimerCallback) callback, this);
@@ -32,6 +33,7 @@ void Timer::accumulate()
 	frame_timer++;
 	delay_timer++;
 	overlap_timer++;
+	overlap_frame_timer++;
 	spray_timer++;
 }
 
@@ -57,6 +59,12 @@ void Timer::resetDelayTimer()
 void Timer::resetOverlapTimer()
 {
 	overlap_timer = 0;
+}
+
+
+void Timer::resetOverlapFrameTimer()
+{
+	overlap_frame_timer = 0;
 }
 
 
@@ -87,6 +95,12 @@ dword Timer::checkDelayTimer()
 word Timer::checkOverlapTimer()
 {
 	return overlap_timer;
+}
+
+
+word Timer::checkOverlapFrameTimer()
+{
+	return overlap_frame_timer;
 }
 
 

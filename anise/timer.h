@@ -14,6 +14,7 @@ private:
 	dword frame_timer;
 	dword delay_timer;
 	word overlap_timer;
+	word overlap_frame_timer;
 	word spray_timer;
 
 	static Uint32 callback(Uint32 interval, void *pointer);
@@ -27,12 +28,14 @@ public:
 	void resetFrameTimer();
 	void resetDelayTimer();
 	void resetOverlapTimer();
+	void resetOverlapFrameTimer();
 	void resetSprayTimer();
 
 	word checkCursorTimer();
 	dword checkFrameTimer();
 	dword checkDelayTimer();
 	word checkOverlapTimer();
+	word checkOverlapFrameTimer();
 	word checkSprayTimer();
 };
 
