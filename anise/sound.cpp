@@ -11,6 +11,7 @@ Sound::Sound(Option *option)
 	is_effect = false;
 	is_playing = false;
 
+	//HACK: get rid of confusion between nanpa2 retail version and custom sound pack
 	if ((option->game_type == GAME_NANPA2) && (option->font_type == FONT_GAMEBOX)) {
 		spec.format = AUDIO_U8;
 	}
@@ -29,7 +30,6 @@ Sound::Sound(Option *option)
 	spec.userdata = this;
 
 	if (SDL_OpenAudio(&spec, NULL) < 0) {
-		//TODO: process error
 		PRINT_ERROR("[Sound::Sound()] unable to open audio: %s\n", SDL_GetError());
 		exit(1);
 	}
@@ -131,9 +131,22 @@ void Sound::load()
 				}
 		}
 
-		SDL_AudioSpec dummy_spec;
-		if (SDL_LoadWAV(file_name.c_str(), &dummy_spec, &buffer, &length) == NULL) {
+		SDL_AudioSpec wav_spec;
+		if (SDL_LoadWAV(file_name.c_str(), &wav_spec, &buffer, &length) == NULL) {
 			PRINT_ERROR("[Sound::load()] unable to load wave file(%s): %s\n", file_name.c_str(), SDL_GetError());
+		}
+
+		//HACK: ensure valid audio specification for wave file
+		if ((spec.format != wav_spec.format) || (spec.freq != wav_spec.freq) || (spec.samples != wav_spec.samples) || (spec.channels != wav_spec.channels)) {
+			SDL_CloseAudio();
+
+			wav_spec.callback = callback;
+			wav_spec.userdata = this;
+
+			if (SDL_OpenAudio(&wav_spec, NULL) < 0) {
+				PRINT_ERROR("[Sound::load()] unable to open audio: %s\n", SDL_GetError());
+				exit(1);
+			}
 		}
 	}
 
