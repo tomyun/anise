@@ -172,6 +172,16 @@ bool Video::isScreen(SurfaceType surface_type)
 
 void Video::updateScreen(word coord_x, word coord_y, word width, word height)
 {
+	/*
+	//HACK: clip the out of bounds region
+	if (coord_x + width > VIDEO_WIDTH) {
+		width = VIDEO_WIDTH - coord_x;
+	}
+	if (coord_y + height > VIDEO_HEIGHT) {
+		height = VIDEO_HEIGHT - coord_y;
+	}
+	*/
+
 //Uint32 start_ticks = SDL_GetTicks();
 
 	if (option->is_filter) {
@@ -396,6 +406,22 @@ void Video::blit(byte mode, word source_coord_x0b, word source_coord_y0, word so
 	order.destination.surface_type = (SurfaceType) destination_type;
 	order.w = width;
 	order.h = height;
+
+	//HACK: clip the out of bounds region in the source
+	if ((order.source.x + order.w) > VIDEO_WIDTH) {
+		order.w = VIDEO_WIDTH - order.source.x;
+	}
+	if ((order.source.y + order.h) > VIDEO_HEIGHT) {
+		order.h = VIDEO_HEIGHT - order.source.y;
+	}
+
+	//HACK: clip the out of bounds region in the destination
+	if ((order.destination.x + order.w) > VIDEO_WIDTH) {
+		order.w = VIDEO_WIDTH - order.destination.x;
+	}
+	if ((order.destination.y + order.h) > VIDEO_HEIGHT) {
+		order.h = VIDEO_HEIGHT - order.destination.y;
+	}
 
 	switch (mode) {
 		case BLIT_SWAPPED:
