@@ -207,6 +207,21 @@ bool Option::initialize(int argc, char *argv[])
 				animation_slot_entry = 0xF302;
 				animation_script_entry = 0x8000;
 			}
+			else if (strcmp(option, "nono") == 0) {
+				game_type = GAME_NONO;
+
+				packed_file_name = "silk";
+				packed_file_extension = ".dat";
+
+				script_file_name = "main.mes";
+
+				//HACK: same as aisimai
+				variable_size = 512;
+				selection_item_entry = 0xED78;
+				procedure_entry = 0xEDA4;
+				animation_slot_entry = 0xF302;
+				animation_script_entry = 0x8000;
+			}
 		}
 
 		if (game_type == GAME_UNKNOWN) {
