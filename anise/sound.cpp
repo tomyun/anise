@@ -88,7 +88,7 @@ void Sound::load()
 		//HACK: check music file whether it is an effect file that should be played just one time
 		string raw_name = file_name.substr(option->path_name.size());
 		if (option->game_type == GAME_NANPA2) {
-			if ((raw_name == "chime.") ||
+			if ((raw_name == "chime.m") ||
 				(raw_name == "cockoo.m") ||
 				(raw_name == "damage.m") ||
 				(raw_name == "elf.m") ||
