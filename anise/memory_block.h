@@ -99,6 +99,9 @@ public:
 	byte shiftLeftByte(word index, int count);
 	word shiftLeftWord(word index, int count);
 
+	/* miscellaneous methods */
+	void clear();
+
 #ifdef DEBUG
 	void dump(word index);
 #endif

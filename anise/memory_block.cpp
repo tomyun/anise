@@ -1,21 +1,18 @@
 #include "memory_block.h"
 //#include <assert.h>
 
-
 /* constructor & destructor */
 MemoryBlock::MemoryBlock(word entry, word size)
 {
-	raw = new byte[size];
-
-	for (word i = 0; i < size; i++) {
-		raw[i] = 0;
-	}
-
 	this->entry = entry;
 	this->size = size;
 	this->current_byte_index = 0;
 	this->current_bit_index = 0;
 	this->current_bit_flow = BIT_FLOW_RIGHT;
+
+	raw = new byte[size];
+
+	clear();
 }
 
 
@@ -499,6 +496,15 @@ word MemoryBlock::shiftLeftWord(word index, int count)
 	writeWord(index, data);
 
 	return data;
+}
+
+
+/* miscellaneous methods */
+inline void MemoryBlock::clear()
+{
+	for (word i = 0; i < size; i++) {
+		raw[i] = 0;
+	}
 }
 
 
