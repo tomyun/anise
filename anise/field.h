@@ -202,26 +202,30 @@ private:
 	} character_log[CHARACTER_LOG];
 
 	word calculateMapOffset(word coord_xw, word coord_yw);
+	void saveCharacterLog(word character_offset, byte character_frame, word character_coord_xw, word character_coord_yw);
 
+	// character movement related stuffs (field_move.cpp)
 	word verifyMovement();
 	word detectCollision(word character_offset);
-
 	void executeOperation(word character_offset);
+
 	bool moveCharacterUp(word character_offset);
 	bool moveCharacterDown(word character_offset);
 	bool moveCharacterLeft(word character_offset);
 	bool moveCharacterRight(word character_offset);
+
 	void toggleFrame(word character_offset);
 
+	// pathfinding related stuffs (field_path.cpp)
 	void setPath(word character_offset, word target_coord_xw, word target_coord_yw, bool use_alternatve);
-	word calculatePathOffset(word coord_xw, word coord_yw);
-	byte getPathMark(word coord_xw, word coord_yw);
-	bool checkPathMark(word coord_xw, word coord_yw, PathDirection direction);
+
 	void initializePath(word character_offset);
 	bool generatePath(word character_offset, word coord_xw, word coord_yw, word mark, word sequence);
 	void moveCharacterOnPath(word character_offset);
 
-	void saveCharacterLog(word character_offset, byte character_frame, word character_coord_xw, word character_coord_yw);
+	word calculatePathOffset(word coord_xw, word coord_yw);
+	byte getPathMark(word coord_xw, word coord_yw);
+	bool checkPathMark(word coord_xw, word coord_yw, PathDirection direction);
 
 public:
 	Field(Memory *memory, Video *video, Input *input, Config *config);
