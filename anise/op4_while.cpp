@@ -17,8 +17,8 @@ SCRIPTCALL Script::op4_while()
 
 				return RETURN_NORMAL;
 			}
-			else if (condition == RETURN_EXIT) {
-				return RETURN_EXIT;
+			else if ((condition == RETURN_EXIT) || (condition == RETURN_ERROR)) {
+				return condition;
 			}
 		}
 		else {
