@@ -1,7 +1,7 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-#define DEBUG
+//#define DEBUG
 
 #if defined(DEBUG)
 	#include <stdio.h>
@@ -11,5 +11,7 @@
 	#define PRINT		/##/		//TODO: is this right?
 	#define PAUSE
 #endif
+
+#define ERROR			printf
 
 #endif
