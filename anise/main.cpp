@@ -3,7 +3,8 @@
 int main(int argc, char *argv[])
 {
 	Config *config = new Config();
-	if ((config->initialize(argc, argv) != true) || config->game_type == GAME_UNKNOWN) {
+	if (config->initialize(argc, argv) == false) {
+		//TODO: process error
 		exit(1);
 	}
 
