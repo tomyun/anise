@@ -5,8 +5,8 @@
 
 using std::string;
 
-#define TITLE			"ANISE beta 7"
-#define TITLE_EXTRA		" - A Newly Implemented Scripting Engine for ai5v\n"
+#define TITLE			"ANISE beta 8"
+#define TITLE_EXTRA		" - A Newly Implemented Scripting Engine for AI5V\n"
 #define FILE_NAME_LENGTH	32
 
 enum GameType {
