@@ -348,6 +348,9 @@
 				RelativePath=".\animation.h">
 			</File>
 			<File
+				RelativePath=".\anise.h">
+			</File>
+			<File
 				RelativePath=".\debug.h">
 			</File>
 			<File
