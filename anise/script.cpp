@@ -390,6 +390,11 @@ SCRIPTCALL Script::parse()
 
 	SCRIPTCALL condition = RETURN_NORMAL;
 	while (condition == RETURN_NORMAL) {
+		//HACK: take screenshot
+		if (input->isCapture()) {
+			video->capture();
+		}
+
 		//TODO: improve this
 		//TODO: debugmode
 		animation->show();
