@@ -7,6 +7,7 @@ Project ANISE
    beta 9 Released
      * Support 'Paradise Lost(isle)'
      * Support 'Kawarasagi(kawa)' and 'Nonomura(nono)' for experimental purpose
+     * Implement Korean Josa processing for community-translated 'Dokyusei 1 and 2'
      * Fix hang on the ending cutscenes in 'Dokyusei 2' (thanks to lmy417)
      * Fix screen corruption in non-32-bit color depth
      * Eliminate flickering on overlapping screens
