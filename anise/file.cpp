@@ -67,6 +67,7 @@ word File::tell()
 	int file_size = ftell(handle);
 	if (file_size > 0xFFFF) {
 		is_huge = true;
+		config->sound_file_name = name;
 
 		return 0;
 	}

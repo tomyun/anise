@@ -3,6 +3,7 @@
 
 #include "memory.h"
 #include "video.h"
+#include "sound.h"
 #include "timer.h"
 #include "input.h"
 #include "script.h"
@@ -14,6 +15,7 @@ private:
 	// connected objects
 	Memory *memory;
 	Video *video;
+	Sound *sound;
 	Timer *timer;
 	Input *input;
 	Script *script;

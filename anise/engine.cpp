@@ -18,7 +18,7 @@ bool Engine::on()
 	//TODO: initialize font
 
 	//TODO: initialize video, mouse and keyboard (SDL related)
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0) {
 		PRINT("[Engine::initialize()] unable to initialize SDL backend: %s\n", SDL_GetError());
 		exit(1);
 	}
@@ -27,10 +27,11 @@ bool Engine::on()
 
 	memory = new Memory(config);
 	video = new Video(memory, config);
+	sound = new Sound(config);
 	timer = new Timer(video);
 	input = new Input(memory, timer);
 
-	script = new Script(memory, video, timer, input, config);
+	script = new Script(memory, video, sound, timer, input, config);
 
 	return true;
 }

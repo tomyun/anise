@@ -15,11 +15,14 @@ SCRIPTCALL Script::op4_sound()
 	switch (function) {
 		case SOUND_PLAY:
 			{
+				sound->load();
+				sound->play();
 			}
 			break;
 
 		case SOUND_STOP:
 			{
+				sound->stop();
 			}
 			break;
 	}
