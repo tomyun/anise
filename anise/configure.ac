@@ -1,7 +1,7 @@
 AC_PREREQ(2.53)
 
 dnl Process this file with autoconf to produce a configure script.
-#AC_INIT([Project ANISE], [beta9-20040226-linux], [tomyun@yonsei.ac.kr], anise)
+#AC_INIT([Project ANISE], [beta10-20040307-linux], [tomyun@yonsei.ac.kr], anise)
 #AC_CONFIG_SRCDIR(anise.h)
 AC_INIT(anise.h)
 
@@ -11,7 +11,7 @@ AC_CANONICAL_TARGET
 
 dnl Initialize for automake
 #AM_INIT_AUTOMAKE(1.6)
-AM_INIT_AUTOMAKE(anise, [beta9-20040226-linux])
+AM_INIT_AUTOMAKE(anise, [beta10-20040307-linux])
 
 dnl Checks for programs.
 AC_PROG_CPP
@@ -27,13 +27,7 @@ dnl Check for SDL
 SDL_VERSION=1.2.0
 AM_PATH_SDL($SDL_VERSION, :, AC_MSG_ERROR([*** SDL version $SDL_VERSION is not found]))
 CFLAGS="$CFLAGS $SDL_CFLAGS"
-
-#HACK: avoid link error when cross-compiling for Zaurus
-if test -z "$QPEDIR"; then
-	LIBS="$LIBS $SDL_LIBS"
-else
-	LIBS="$LIBS $SDL_LIBS -Wl,-rpath-link,$QPEDIR/lib"
-fi
+LIBS="$LIBS $SDL_LIBS"
 
 dnl Checks for header files.
 AC_HEADER_STDC
