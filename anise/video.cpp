@@ -201,6 +201,8 @@ void Video::fadeScreen()
 	SDL_Surface *old_screen = SDL_CreateRGBSurface(SDL_HWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
 	SDL_Surface *new_screen = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
 
+	lockScreen();
+
 	SDL_BlitSurface(sdl_screen, NULL, old_screen, NULL);
 
 	for (word y = 0; y < VIDEO_HEIGHT; y++) {
@@ -214,13 +216,13 @@ void Video::fadeScreen()
 	for (int i = SDL_ALPHA_OPAQUE - (fade_interval * FADE_LEVEL); i <= SDL_ALPHA_OPAQUE; i += fade_interval) {
 		SDL_SetAlpha(new_screen, SDL_SRCALPHA, i);
 
-		lockScreen();
 		SDL_BlitSurface(old_screen, NULL, sdl_screen, NULL);
 		SDL_BlitSurface(new_screen, NULL, sdl_screen, NULL);
-		unlockScreen();
 
 		SDL_UpdateRect(sdl_screen, 0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
 	}
+
+	unlockScreen();
 
 	SDL_FreeSurface(old_screen);
 	SDL_FreeSurface(new_screen);
@@ -239,6 +241,8 @@ void Video::initializeOverlapScreen()
 	}
 	overlap_new_screen = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
 
+	lockScreen();
+
 	SDL_BlitSurface(sdl_screen, NULL, overlap_old_screen, NULL);
 
 	setIntermediatePalette();
@@ -253,6 +257,8 @@ void Video::initializeOverlapScreen()
 		}
 	}
 
+	unlockScreen();
+
 	overlap_inuse = true;
 }
 
@@ -264,9 +270,9 @@ void Video::overlapScreen()
 	SDL_SetAlpha(overlap_new_screen, SDL_SRCALPHA, overlap_initial + (overlap_interval * overlap_current_level));
 
 	lockScreen();
+
 	SDL_BlitSurface(overlap_old_screen, NULL, sdl_screen, NULL);
 	SDL_BlitSurface(overlap_new_screen, NULL, sdl_screen, NULL);
-	unlockScreen();
 
 	SDL_UpdateRect(sdl_screen, 0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
 
@@ -282,6 +288,8 @@ void Video::overlapScreen()
 
 		updateScreen();
 	}
+
+	unlockScreen();
 }
 
 
