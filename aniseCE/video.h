@@ -21,7 +21,11 @@
 enum VideoSpecification {
 	VIDEO_WIDTH = 640,
 	VIDEO_HEIGHT = 400,
+#ifdef _WIN32_WCE
 	VIDEO_SCREEN_DEPTH = 16,
+#else
+	VIDEO_SCREEN_DEPTH = 32,
+#endif
 	VIDEO_BUFFER_DEPTH = 8,
 	VIDEO_COLOR = 16,
 	VIDEO_BUFFER = 4

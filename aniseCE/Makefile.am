@@ -78,8 +78,8 @@ anise_SOURCES = \
 	field_move.cpp \
 	field_path.cpp \
 	option.cpp option.h \
-        opl3.cpp opl3.h \
-        ymf262.cpp ymf262.h
+	opl3.cpp opl3.h \
+	ymf262.cpp ymf262.h
 
 EXTRA_DIST = \
 	autogen.sh \

@@ -1,8 +1,6 @@
 #include "dialogue.h"
-#if defined(_WIN32)||defined(_WIN32_WCE)
-    #include <windows.h>
-#else
-    #include "SDL_timer.h"
+#if	defined(_WIN32)||defined(_WIN32_WCE)
+	#include <windows.h>
 #endif
 
 Dialogue::Dialogue(Memory *memory, Timer *timer, Input *input, Video *video, Animation *animation, Option *option)
@@ -200,7 +198,6 @@ void Dialogue::getPosition(word *coord_xb, word *coord_y)
 
 void Dialogue::delay(word duration)
 {
-	PRINT("Delay\n");
 	if (duration != 0) {
 		duration = (duration >> 2) + 1;
 
@@ -208,7 +205,6 @@ void Dialogue::delay(word duration)
 
 		word tick = 0;
 		while (tick < duration) {
-			PRINT("timer = %d < %d\n", tick, duration);
 			//TODO: debugmode
 			animation->show();
 			if (input->refresh() == false) {
@@ -219,12 +215,11 @@ void Dialogue::delay(word duration)
 				break;
 			}
 
-#if defined(_WIN32)||defined(_WIN32_WCE)
+#if	defined(_WIN32)||defined(_WIN32_WCE)
 			SendMessage(NULL, WM_USER, 0, 0);
 #else
-			SDL_Delay(0);
+			timer->delay();
 #endif
-
 			tick = (word) timer->checkDelayTimer();
 		}
 	}
@@ -233,48 +228,26 @@ void Dialogue::delay(word duration)
 
 void Dialogue::wait()
 {
-	PRINT("Wait\n");
 	while (true) {
-		PRINT("wait start\n");
-		fflush(0);
 		if (input->refresh() == false) {
-			PRINT("wait end 1 \n");
-			fflush(0);
 			return;
 		}
 
 		if (input->check(INPUT_CTRL) == true) {
-			PRINT("wait end 2 \n");
-			fflush(0);
 			return;
 		}
 
-		PRINT("before wait\n");
-		fflush(0);
 		delay(WAIT_DURATION);
-		input->refresh();
-		PRINT("after wait\n");
-		fflush(0);
 
 		if (input->check(INPUT_OK) == true) {
-			PRINT("pass check 1\n");
-			fflush(0);
 			while (true) {
 				if (input->check(INPUT_CTRL) == true) {
-					PRINT("pass check 2\n");
-					fflush(0);
 					return;
 				}
 				else {
-					PRINT("before wait 2\n");
-					fflush(0);
 					delay(WAIT_DURATION);
-					PRINT("after wait 2\n");
-					fflush(0);
 
 					if (input->check(INPUT_OK) == false) {
-                        PRINT("pass check 4\n");
-						fflush(0);
 						return;
 					}
 				}

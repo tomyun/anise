@@ -7,7 +7,7 @@ SCRIPTCALL Script::op_wait()
 	//deleteParameter();
 
 	dialogue->wait();
-    video->clearScreen();
+	video->clearScreen();
 	dialogue->setPosition();
 
 	return RETURN_NORMAL;

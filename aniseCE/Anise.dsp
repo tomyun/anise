@@ -85,70 +85,85 @@ LINK32=link.exe
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Group "op"
+
+# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\animation.cpp
+SOURCE=.\op_animate.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\dialogue.cpp
+SOURCE=.\op_call.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\dialogue_gamebox.cpp
+SOURCE=.\op_callprocedure.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\dialogue_jis.cpp
+SOURCE=.\op_clearscreen.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\dialogue_jishan.cpp
+SOURCE=.\op_defineprocedure.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\engine.cpp
+SOURCE=.\op_delay.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\field.cpp
+SOURCE=.\op_displaynumber.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\field_move.cpp
+SOURCE=.\op_if.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\field_path.cpp
+SOURCE=.\op_makearray.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\file.cpp
+SOURCE=.\op_makebytearray.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\image.cpp
+SOURCE=.\op_null.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\input.cpp
+SOURCE=.\op_saveconstant.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\main.cpp
+SOURCE=.\op_saveexpression.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\memory.cpp
+SOURCE=.\op_setbasevariable.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\memory_block.cpp
+SOURCE=.\op_setcolor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\memory_segment.cpp
+SOURCE=.\op_setdialoguecolor.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\op_utility.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\op_wait.cpp
+# End Source File
+# End Group
+# Begin Group "op4"
+
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=.\op4_blitdirect.cpp
@@ -237,86 +252,10 @@ SOURCE=.\op4_sound.cpp
 
 SOURCE=.\op4_while.cpp
 # End Source File
-# Begin Source File
+# End Group
+# Begin Group "oput"
 
-SOURCE=.\op_animate.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_call.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_callprocedure.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_clearscreen.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_defineprocedure.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_delay.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_displaynumber.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_if.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_makearray.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_makebytearray.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_null.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_saveconstant.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_saveexpression.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_setbasevariable.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_setcolor.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_setdialoguecolor.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_utility.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\op_wait.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\opl3.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\option.cpp
-# End Source File
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=.\oput_dummy.cpp
@@ -336,6 +275,79 @@ SOURCE=.\oput_swapscreen.cpp
 # Begin Source File
 
 SOURCE=.\oput_unpackaniheader.cpp
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=.\animation.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\dialogue.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\dialogue_gamebox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\dialogue_jis.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\dialogue_jishan.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\engine.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\field.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\field_move.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\field_path.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\file.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\image.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\input.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\main.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\memory.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\memory_block.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\memory_segment.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\opl3.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\option.cpp
 # End Source File
 # Begin Source File
 

@@ -18,7 +18,6 @@ File::File(Memory *memory, Option *option)
 		packed_table_size[i] = 0;
 	}
 
-	PRINT("Initialize DAT\n");
 	if (!option->is_unpacked) {
 		initializeDAT(0, 0);
 		initializeDAT(1, 1);
@@ -37,6 +36,7 @@ File::~File()
 	}
 }
 
+
 void File::open(const char *filename, bool is_flag)
 {
 	if (is_flag) {
@@ -47,14 +47,14 @@ void File::open(const char *filename, bool is_flag)
 		string hms_file_name;
 		if (option->font_type == FONT_JISHAN) {
 			string file_name = concatenatePath(filename);
-			string file_extension = file_name.substr(file_name.size() - MES_FILE_EXTENSION_LENGTH, 2);
+			string file_extension = file_name.substr(file_name.size() - MES_FILE_EXTENSION_LENGTH);
 			if (file_extension == MES_FILE_EXTENSION) {
 				hms_file_name = file_name.substr(option->path_name.size(), (file_name.size() - option->path_name.size()) - MES_FILE_EXTENSION_LENGTH);
 				hms_file_name.append(HMS_FILE_EXTENSION);
 
 				string hms_file_name_with_path = option->path_name + hms_file_name;
-				FILE *hms_file_handle = fopen(hms_file_name_with_path.c_str(), FILE_READ);
 
+				FILE *hms_file_handle = fopen(hms_file_name_with_path.c_str(), FILE_READ);
 				if (hms_file_handle) {
 					is_hms = true;
 					fclose(hms_file_handle);
@@ -72,8 +72,8 @@ void File::open(const char *filename, bool is_flag)
 
 				string wav_file_name = option->sound_file_name;
 				wav_file_name.append(WAV_FILE_EXTENSION);
-				FILE *wav_file_handle = fopen(wav_file_name.c_str(), FILE_READ);
 
+				FILE *wav_file_handle = fopen(wav_file_name.c_str(), FILE_READ);
 				if (wav_file_handle) {
 					option->sound_file_extension = WAV_FILE_EXTENSION;
 					fclose(wav_file_handle);
@@ -108,8 +108,8 @@ void File::openDirect(const char *filename, const char *mode)
 
 	// concatenate path name with file name
 	name = concatenatePath(filename);
-	handle = fopen(name.c_str(), mode);
 
+	handle = fopen(name.c_str(), mode);
 	if (handle == NULL) {
 		PRINT_ERROR("[File::openDirect()] fopen() failed: %s\n", name.c_str());
 		exit(1);
@@ -125,29 +125,21 @@ void File::openDirect(const char *filename, const char *mode)
 
 void File::initializeDAT(int slot_index, int packed_index)
 {
-	PRINT("Close alreay open files\n");
 	if (packed_handle[slot_index] != NULL) {
 		fclose(packed_handle[slot_index]);
 	}
 
-	PRINT("Get packed file name\n");
 	// concatenate path name with file name
 	char packed_index_c_str[2];
 	sprintf(packed_index_c_str, "%1d", packed_index);
 	string filename = option->packed_file_name + packed_index_c_str + option->packed_file_extension;
 	string packed_name = concatenatePath(filename.c_str());
 
-	PRINT("Open file : %s\n", packed_name.c_str());
 	packed_handle[slot_index] = fopen(packed_name.c_str(), FILE_READ);
-
-	if(!packed_handle[slot_index])
-		PRINT("Open Error\n");
 	packed_entry_offset[slot_index] = 0;
 
-	PRINT("Seek file\n");
 	fseek(packed_handle[slot_index], 500, SEEK_SET);
 
-	PRINT("Read file\n");
 	int table_size;
 	fread(&table_size, sizeof(int), 1, packed_handle[slot_index]);
 	packed_table_size[slot_index] = table_size / sizeof(DATFile);
@@ -163,15 +155,12 @@ void File::initializeDAT(int slot_index, int packed_index)
 
 	fread(packed_dat_table[slot_index], sizeof(DATFile), packed_table_size[slot_index], packed_handle[slot_index]);
 
-	int tmp = table_size;
-	PRINT("Decrypt table(table_size = %d)\n", tmp);
 	byte *packed_table = (byte*) &packed_dat_table[slot_index];
 	for (int i = (table_size - 1); i > 0; i--) {
 		byte data = packed_table[i - 1];
 		packed_table[i] ^= data;
 	}
 	packed_table[0] ^= FILE_PACKED_DAT_KEY;
-	PRINT("Decrypt complete\n");
 
 	//TODO: isn't it possible?
 	//packed_entry_offset[slot_index] = ftell(packed_handle[slot_index]);

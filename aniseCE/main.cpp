@@ -28,8 +28,6 @@ int main(int argc, char *argv[])
 	stderr_file = fopen("\\anise_stderr.txt", "w");
 #endif
 
-	PRINT("ANISE Project On\n");
-
 	Option *option = new Option();
 #ifdef _ARG
 	if (argc == 1) {
@@ -50,19 +48,13 @@ int main(int argc, char *argv[])
 	}
 #endif
 
-	PRINT("Generation Engine\n");
 	Engine *engine = new Engine(option);
-	PRINT("Engine On\n");
 	engine->on();
-	PRINT("Engine Run\n");
 	engine->run();
-	PRINT("Engine Off\n");
 	engine->off();
 
 	delete engine;
 	delete option;
-
-	PRINT("ANISE Terminated.\n");
 
 #if defined(_WIN32_WCE)
 //#ifdef DEBUG

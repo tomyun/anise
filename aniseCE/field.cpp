@@ -332,8 +332,6 @@ void Field::quickDraw()
 #else
 	bool is_drawn = false;
 
-	/*int tick = SDL_GetTicks();
-	printf("Field Draw Start\n");*/
 	for (word yw = 0; yw < view_heightw; yw++) {
 		for (word xw = 0; xw < view_widthw; xw++) {
 			if ((view_buffer[(yw * view_widthw) + xw][0] == view[(yw * view_widthw) + xw][0]) && (view_buffer[(yw * view_widthw) + xw][1] == view[(yw * view_widthw) + xw][1]) && (view_buffer[(yw * view_widthw) + xw][2] == view[(yw * view_widthw) + xw][2]) && (view_buffer[(yw * view_widthw) + xw][3] == view[(yw * view_widthw) + xw][3])) {
@@ -353,14 +351,10 @@ void Field::quickDraw()
 			is_drawn = true;
 		}
 	}
-	/*printf("Field Put Sprite : %d\n", SDL_GetTicks() - tick);
-	tick = SDL_GetTicks();*/
 
 	if (is_drawn) {
 		video->updateScreen(view_margin_xw * SPRITE_SIZE, view_margin_y, view_widthw * SPRITE_SIZE, view_heightw * SPRITE_SIZE);
 	}
-
-	//printf("Update Screen : %d\n", SDL_GetTicks() - tick);
 #endif
 }
 

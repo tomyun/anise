@@ -48,8 +48,8 @@ SCRIPTCALL Script::op4_manipulateFlag()
 				}
 
 				char *filename = memory->b_ScriptName->queryString(0, SCRIPT_NAME_SIZE);
-				file->open(filename, true);
-				file->load(memory->b_Script, 0, true);
+				file->open(filename, false);
+				file->load(memory->b_Script, 0, false);
 				file->close();
 				delete filename;
 

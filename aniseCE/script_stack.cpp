@@ -37,6 +37,6 @@ word ScriptStack::pop()
 		//TODO: process error
 		PRINT_ERROR("[Stack::pop()] stack underflow: STACK_SIZE = %d, index = %d\n", STACK_SIZE, index);
 		exit(1);
-		return -1;
+		return 0;
 	}
 }

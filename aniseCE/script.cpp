@@ -9,15 +9,10 @@ Script::Script(Memory *memory, Timer *timer, Input *input, Sound *sound, Video *
 	this->video = video;
 	this->option = option;
 	
-	PRINT("Script Object file Generation\n");
 	file = new File(memory, option);
-	PRINT("Script Object image Generation\n");
 	image = new Image(memory, video, file);
-	PRINT("Script Object animation Generation\n");
 	animation = new Animation(memory, timer, input, video);
-	PRINT("Script Object dialogue Generation\n");
 	dialogue = new Dialogue(memory, timer, input, video, animation, option);
-	PRINT("Script Object fiele Generation\n");
 	field = new Field(memory, input, video, option);
 
 	parameter = NULL;
@@ -26,7 +21,6 @@ Script::Script(Memory *memory, Timer *timer, Input *input, Sound *sound, Video *
 
 	random_seed = RANDOM_SEED;
 
-	PRINT("Opcodes Setting\n");
 	setOpcodes();
 }
 

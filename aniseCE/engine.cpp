@@ -23,7 +23,6 @@ bool Engine::on()
 		exit(1);
 	}
 
-	PRINT("SetCaption\n");
 	SDL_WM_SetCaption(TITLE, NULL);
 
 #ifdef _WIN32
@@ -47,17 +46,13 @@ bool Engine::on()
 	SendMessage(hWnd, WM_SETICON, (WPARAM) ICON_BIG, (LPARAM) large_icon);
 #endif
 
-	PRINT("Object Generation\n");
 	memory = new Memory(option);
 	timer = new Timer();
 	input = new Input(memory, timer);
 	sound = new Sound(option);
 	video = new Video(memory, timer, option);
 
-	PRINT("Script Generation\n");
 	script = new Script(memory, timer, input, sound, video, option);
-	
-	input->showCursor();
 
 	return true;
 }
@@ -74,7 +69,7 @@ bool Engine::off()
 
 	SDL_Quit();
 
-	PRINT("[Engine::off()] successfully turned off\n");
+	printf("[Engine::off()] successfully turned off\n");
 
 	return true;
 }

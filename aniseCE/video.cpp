@@ -7,13 +7,7 @@ Video::Video(Memory *memory, Timer *timer, Option *option)
 	this->option = option;
 
 #ifdef _WIN32_WCE
-	if (option->is_fullscreen) {
-		//sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, 16, SDL_SWSURFACE | SDL_ANYFORMAT | SDL_FULLSCREEN);
-		sdl_screen = SDL_SetVideoMode(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), 16, SDL_SWSURFACE | SDL_ANYFORMAT | SDL_FULLSCREEN);
-	}
-	else {
-		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, 16, SDL_SWSURFACE | SDL_ANYFORMAT);
-	}
+	sdl_screen = SDL_SetVideoMode(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), 16, SDL_SWSURFACE | SDL_ANYFORMAT | SDL_FULLSCREEN);
 #else
 	if (option->is_fullscreen) {
 		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, SDL_SWSURFACE | SDL_ANYFORMAT | SDL_FULLSCREEN);
@@ -862,14 +856,6 @@ void Video::drawCharacter(word view_coord_xw, word view_coord_yw, word view_marg
 
 void Video::putSprite(word coord_x, word coord_y, word background_layer, word foreground_layer_1st, word foreground_layer_2nd, word foreground_layer_3rd, SurfaceType surface_type)
 {
-	/*static int count = 0;
-	static int gettick = 0;
-	static int keytick = 0;
-	static int puttick = 0;
-	static int dircount = 0;
-	static int dirtick = 0;
-	int tick;*/
-
 	word background_coord_x = (word) ((background_layer & SPRITE_LAYER_MASK) % (VIDEO_WIDTH / SPRITE_SIZE)) * SPRITE_SIZE;
 	word background_coord_y = (word) ((background_layer & SPRITE_LAYER_MASK) / (VIDEO_WIDTH / SPRITE_SIZE)) * SPRITE_SIZE;
 	word foreground1_coord_x = (word) ((foreground_layer_1st & SPRITE_LAYER_MASK) % (VIDEO_WIDTH / SPRITE_SIZE)) * SPRITE_SIZE;
@@ -887,7 +873,6 @@ void Video::putSprite(word coord_x, word coord_y, word background_layer, word fo
 	if((sdl_buffer[surface_type]->format->BytesPerPixel == 1)&&
 		(sdl_buffer[SURFACE_BUFFER2]->format->BytesPerPixel == 1)&&
 		((option->game_type != GAME_NANPA2)||(sdl_buffer[SURFACE_BUFFER3]->format->BytesPerPixel == 1))){
-		//tick = SDL_GetTicks();
 		int getbgpitch = sdl_buffer[SURFACE_BUFFER2]->pitch;
 		Uint8 *getbg = (Uint8 *) ((Uint8 *)(sdl_buffer[SURFACE_BUFFER2]->pixels) + (background_coord_y * getbgpitch) + background_coord_x);
 
@@ -948,17 +933,9 @@ void Video::putSprite(word coord_x, word coord_y, word background_layer, word fo
 			getfg3 += getfgpitch;
 			put += putpitch;
 		}
-		/*dirtick += SDL_GetTicks() - tick;
-
-		if(++dircount == 1000){
-			printf("Direct Put Sprite Time = %d\n", dirtick);
-			dircount = 0;
-			dirtick = 0;
-		}*/
 	} else {
 		for (word y = 0; y < SPRITE_SIZE; y++) {
 			for (word x = 0; x < SPRITE_SIZE; x++) {
-				//tick = SDL_GetTicks();
 				byte background_color = getPoint(background_coord_x + x, background_coord_y + y, SURFACE_BUFFER2);
 
 				byte foreground1_color;
@@ -974,9 +951,7 @@ void Video::putSprite(word coord_x, word coord_y, word background_layer, word fo
 					foreground2_color = getPoint(foreground2_coord_x + x, foreground2_coord_y + y, SURFACE_BUFFER2);
 					foreground3_color = getPoint(foreground3_coord_x + x, foreground3_coord_y + y, SURFACE_BUFFER2);
 				}
-				//gettick += SDL_GetTicks() - tick;
 
-				//tick = SDL_GetTicks();
 				byte color;
 				if (background_color >= COLOR_KEY) {
 					color = background_color & SPRITE_COLOR_MASK;
@@ -994,28 +969,12 @@ void Video::putSprite(word coord_x, word coord_y, word background_layer, word fo
 					color = background_color & SPRITE_COLOR_MASK;
 				}
 				else {
-					//keytick += SDL_GetTicks() - tick;
 					continue;
 				}
-				//keytick += SDL_GetTicks() - tick;
 
-				//tick = SDL_GetTicks();
 				putPoint(coord_x + x, coord_y + y, color, surface_type);
-				//puttick += SDL_GetTicks() - tick;
 			}
 		}
-
-		/*if(++count == 1000){
-			printf("Put Sprite Info\n");
-			printf("Get Point Time = %d\n", gettick);
-			printf("Key Point Time = %d\n", keytick);
-			printf("Put Point Time = %d\n", puttick);
-			printf("Totla Point Time = %d\n", gettick + keytick + puttick);
-			count = 0;
-			gettick = 0;
-			keytick = 0;
-			puttick = 0;
-		}*/
 	}
 
 	if(locked[surface_type]){
