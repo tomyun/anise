@@ -85,6 +85,11 @@ private:
 	byte screen[VIDEO_WIDTH * VIDEO_HEIGHT];
 	byte buffer[VIDEO_BUFFER][VIDEO_WIDTH * VIDEO_HEIGHT];
 
+	Uint32 color_red_mask;
+	Uint32 color_blue_mask;
+	Uint32 color_green_mask;
+	Uint32 color_alpha_mask;
+
 	Uint32 sdl_palette[VIDEO_COLOR];
 	word intermediate_palette[VIDEO_COLOR];
 
