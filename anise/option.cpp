@@ -11,6 +11,7 @@ Option::Option()
 		"  -p		Path to the game\n"
 		"  -l		Select language (j: Japanese, k: *Korean, K: Korean (gamebox))\n"
 		"  -f		Fullscreen mode\n"
+//		"  -b		Blur filter mode\n"
 		"\n"
 		"Supported Games:\n"
 		"  nanpa2	Dokyusei 2 (including special version)\n"
@@ -28,6 +29,7 @@ Option::Option()
 	font_type = FONT_JISHAN;
 
 	is_fullscreen = false;
+	is_filter = false;
 
 	variable_size = 0;
 	selection_item_entry = 0;
@@ -97,6 +99,12 @@ bool Option::initialize(int argc, char *argv[])
 					case 'f':
 						{
 							is_fullscreen = true;
+						}
+						break;
+
+					case 'b':
+						{
+							is_filter = true;
 						}
 						break;
 				}
