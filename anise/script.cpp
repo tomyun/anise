@@ -14,7 +14,7 @@ Script::Script(Memory *memory, Video *video, Sound *sound, Timer *timer, Input *
 	animation = new Animation(memory, video, timer, input);
 	dialogue = new Dialogue(memory, video, timer, input, animation, config);
 
-	field = new Field(memory, video, input);
+	field = new Field(memory, video, input, config);
 
 	parameter = NULL;
 
