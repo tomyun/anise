@@ -52,20 +52,23 @@ void File::open(const char *filename, const char *mode)
 
 	memory->b_SystemVariable->writeWord(iw_File_Size, size);
 
-	// check if it is a music file
-	string extension = name.substr(name.size() - M_FILE_EXTENSION_LENGTH);
-	if (extension == M_FILE_EXTENSION) {
-		string wav_file_name = name.substr(0, name.size() - M_FILE_EXTENSION_LENGTH);
-		wav_file_name.append(WAV_FILE_EXTENSION);
+	//HACK: script files in crescent have .m extension
+	if (option->game_type != GAME_CRESCENT) {
+		// check if it is a music file
+		string extension = name.substr(name.size() - M_FILE_EXTENSION_LENGTH);
+		if (extension == M_FILE_EXTENSION) {
+			string wav_file_name = name.substr(0, name.size() - M_FILE_EXTENSION_LENGTH);
+			wav_file_name.append(WAV_FILE_EXTENSION);
 
-		FILE *wav_file_handle = fopen(wav_file_name.c_str(), FILE_READ);
-		if (wav_file_handle) {
-			option->sound_file_name = wav_file_name;
+			FILE *wav_file_handle = fopen(wav_file_name.c_str(), FILE_READ);
+			if (wav_file_handle) {
+				option->sound_file_name = wav_file_name;
 
-			fclose(wav_file_handle);
-		}
-		else {
-			option->sound_file_name = name;
+				fclose(wav_file_handle);
+			}
+			else {
+				option->sound_file_name = name;
+			}
 		}
 	}
 }
