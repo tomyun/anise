@@ -83,7 +83,7 @@ void MFile::initChannel(void){
 }
 
 INLINE unsigned char MFile::getByte(void){
-	return unsigned char(Music[chInfo[ch].filePos++]);
+	return (unsigned char)(Music[chInfo[ch].filePos++]);
 }
 
 INLINE char MFile::getChar(void){
@@ -92,7 +92,7 @@ INLINE char MFile::getChar(void){
 
 INLINE unsigned short MFile::getWord(void){
 	unsigned short ret = getByte();
-	return ret | (unsigned short(getByte()) << 8);
+	return ret | ((unsigned short)(getByte()) << 8);
 }
 
 INLINE short MFile::getInt16(void){
@@ -336,7 +336,7 @@ void MFile::OpCode(unsigned char op){
 	case 0xF2:{
 		unsigned short base = chInfo[ch].filePos;
 		short int val = getInt16();
-		if(unsigned char(val & 0xFF) >= unsigned char(val >> 8)){
+		if((unsigned char)(val & 0xFF) >= (unsigned char)(val >> 8)){
 			Music[base] = 0;
 		} else {
 			Music[base]++;
@@ -352,10 +352,10 @@ void MFile::OpCode(unsigned char op){
 	case 0xF3:{
 		unsigned short val = getWord();
 		if((val & 0xFF) > 1){
-			Music[chInfo[ch].filePos-2] = unsigned char(val && 0xFF) - 1;
+			Music[chInfo[ch].filePos-2] = (unsigned char)(val && 0xFF) - 1;
 			getWord();
 		} else {
-			Music[chInfo[ch].filePos-2] = unsigned char(val >> 8);
+			Music[chInfo[ch].filePos-2] = (unsigned char)(val >> 8);
 			chInfo[ch].filePos += getInt16() - 4;
 		}
 		break;
@@ -416,10 +416,10 @@ void MFile::setupMusic(void){
 
 	switch(mType){
 	case ELF_SONG:
-		pos = unsigned short(Music[0x20 + ch*2]) | unsigned short(Music[0x21 + ch*2] << 8);
+		pos = (unsigned short)(Music[0x20 + ch*2]) | (unsigned short)(Music[0x21 + ch*2] << 8);
 		break;
 	case SILKYS_SONG:
-		pos = unsigned short(Music[0x10 + ch*2]) | unsigned short(Music[0x11 + ch*2] << 8);
+		pos = (unsigned short)(Music[0x10 + ch*2]) | (unsigned short)(Music[0x11 + ch*2] << 8);
 		break;
 	case NONE_SONG:
 		return;
@@ -731,10 +731,10 @@ bool MFile::load(const char *file_name)
 
 	if(strncmp((char *)Music, "MUSIC DRV", 9) == 0){
 		mType = ELF_SONG;
-		MusicPreset = Music + (unsigned short(Music[0x2C]) | unsigned short(Music[0x2D] << 8));
+		MusicPreset = Music + ((unsigned short)(Music[0x2C]) | (unsigned short)(Music[0x2D] << 8));
 	} else if(strncmp((char *)Music, "OPL3 DATA", 9) == 0){
 		mType = SILKYS_SONG;
-		MusicPreset = Music + (unsigned short(Music[0x1C]) | unsigned short(Music[0x1D] << 8));
+		MusicPreset = Music + ((unsigned short)(Music[0x1C]) | (unsigned short)(Music[0x1D] << 8));
 	} else {
 		mType = NONE_SONG;
 		delete memory;

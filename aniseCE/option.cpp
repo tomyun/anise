@@ -25,7 +25,8 @@ Option::Option()
 		"\n"
 		"Example:\n"
 		"  anise -pC:\\NANPA2 -lK nanpa2\n"
-		"  anise -pC:\\NANPA1 -lj -bs nanpa1\n";
+		"  anise -pC:\\NANPA1 -lj -bs nanpa1\n"
+		"  anise -p=/home/user/nanpa -s4 nanpa1\n";
 
 	this->title = title;
 	this->usage = usage;
@@ -73,7 +74,11 @@ bool Option::initialize(int argc, char *argv[])
 				switch (option[1]) {
 					case 'p':
 						{
-							path_name = option + 2;
+							if(option[2] == '='){ // added linux support(option -p=PATH)
+								path_name = option + 3;
+							} else {
+								path_name = option + 2;
+							}
 
 							//HACK: should be platform independent
 #if defined(_WIN32)||defined(_WIN32_WCE)
