@@ -24,7 +24,7 @@ void File::open(const char *filename, const char *mode)
 
 	if (handle != NULL) {
 		//TODO: process error
-		ERROR("[File::open()] file is already opened\n");
+		PRINT_ERROR("[File::open()] file is already opened\n");
 		close();
 	}
 
@@ -37,7 +37,7 @@ void File::open(const char *filename, const char *mode)
 	handle = fopen(name.data(), mode);
 	if (handle == NULL) {
 		//TODO: process error
-		ERROR("[File::open()] fopen() failed\n");
+		PRINT_ERROR("[File::open()] fopen() failed\n");
 		exit(1);
 	}
 
@@ -99,7 +99,7 @@ bool File::load(MemoryBlock *memory_block, word offset)
 	}
 	else {
 		//TODO: process error
-		ERROR("[File::open()] fread() failed (read %d of %d)\n", read_length, size);
+		PRINT_ERROR("[File::open()] fread() failed (read %d of %d)\n", read_length, size);
 		return false;
 	}
 }
@@ -116,7 +116,7 @@ bool File::store(MemoryBlock *memory_block)
 	}
 	else {
 		//TODO: process error
-		ERROR("[File::open()] fwrite() failed (written %d of %d)\n", write_length, size);
+		PRINT_ERROR("[File::open()] fwrite() failed (written %d of %d)\n", write_length, size);
 		return false;
 	}
 }

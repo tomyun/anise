@@ -23,7 +23,7 @@ Sound::Sound(Option *option)
 
 	if (SDL_OpenAudio(&spec, NULL) < 0) {
 		//TODO: process error
-		ERROR("[Sound::Sound()] unable to open audio: %s\n", SDL_GetError());
+		PRINT_ERROR("[Sound::Sound()] unable to open audio: %s\n", SDL_GetError());
 		exit(1);
 	}
 }
@@ -78,7 +78,7 @@ void Sound::load()
 
 	if (SDL_LoadWAV(option->sound_file_name.data(), &dummy_spec, &buffer, &length) == NULL) {
 		//TODO: process error
-		//ERROR("[Sound::load()] unable to load wave file(%s): %s\n", option->sound_file_name, SDL_GetError());
+		//PRINT_ERROR("[Sound::load()] unable to load wave file(%s): %s\n", option->sound_file_name, SDL_GetError());
 		//exit(1);
 	}
 

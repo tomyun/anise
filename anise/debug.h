@@ -12,6 +12,6 @@
 	#define PAUSE
 #endif
 
-#define ERROR			printf
+#define PRINT_ERROR		printf
 
 #endif
