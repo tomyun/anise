@@ -24,24 +24,32 @@ SCRIPTCALL Script::op4_manipulateFlag()
 		case FLAG_READ:
 		default:
 			{
-				memory->b_SystemVariable->andByte(ibf_DisabledStatus, DISABLE_FLAG_RESET);
+				byte disabled_status = memory->b_SystemVariable->queryByte(ibf_DisabledStatus);
+				disabled_status &= DISABLE_FLAG_RESET;
 
 				MemoryBlock *b_Flag = new MemoryBlock(0, FLAG_SIZE);
 				file->open(flag_filename, true);
-				file->load(b_Flag, 0);
+				file->load(b_Flag, 0, true);
 				file->close();
 				memory->loadFlag(b_Flag);
 				delete b_Flag;
 
 				memory->b_SystemVariable->andByte(ibf_DisabledStatus, DISABLE_FLAG_SET);
+				memory->b_SystemVariable->orByte(ibf_DisabledStatus, disabled_status);
 
 				//HACK: check it out
 				//memory->b_SystemVariable->writeWord(iwpo_Heap, memory->heap_entry);
-				//memory->b_SystemVariable->writeWord(iwpo_Selection_Item, 0xED7C);
+				memory->b_SystemVariable->writeWord(iwpo_Selection_Item, option->selection_item_entry);
+
+				//TODO: it is only true for DAT based games like nanpa1 or aisimai
+				if (!option->is_unpacked) {
+					file->initializeDAT(0, memory->b_SystemVariable->queryByte(ib_PackedFile_Slot0));
+					file->initializeDAT(1, memory->b_SystemVariable->queryByte(ib_PackedFile_Slot1));
+				}
 
 				char *filename = memory->b_ScriptName->queryString(0, SCRIPT_NAME_SIZE);
 				file->open(filename, true);
-				file->load(memory->b_Script, 0);
+				file->load(memory->b_Script, 0, true);
 				file->close();
 				delete filename;
 
@@ -71,7 +79,7 @@ SCRIPTCALL Script::op4_manipulateFlag()
 
 				MemoryBlock *b_Flag = new MemoryBlock(0, FLAG_SIZE);
 				file->open(flag_filename, true);
-				file->load(b_Flag, 0);
+				file->load(b_Flag, 0, true);
 				file->close();
 				memory->loadFlag(b_Flag);
 				delete b_Flag;
