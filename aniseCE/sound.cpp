@@ -1,13 +1,12 @@
 #include "sound.h"
 #include "opl3.h"
 
-#ifdef _WIN32_WCE
-DWORD _soundmix_getpcm(short *pcm, DWORD samples) {
-	OPL3_getpcm(pcm, samples);
-	//samples = soundmix_getpcm(pcm, samples);
-	return samples;
-}
-#endif
+enum {
+	NONE_FILE = 0,
+	WAV_FILE = 1,
+	M_FILE = 2
+};
+
 
 Sound::Sound(Option *option)
 {
@@ -17,27 +16,55 @@ Sound::Sound(Option *option)
 
 	is_playing = false;
 
-	OPL3_init();
-
-#ifdef _WIN32_WCE
-
-	wavemng_create(22050, 2);
-
-#else
 	buffer = NULL;
 	length = 0;
 	current_length = 0;
+	song_type = NONE_FILE;
 
-	if ((option->game_type == GAME_NANPA2) && (option->font_type == FONT_GAMEBOX)) {
-		spec.format = AUDIO_U8;
-	} else {
-		spec.format = AUDIO_S16;
+#ifdef _WIN32_WCE
+	int				i;
+	WAVEFORMATEX	wfex;
+
+	int samples = 2048 * int(option->sound_freq / 11025);
+	wave_buf = (BYTE *)malloc(samples * 4);
+	if (wave_buf == NULL) {
+		//TODO: process error
+		PRINT_ERROR("[Sound::Sound()] unable to malloc sound buffer\n");
+		exit(1);
 	}
 
+	ZeroMemory(wave_buf, samples * 4);
+	for (i=0; i<4; i++) {
+		ZeroMemory(wh + i, sizeof(WAVEHDR));
+		wh[i].lpData = (char *)wave_buf + (samples * i);
+		wh[i].dwBufferLength = samples;
+		wh[i].dwUser = i;
+	}
+
+	wfex.wFormatTag = WAVE_FORMAT_PCM;
+	wfex.nSamplesPerSec = option->sound_freq;
+	wfex.wBitsPerSample = 16;
+	wfex.nChannels = 2;
+	wfex.nBlockAlign = wfex.nChannels * (wfex.wBitsPerSample / 8);
+	wfex.nAvgBytesPerSec = wfex.nSamplesPerSec * wfex.nBlockAlign;
+	wfex.cbSize = 0;
+	hwave = 0;
+	if (waveOutOpen(&hwave, WAVE_MAPPER, &wfex, (DWORD)callback, (DWORD)this, CALLBACK_FUNCTION) == MMSYSERR_NOERROR)
+	{
+		for (i=0; i<4; i++) {
+			waveOutPrepareHeader(hwave, wh + i, sizeof(WAVEHDR));
+			waveOutWrite(hwave, wh + i, sizeof(WAVEHDR));
+		}
+	} else {
+		free(wave_buf);
+		PRINT_ERROR("[Sound::Sound()] unable to open audio: %s\n", SDL_GetError());
+		exit(1);
+	}
+#else
 	spec.format = AUDIO_S16;
 	spec.channels = 2;
-	spec.freq = 22050;
-	spec.samples = 2048;
+	spec.freq = option->sound_freq;
+	spec.samples = 1024 * int(option->sound_freq / 11025);
 
 	spec.callback = callback;
 	spec.userdata = this;
@@ -50,85 +77,114 @@ Sound::Sound(Option *option)
 
 	SDL_PauseAudio(0);
 #endif
+
+	OPL3_init(option->sound_freq);
 }
 
 
 Sound::~Sound()
 {
-	is_effect = true;stop();
-	is_effect = false;stop();
+	stop();
 
+	if(buffer)
+		free(buffer);
 	OPL3_destroy();
 
 #ifdef _WIN32_WCE
-	//wavemng_destroy();
-#else
-	if (buffer != NULL) {
-		SDL_FreeWAV(buffer);
+	int		i;
+	int		retry = 10;
+
+	for (i=0; i<4; i++) {
+		waveOutUnprepareHeader(hwave, wh + i, sizeof(WAVEHDR));
+		wh[i].lpData = NULL;
 	}
 
+	//waveOutPause(hwave);
+	//waveOutReset(hwave);
+
+	do {
+		if (waveOutClose(hwave) == MMSYSERR_NOERROR) {
+			break;
+		}
+		Sleep(500);
+	} while(--retry);
+	free(wave_buf);
+#else
 	SDL_CloseAudio();
 #endif
 }
 
-#ifndef _WIN32_WCE
+#ifdef _WIN32_WCE
+void CALLBACK Sound::callback(HWAVEOUT hwo, UINT uMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2)
+{
+	if ((uMsg == WOM_DONE) && (dwParam1)) {
+		waveOutUnprepareHeader(hwo, (WAVEHDR *)dwParam1, sizeof(WAVEHDR));
+		if (((WAVEHDR *)dwParam1)->lpData) {
+			((Sound*)dwInstance)->mix((Uint8 *)((WAVEHDR *)dwParam1)->lpData, ((WAVEHDR *)dwParam1)->dwBufferLength);
+			waveOutPrepareHeader(hwo, (WAVEHDR *)dwParam1, sizeof(WAVEHDR));
+			waveOutWrite(hwo, (WAVEHDR *)dwParam1, sizeof(WAVEHDR));
+		}
+	}
+}
+#else
 void Sound::callback(void *pointer, Uint8 *stream, int stream_length)
 {
-	OPL3_getpcm((short *)stream, stream_length >> 2);
-	//((Sound*)pointer)->mix(stream, stream_length);
+	((Sound*)pointer)->mix(stream, stream_length);
 }
+#endif
 
 void Sound::mix(Uint8 *stream, int stream_length)
 {
-	if(true){
-		OPL3_getpcm((short *)stream, stream_length >> 2);
-	} else {
+	switch(is_playing ? song_type : NONE_FILE) {
+	case WAV_FILE:{
 		Uint8 *current_buffer = buffer + current_length;
 		int remain_length = length - current_length;
 
 		while (remain_length <= stream_length) {
-			SDL_MixAudio(stream, current_buffer, remain_length, SDL_MIX_MAXVOLUME);
+			memcpy(stream, current_buffer, remain_length);
 
 			stream += remain_length;
 			stream_length -= remain_length;
+			current_length = 0;
 
-			if (!is_effect) {
+			if (is_effect) {
+				memset(stream, 0, stream_length);
+
+				stream += stream_length;
+				stream_length = 0;
+
+				song_type = NONE_FILE;
+				break;
+			} else {
 				current_buffer = buffer;
 				remain_length = length;
-
-				current_length = 0;
 			}
 
 		}
 
-		SDL_MixAudio(stream, current_buffer, stream_length, SDL_MIX_MAXVOLUME);
+		memcpy(stream, current_buffer, stream_length);
 
 		current_length += stream_length;
+		break;
+		}
+	case M_FILE:
+		OPL3_getpcm((short *)stream, stream_length >> 2);
+		break;
+	case NONE_FILE:
+		memset(stream, 0, stream_length);
+		break;
 	}
 }
-#endif
 
 void Sound::load()
 {
-#ifndef _WIN32_WCE
-/*
-	if (!(option->sound_file_extension == WAV_FILE_EXTENSION)) {
-		PRINT("Not wav File\n");
-		if (option->sound_file_extension == M_FILE_EXTENSION) {
-			if (((option->game_type == GAME_NANPA2) && (option->font_type == FONT_GAMEBOX)) == false) {
-				return;
-			}
-		}
-		else {
-			return;
-		}
-	}
-*/
+	stop();
+	song_type = NONE_FILE;
+
 	if (buffer != NULL) {
-		SDL_FreeWAV(buffer);
+		free(buffer);
 		buffer = NULL;
 	}
-#endif
 
 	if (file_name != option->sound_file_name) {
 		file_name = option->sound_file_name; // + option->sound_file_extension;
@@ -163,131 +219,116 @@ void Sound::load()
 					is_effect = true;
 				}
 		}
-
-#ifndef _WIN32_WCE
-		/*
-		SDL_AudioSpec dummy_spec;
-		if (SDL_LoadWAV(file_name.c_str(), &dummy_spec, &buffer, &length) == NULL) {
-			PRINT_ERROR("[Sound::load()] unable to load wave file(%s): %s\n", file_name.c_str(), SDL_GetError());
-		}
-		*/
-#endif
 	}
 
-	//char file[MAX_PATH];
-	//MMAPPEDSTREAMARG arg;
-	FILE* fp;
-	int result = 0;
+	string file = file_name + ".WAV";
+	FILE* fp = fopen(file.c_str(), "rb");
 
-	stop();
+	if(!fp){
+		file = file_name + ".M";
+		fp = fopen(file.c_str(), "rb");
+	}
 
-	//sprintf(file, "%s.M", file_name.c_str());
-	string file = file_name + ".M";
-	PRINT("Check Sound File %s\n", file.c_str());
-	fp = fopen(file.c_str(), "rb");
-
-	if ( fp ) {
+	if(fp){
+		char header[0x10];
+		fread(header, 1, sizeof(header), fp);
 		fclose(fp);
-		result = 1;
-		PRINT("Load Sound File %s\n", file.c_str());
-		OPL3_load(file.c_str());
-	}
-/*
-	//sprintf(file, "%s%s.MP3", option->path_name, option->sound_file_name.substr(option->path_name.size()));
-	sprintf(file, "%s.MP3", file_name.c_str());
-	PRINT("Check Sound File %s\n", file);
-#ifdef _WIN32_WCE
-	TCHAR wfile[MAX_PATH];
-	static TCHAR ofile[MAX_PATH];
-	MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, file, -1, ofile, MAX_PATH);
-	wcscpy(wfile, base_path);
-	wcscat(wfile, ofile);
 
-	fp = _wfopen(wfile, _T("rb"));
-#else
-	fp = fopen(file, "rb");
-#endif
-	if ( fp ) {
-		fclose(fp);
-		result = 1;
-	}
-	if ( !result ) {
-		sprintf(file, "%s.WAV", file_name.c_str());
-		PRINT("Chck Sound File %s\n", file);
-#ifdef _WIN32_WCE
-		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, file, -1, ofile, MAX_PATH);
-		wcscpy(wfile, base_path);
-		wcscat(wfile, ofile);
-
-		fp = _wfopen(wfile, _T("rb"));
-#else
-		fp = fopen(file, "rb");
-#endif
-		if ( fp ) {
-			fclose(fp);
-			result = 1;
+		if((strncmp(header, "RIFF", 4) == 0)&&(strncmp(&header[8], "WAVEfmt", 7) == 0)){
+			song_type = WAV_FILE;
+			PRINT("Load Wave File %s\n", file.c_str());
+		} else if((strncmp(header, "MUSIC DRV", 9) == 0)||(strncmp(header, "OPL3 DATA", 9) == 0)){
+			song_type = M_FILE;
+			PRINT("Load M File %s\n", file.c_str());
 		}
 	}
-	if ( result ) {
-		if ( !is_effect ) {
-			arg.type = MMMAPPEDSTREAM_NEWMAP;
+
+	switch(song_type){
+	case WAV_FILE:{
+		SDL_AudioSpec wave;
+		Uint8 *data;
+		Uint32 dlen;
+		SDL_AudioCVT cvt;
+
+		if (SDL_LoadWAV(file.c_str(), &wave, &data, &dlen) == NULL) {
+			PRINT_ERROR("[Sound::load()] unable to load wave file(%s): %s\n", file.c_str(), SDL_GetError());
+			song_type = NONE_FILE;
+		}
+		SDL_BuildAudioCVT(&cvt, wave.format, wave.channels, wave.freq,
+								AUDIO_S16,   2,             option->sound_freq);
+		cvt.buf = (Uint8 *)malloc(dlen*cvt.len_mult);
+		if(!cvt.buf){
+			PRINT_ERROR("[Sound::Sound()] unable to malloc wave buffer\n");
+			SDL_FreeWAV(data);
+			exit(1);
+		}
+		cvt.len = dlen;
+		memcpy(cvt.buf, data, dlen);
+		SDL_FreeWAV(data);
+		SDL_ConvertAudio(&cvt);
+
+		if(!cvt.buf){
+			song_type = NONE_FILE;
 		} else {
-			arg.type = MMMAPPEDSTREAM_ONMEMORY;
+			buffer = cvt.buf;
+			length = cvt.len_cvt;
+			current_length = 0;
 		}
-#ifdef _WIN32_WCE
-		arg.fname = wfile;
-#else
-		arg.fname = file;
-#endif
-		PRINT("Load Sound File %s\n", file);
-		fflush(0);
-
-		if(is_effect)
-			soundmix_load(SOUNDTRK_SE, &mmapped_stream, &arg);
-		else
-			soundmix_load(SOUNDTRK_SOUND, &mmapped_stream, &arg);
-		//soundmix_play(ch, loop, delay);
+		break;
+		}
+	case M_FILE:
+		OPL3_load(file.c_str());
+		break;
 	}
-
-	//return result;
-	//current_length = 0;
-*/
 }
 
 
 void Sound::play()
 {
-	OPL3_play();
-/*
-	if(is_effect)
-		soundmix_play(SOUNDTRK_SE, 0, 0);
-	else
-		soundmix_play(SOUNDTRK_SOUND, 1, 0);
-*/
-/*
-	if (buffer) {
+	switch(song_type){
+	case WAV_FILE:
+		if (buffer) {
+			is_playing = true;
+		}
+		break;
+	case M_FILE:
+		OPL3_play();
 		is_playing = true;
-
-//		SDL_PauseAudio(0);
+		break;
+	case NONE_FILE:
+		stop();
+		break;
 	}
-*/
+
+	if(is_playing) {
+#ifdef _WIN32_WCE
+		waveOutRestart(hwave);
+#else
+		SDL_PauseAudio(0);
+#endif
+	}
 }
 
 
 void Sound::stop()
 {
-	OPL3_stop();
-/*
-	if(is_effect)
-		soundmix_stop(SOUNDTRK_SE, 0);
-	else
-		soundmix_stop(SOUNDTRK_SOUND, 0);
-*/
-/*
-	if (buffer && is_playing) {
-//		SDL_PauseAudio(1);
+	if(is_playing){
+		switch(song_type){
+		case WAV_FILE:
+			break;
+		case M_FILE:
+			OPL3_stop();
+			break;
+		case NONE_FILE:
+			break;
+		}
+
+#ifdef _WIN32_WCE
+		//waveOutReset(hwave);
+#else
+		SDL_PauseAudio(1);
+#endif
 
 		is_playing = false;
 	}
-*/
 }

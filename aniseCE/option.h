@@ -57,6 +57,8 @@ public:
 	word animation_slot_entry;
 	word animation_script_entry;
 
+	int sound_freq;
+
 public:
 	Option();
 	~Option();
