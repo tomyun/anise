@@ -346,7 +346,9 @@ void Dialogue::delay(word duration)
 		while (tick < duration) {
 			//TODO: debugmode
 			animation->show();
-			input->refresh();
+			if (input->refresh() == false) {
+				break;
+			}
 
 			if (input->check(INPUT_CTRL)) {
 				break;
@@ -361,25 +363,28 @@ void Dialogue::delay(word duration)
 void Dialogue::wait()
 {
 	while (true) {
+		if (input->refresh() == false) {
+			return;
+		}
+
 		if (input->check(INPUT_CTRL) == true) {
 			return;
 		}
 
 		delay(WAIT_DURATION);
 
-		if (input->check(INPUT_OK) == false) {
-			continue;
-		}
+		if (input->check(INPUT_OK) == true) {
+			while (true) {
+				if (input->check(INPUT_CTRL) == true) {
+					return;
+				}
+				else {
+					delay(WAIT_DURATION);
 
-		while (true) {
-			if (input->check(INPUT_CTRL) == true) {
-				return;
-			}
-
-			delay(WAIT_DURATION);
-
-			if (input->check(INPUT_OK) == false) {
-				return;
+					if (input->check(INPUT_OK) == false) {
+						return;
+					}
+				}
 			}
 		}
 	}
