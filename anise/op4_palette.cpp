@@ -41,12 +41,12 @@ SCRIPTCALL Script::op4_palette()
 				savePalette(memory);
 				getPalette(memory, parameter);
 
+				//ACK: original algorithm, but too slow
+				/*
 				for (int i = 0; i < VIDEO_COLOR; i++) {
 					word color = memory->b_SystemVariable->queryWord(iw_Video_Palette0 + (i * 2));
 					video->setIntermediateColor(i, color);
 
-					//ACK: original algorithm, but too slow
-					/*
 					word color_to, color_from;
 
 					for (int j = 0; j < COLOR_LEVEL; j++) {
@@ -86,10 +86,10 @@ SCRIPTCALL Script::op4_palette()
 					input->delay(PALETTE_CHANGE_DELAY);
 					video->setPalette();
 					input->refresh();		//TODO: temporary
-
-					*/
 				}
+				*/
 
+				video->setIntermediatePalette();
 				video->fadeScreen();
 
 				restorePalette(memory);
