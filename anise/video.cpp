@@ -314,14 +314,20 @@ void Video::overlapScreen()
 			timer->resetOverlapTimer();
 		}
 
-		int overlap_interval = (int) (SDL_ALPHA_OPAQUE / overlap_level);
-		int overlap_initial = SDL_ALPHA_OPAQUE - (overlap_interval * overlap_level);
-		SDL_SetAlpha(overlap_new_screen, SDL_SRCALPHA, overlap_initial + (overlap_interval * (overlap_level - overlap_left_level)));
+		//HACK: prevent flickering by ignoring fast overlapping
+		if (overlap_delay == 1) {
+			overlap_left_level = 1;
+		}
+		else {
+			int overlap_interval = (int) (SDL_ALPHA_OPAQUE / overlap_level);
+			int overlap_initial = SDL_ALPHA_OPAQUE - (overlap_interval * overlap_level);
+			SDL_SetAlpha(overlap_new_screen, SDL_SRCALPHA, overlap_initial + (overlap_interval * (overlap_level - overlap_left_level)));
 
-		SDL_BlitSurface(overlap_old_screen, NULL, sdl_screen, NULL);
-		SDL_BlitSurface(overlap_new_screen, NULL, sdl_screen, NULL);
+			SDL_BlitSurface(overlap_old_screen, NULL, sdl_screen, NULL);
+			SDL_BlitSurface(overlap_new_screen, NULL, sdl_screen, NULL);
 
-		SDL_UpdateRect(sdl_screen, 0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
+			SDL_UpdateRect(sdl_screen, 0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
+		}
 
 		overlap_left_level--;
 		if (overlap_left_level == 0) {
