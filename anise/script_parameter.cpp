@@ -90,4 +90,7 @@ void ScriptParameter::load(int index, char *name)
 			}
 		}
 	}
+	else {
+		PRINT_ERROR("[ScriptParameter::load()] unable to load parameter: index = %d, type = %d\n", index, type_list[index]);
+	}
 }
