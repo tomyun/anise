@@ -172,6 +172,9 @@
 				RelativePath=".\script_value.cpp">
 			</File>
 			<File
+				RelativePath=".\sound.cpp">
+			</File>
+			<File
 				RelativePath=".\timer.cpp">
 			</File>
 			<File
@@ -379,6 +382,9 @@
 			</File>
 			<File
 				RelativePath=".\script_stack.h">
+			</File>
+			<File
+				RelativePath=".\sound.h">
 			</File>
 			<File
 				RelativePath=".\timer.h">
