@@ -631,7 +631,7 @@ void Video::drawPixel(SDL_Surface *sdl_surface, int x, int y, Uint32 sdl_color)
 }
 
 
-void Video::drawFont(word coord_x, word coord_y, byte *font, long int offset, word width, word height)
+void Video::drawFont(word coord_x, word coord_y, const byte *font, long int offset, word width, word height)
 {
 	word length = (width / FONT_BPB) * height;
 	MemoryBlock *b_Font = new MemoryBlock(0, length);
