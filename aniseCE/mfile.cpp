@@ -9,7 +9,7 @@
 #define OPLWrt(x, y) YMF262Write(0, x, y)
 
 //#define MFILE_TEMPO 1.25 // Original
-#define MFILE_TEMPO 1.18
+#define MFILE_TEMPO 1.20
 
 const int MFILE_Buffering = 50;
 
@@ -217,9 +217,6 @@ void MFile::setDepth(unsigned char depth){
 }
 
 void MFile::OpCode(unsigned char op){
-#ifdef _WIN32_WCE
-	//printf("OPL3 OpCode %x\n", op);
-#endif
 	switch(op){
 	case 0x81:
 		setPreset(getByte());
@@ -438,8 +435,6 @@ void MFile::setupMusic(void){
 
 	while(true){
 		unsigned char op = getByte();
-		//printf("OpCode %2x\n", op);
-		//fflush(0);
 		if(op > 0x80){
 			OpCode(op);
 		} else if(op == 0x80){

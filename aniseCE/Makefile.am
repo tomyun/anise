@@ -78,7 +78,7 @@ anise_SOURCES = \
 	field_move.cpp \
 	field_path.cpp \
 	option.cpp option.h \
-	opl3.cpp opl3.h \
+	mfile.cpp mfile.h \
 	ymf262.cpp ymf262.h
 
 EXTRA_DIST = \

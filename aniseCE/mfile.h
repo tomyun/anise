@@ -43,12 +43,14 @@ private:
 
 	void OutPort(unsigned char reg, unsigned char val);
 	void OutPortOp(unsigned char reg, unsigned char val);
-	void initChip(void);
-	void initChannel(void);
+
 	unsigned char getByte(void);
 	char getChar(void);
 	unsigned short getWord(void);
 	short getInt16(void);
+
+	void initChip(void);
+	void initChannel(void);
 	void setPreset(int id);
 	void setVolume(void);
 	void setSpeaker(unsigned char spk);

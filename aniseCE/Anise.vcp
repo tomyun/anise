@@ -28446,326 +28446,224 @@ DEP_CPP_MEMORY_=\
 # End Source File
 # Begin Source File
 
-SOURCE=.\opl3.cpp
+SOURCE=.\mfile.cpp
 
 !IF  "$(CFG)" == "Anise - Win32 (WCE MIPS) Release"
 
-DEP_CPP_OPL3_=\
-	".\opl3.h"\
+DEP_CPP_MFILE=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
 	".\ymf262.h"\
 	
-NODEP_CPP_OPL3_=\
-	".\begin_code.h"\
-	".\close_code.h"\
+NODEP_CPP_MFILE=\
 	".\SDL.h"\
-	".\SDL_active.h"\
-	".\SDL_audio.h"\
-	".\SDL_byteorder.h"\
-	".\SDL_cdrom.h"\
-	".\SDL_error.h"\
-	".\SDL_events.h"\
-	".\SDL_getenv.h"\
-	".\SDL_joystick.h"\
-	".\SDL_keyboard.h"\
-	".\SDL_keysym.h"\
-	".\SDL_main.h"\
-	".\SDL_mouse.h"\
-	".\SDL_mutex.h"\
-	".\SDL_quit.h"\
-	".\SDL_rwops.h"\
-	".\SDL_syswm.h"\
-	".\SDL_timer.h"\
-	".\SDL_types.h"\
-	".\SDL_version.h"\
-	".\SDL_video.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE MIPS) Debug"
 
-DEP_CPP_OPL3_=\
-	".\opl3.h"\
+DEP_CPP_MFILE=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
 	".\ymf262.h"\
 	
-NODEP_CPP_OPL3_=\
-	".\begin_code.h"\
-	".\close_code.h"\
+NODEP_CPP_MFILE=\
 	".\SDL.h"\
-	".\SDL_active.h"\
-	".\SDL_audio.h"\
-	".\SDL_byteorder.h"\
-	".\SDL_cdrom.h"\
-	".\SDL_error.h"\
-	".\SDL_events.h"\
-	".\SDL_getenv.h"\
-	".\SDL_joystick.h"\
-	".\SDL_keyboard.h"\
-	".\SDL_keysym.h"\
-	".\SDL_main.h"\
-	".\SDL_mouse.h"\
-	".\SDL_mutex.h"\
-	".\SDL_quit.h"\
-	".\SDL_rwops.h"\
-	".\SDL_syswm.h"\
-	".\SDL_timer.h"\
-	".\SDL_types.h"\
-	".\SDL_version.h"\
-	".\SDL_video.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE SH4) Release"
 
-DEP_CPP_OPL3_=\
-	".\opl3.h"\
+DEP_CPP_MFILE=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
 	".\ymf262.h"\
 	
-NODEP_CPP_OPL3_=\
-	".\begin_code.h"\
-	".\close_code.h"\
+NODEP_CPP_MFILE=\
 	".\SDL.h"\
-	".\SDL_active.h"\
-	".\SDL_audio.h"\
-	".\SDL_byteorder.h"\
-	".\SDL_cdrom.h"\
-	".\SDL_error.h"\
-	".\SDL_events.h"\
-	".\SDL_getenv.h"\
-	".\SDL_joystick.h"\
-	".\SDL_keyboard.h"\
-	".\SDL_keysym.h"\
-	".\SDL_main.h"\
-	".\SDL_mouse.h"\
-	".\SDL_mutex.h"\
-	".\SDL_quit.h"\
-	".\SDL_rwops.h"\
-	".\SDL_syswm.h"\
-	".\SDL_timer.h"\
-	".\SDL_types.h"\
-	".\SDL_version.h"\
-	".\SDL_video.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE SH4) Debug"
 
-DEP_CPP_OPL3_=\
-	".\opl3.h"\
+DEP_CPP_MFILE=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
 	".\ymf262.h"\
 	
-NODEP_CPP_OPL3_=\
-	".\begin_code.h"\
-	".\close_code.h"\
+NODEP_CPP_MFILE=\
 	".\SDL.h"\
-	".\SDL_active.h"\
-	".\SDL_audio.h"\
-	".\SDL_byteorder.h"\
-	".\SDL_cdrom.h"\
-	".\SDL_error.h"\
-	".\SDL_events.h"\
-	".\SDL_getenv.h"\
-	".\SDL_joystick.h"\
-	".\SDL_keyboard.h"\
-	".\SDL_keysym.h"\
-	".\SDL_main.h"\
-	".\SDL_mouse.h"\
-	".\SDL_mutex.h"\
-	".\SDL_quit.h"\
-	".\SDL_rwops.h"\
-	".\SDL_syswm.h"\
-	".\SDL_timer.h"\
-	".\SDL_types.h"\
-	".\SDL_version.h"\
-	".\SDL_video.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE SH3) Release"
 
-DEP_CPP_OPL3_=\
-	".\opl3.h"\
+DEP_CPP_MFILE=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
 	".\ymf262.h"\
 	
-NODEP_CPP_OPL3_=\
-	".\begin_code.h"\
-	".\close_code.h"\
+NODEP_CPP_MFILE=\
 	".\SDL.h"\
-	".\SDL_active.h"\
-	".\SDL_audio.h"\
-	".\SDL_byteorder.h"\
-	".\SDL_cdrom.h"\
-	".\SDL_error.h"\
-	".\SDL_events.h"\
-	".\SDL_getenv.h"\
-	".\SDL_joystick.h"\
-	".\SDL_keyboard.h"\
-	".\SDL_keysym.h"\
-	".\SDL_main.h"\
-	".\SDL_mouse.h"\
-	".\SDL_mutex.h"\
-	".\SDL_quit.h"\
-	".\SDL_rwops.h"\
-	".\SDL_syswm.h"\
-	".\SDL_timer.h"\
-	".\SDL_types.h"\
-	".\SDL_version.h"\
-	".\SDL_video.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE SH3) Debug"
 
-DEP_CPP_OPL3_=\
-	".\opl3.h"\
+DEP_CPP_MFILE=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
 	".\ymf262.h"\
 	
-NODEP_CPP_OPL3_=\
-	".\begin_code.h"\
-	".\close_code.h"\
+NODEP_CPP_MFILE=\
 	".\SDL.h"\
-	".\SDL_active.h"\
-	".\SDL_audio.h"\
-	".\SDL_byteorder.h"\
-	".\SDL_cdrom.h"\
-	".\SDL_error.h"\
-	".\SDL_events.h"\
-	".\SDL_getenv.h"\
-	".\SDL_joystick.h"\
-	".\SDL_keyboard.h"\
-	".\SDL_keysym.h"\
-	".\SDL_main.h"\
-	".\SDL_mouse.h"\
-	".\SDL_mutex.h"\
-	".\SDL_quit.h"\
-	".\SDL_rwops.h"\
-	".\SDL_syswm.h"\
-	".\SDL_timer.h"\
-	".\SDL_types.h"\
-	".\SDL_version.h"\
-	".\SDL_video.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Release"
 
-DEP_CPP_OPL3_=\
-	".\opl3.h"\
+DEP_CPP_MFILE=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
 	".\ymf262.h"\
-	
-NODEP_CPP_OPL3_=\
-	".\DL.h"\
-	".\DL_active.h"\
-	".\DL_audio.h"\
-	".\DL_byteorder.h"\
-	".\DL_cdrom.h"\
-	".\DL_error.h"\
-	".\DL_events.h"\
-	".\DL_getenv.h"\
-	".\DL_joystick.h"\
-	".\DL_keyboard.h"\
-	".\DL_keysym.h"\
-	".\DL_main.h"\
-	".\DL_mouse.h"\
-	".\DL_mutex.h"\
-	".\DL_quit.h"\
-	".\DL_rwops.h"\
-	".\DL_syswm.h"\
-	".\DL_timer.h"\
-	".\DL_types.h"\
-	".\DL_version.h"\
-	".\DL_video.h"\
-	".\egin_code.h"\
-	".\lose_code.h"\
+	{$(INCLUDE)}"begin_code.h"\
+	{$(INCLUDE)}"close_code.h"\
+	{$(INCLUDE)}"SDL.h"\
+	{$(INCLUDE)}"SDL_active.h"\
+	{$(INCLUDE)}"SDL_audio.h"\
+	{$(INCLUDE)}"SDL_byteorder.h"\
+	{$(INCLUDE)}"SDL_cdrom.h"\
+	{$(INCLUDE)}"SDL_error.h"\
+	{$(INCLUDE)}"SDL_events.h"\
+	{$(INCLUDE)}"SDL_getenv.h"\
+	{$(INCLUDE)}"SDL_joystick.h"\
+	{$(INCLUDE)}"SDL_keyboard.h"\
+	{$(INCLUDE)}"SDL_keysym.h"\
+	{$(INCLUDE)}"SDL_main.h"\
+	{$(INCLUDE)}"SDL_mouse.h"\
+	{$(INCLUDE)}"SDL_mutex.h"\
+	{$(INCLUDE)}"SDL_quit.h"\
+	{$(INCLUDE)}"SDL_rwops.h"\
+	{$(INCLUDE)}"SDL_timer.h"\
+	{$(INCLUDE)}"SDL_types.h"\
+	{$(INCLUDE)}"SDL_version.h"\
+	{$(INCLUDE)}"SDL_video.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE ARM) Debug"
 
-DEP_CPP_OPL3_=\
-	".\opl3.h"\
+DEP_CPP_MFILE=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
 	".\ymf262.h"\
-	
-NODEP_CPP_OPL3_=\
-	".\begin_code.h"\
-	".\close_code.h"\
-	".\SDL.h"\
-	".\SDL_active.h"\
-	".\SDL_audio.h"\
-	".\SDL_byteorder.h"\
-	".\SDL_cdrom.h"\
-	".\SDL_error.h"\
-	".\SDL_events.h"\
-	".\SDL_getenv.h"\
-	".\SDL_joystick.h"\
-	".\SDL_keyboard.h"\
-	".\SDL_keysym.h"\
-	".\SDL_main.h"\
-	".\SDL_mouse.h"\
-	".\SDL_mutex.h"\
-	".\SDL_quit.h"\
-	".\SDL_rwops.h"\
-	".\SDL_syswm.h"\
-	".\SDL_timer.h"\
-	".\SDL_types.h"\
-	".\SDL_version.h"\
-	".\SDL_video.h"\
+	{$(INCLUDE)}"begin_code.h"\
+	{$(INCLUDE)}"close_code.h"\
+	{$(INCLUDE)}"SDL.h"\
+	{$(INCLUDE)}"SDL_active.h"\
+	{$(INCLUDE)}"SDL_audio.h"\
+	{$(INCLUDE)}"SDL_byteorder.h"\
+	{$(INCLUDE)}"SDL_cdrom.h"\
+	{$(INCLUDE)}"SDL_error.h"\
+	{$(INCLUDE)}"SDL_events.h"\
+	{$(INCLUDE)}"SDL_getenv.h"\
+	{$(INCLUDE)}"SDL_joystick.h"\
+	{$(INCLUDE)}"SDL_keyboard.h"\
+	{$(INCLUDE)}"SDL_keysym.h"\
+	{$(INCLUDE)}"SDL_main.h"\
+	{$(INCLUDE)}"SDL_mouse.h"\
+	{$(INCLUDE)}"SDL_mutex.h"\
+	{$(INCLUDE)}"SDL_quit.h"\
+	{$(INCLUDE)}"SDL_rwops.h"\
+	{$(INCLUDE)}"SDL_timer.h"\
+	{$(INCLUDE)}"SDL_types.h"\
+	{$(INCLUDE)}"SDL_version.h"\
+	{$(INCLUDE)}"SDL_video.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE x86em) Release"
 
-DEP_CPP_OPL3_=\
-	".\opl3.h"\
+DEP_CPP_MFILE=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
 	".\ymf262.h"\
 	
-NODEP_CPP_OPL3_=\
-	".\begin_code.h"\
-	".\close_code.h"\
+NODEP_CPP_MFILE=\
 	".\SDL.h"\
-	".\SDL_active.h"\
-	".\SDL_audio.h"\
-	".\SDL_byteorder.h"\
-	".\SDL_cdrom.h"\
-	".\SDL_error.h"\
-	".\SDL_events.h"\
-	".\SDL_getenv.h"\
-	".\SDL_joystick.h"\
-	".\SDL_keyboard.h"\
-	".\SDL_keysym.h"\
-	".\SDL_main.h"\
-	".\SDL_mouse.h"\
-	".\SDL_mutex.h"\
-	".\SDL_quit.h"\
-	".\SDL_rwops.h"\
-	".\SDL_syswm.h"\
-	".\SDL_timer.h"\
-	".\SDL_types.h"\
-	".\SDL_version.h"\
-	".\SDL_video.h"\
 	
 
 !ELSEIF  "$(CFG)" == "Anise - Win32 (WCE x86em) Debug"
 
-DEP_CPP_OPL3_=\
-	".\opl3.h"\
+DEP_CPP_MFILE=\
+	".\anise.h"\
+	".\debug.h"\
+	".\file.h"\
+	".\memory.h"\
+	".\memory_block.h"\
+	".\memory_index.h"\
+	".\memory_segment.h"\
+	".\mfile.h"\
+	".\option.h"\
 	".\ymf262.h"\
 	
-NODEP_CPP_OPL3_=\
-	".\begin_code.h"\
-	".\close_code.h"\
+NODEP_CPP_MFILE=\
 	".\SDL.h"\
-	".\SDL_active.h"\
-	".\SDL_audio.h"\
-	".\SDL_byteorder.h"\
-	".\SDL_cdrom.h"\
-	".\SDL_error.h"\
-	".\SDL_events.h"\
-	".\SDL_getenv.h"\
-	".\SDL_joystick.h"\
-	".\SDL_keyboard.h"\
-	".\SDL_keysym.h"\
-	".\SDL_main.h"\
-	".\SDL_mouse.h"\
-	".\SDL_mutex.h"\
-	".\SDL_quit.h"\
-	".\SDL_rwops.h"\
-	".\SDL_syswm.h"\
-	".\SDL_timer.h"\
-	".\SDL_types.h"\
-	".\SDL_version.h"\
-	".\SDL_video.h"\
 	
 
 !ENDIF 
@@ -30861,7 +30759,6 @@ DEP_CPP_SOUND=\
 	".\memory_block.h"\
 	".\memory_index.h"\
 	".\memory_segment.h"\
-	".\opl3.h"\
 	".\option.h"\
 	".\sound.h"\
 	".\ymf262.h"\
@@ -30889,6 +30786,7 @@ NODEP_CPP_SOUND=\
 	".\DL_video.h"\
 	".\egin_code.h"\
 	".\lose_code.h"\
+	".\opl3.h"\
 	".\wavemng.h"\
 	
 
@@ -31568,7 +31466,7 @@ SOURCE=.\memory_segment.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opl3.h
+SOURCE=.\mfile.h
 # End Source File
 # Begin Source File
 

@@ -176,7 +176,7 @@
 				RelativePath=".\memory_segment.cpp">
 			</File>
 			<File
-				RelativePath=".\opl3.cpp">
+				RelativePath=".\mfile.cpp">
 			</File>
 			<File
 				RelativePath=".\option.cpp">
@@ -398,6 +398,9 @@
 			</File>
 			<File
 				RelativePath=".\memory_segment.h">
+			</File>
+			<File
+				RelativePath=".\mfile.h">
 			</File>
 			<File
 				RelativePath=".\option.h">
