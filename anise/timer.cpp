@@ -1,9 +1,7 @@
 #include "timer.h"
 
-Timer::Timer(Video *video)
+Timer::Timer()
 {
-	this->video = video;
-
 	cursor_timer = 0;
 	frame_timer = 0;
 	delay_timer = 0;
@@ -23,7 +21,6 @@ Timer::~Timer()
 Uint32 Timer::callback(Uint32 interval, void *pointer)
 {
 	((Timer*)pointer)->accumulate();
-	((Timer*)pointer)->display();
 
 	return interval;
 }
@@ -36,15 +33,6 @@ void Timer::accumulate()
 	delay_timer++;
 	overlap_timer++;
 	spray_timer++;
-}
-
-
-void Timer::display()
-{
-	if (video->overlap_inuse && (overlap_timer >= video->overlap_delay)) {
-		video->overlapScreen();
-		resetOverlapTimer();
-	}
 }
 
 

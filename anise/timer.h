@@ -1,16 +1,13 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#include "memory.h"
-#include "video.h"
+#include "anise.h"
 #include "SDL_timer.h"
 
 #define TIMER_INTERVAL	10
 
 class Timer {
 private:
-	Video *video;
-
 	SDL_TimerID timer_id;
 
 	word cursor_timer;
@@ -21,10 +18,9 @@ private:
 
 	static Uint32 callback(Uint32 interval, void *pointer);
 	void accumulate();
-	void display();
 
 public:
-	Timer(Video *video);
+	Timer();
 	~Timer();
 
 	void resetCursorTimer();
