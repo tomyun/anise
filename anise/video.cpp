@@ -207,14 +207,8 @@ void Video::updateScreen(word coord_x, word coord_y, word width, word height)
 		if (coord_x >= FILTER_RADIUS) {
 			coord_x -= FILTER_RADIUS;
 		}
-		if (coord_y >= FILTER_RADIUS) {
-			coord_y -= FILTER_RADIUS;
-		}
 		if (((coord_x + width) + FILTER_RADIUS) < VIDEO_WIDTH) {
 			width += FILTER_RADIUS;
-		}
-		if (((coord_y + height) + FILTER_RADIUS) < VIDEO_HEIGHT) {
-			height += FILTER_RADIUS;
 		}
 	}
 
@@ -600,6 +594,21 @@ void Video::drawCharacter(word view_coord_xw, word view_coord_yw, word view_marg
 				word coord_y = ((character[i][SPRITE_PREVIOUS]->coord_yw - view_coord_yw) * SPRITE_SIZE) + view_margin_y;
 
 				for (word yw = 0; yw < heightw; yw++) {
+					if (option->is_filter) {
+						word left_background_layer = character[i][SPRITE_PREVIOUS]->neighbour_background_layer[(yw * 2) + SPRITE_LEFT];
+						word left_foreground_layer_1st = character[i][SPRITE_PREVIOUS]->neighbour_foreground_layer_1st[(yw * 2) + SPRITE_LEFT];
+						word left_foreground_layer_2nd = character[i][SPRITE_PREVIOUS]->neighbour_foreground_layer_2nd[(yw * 2) + SPRITE_LEFT];
+						word left_foreground_layer_3rd = character[i][SPRITE_PREVIOUS]->neighbour_foreground_layer_3rd[(yw * 2) + SPRITE_LEFT];
+
+						word right_background_layer = character[i][SPRITE_PREVIOUS]->neighbour_background_layer[(yw * 2) + SPRITE_RIGHT];
+						word right_foreground_layer_1st = character[i][SPRITE_PREVIOUS]->neighbour_foreground_layer_1st[(yw * 2) + SPRITE_RIGHT];
+						word right_foreground_layer_2nd = character[i][SPRITE_PREVIOUS]->neighbour_foreground_layer_2nd[(yw * 2) + SPRITE_RIGHT];
+						word right_foreground_layer_3rd = character[i][SPRITE_PREVIOUS]->neighbour_foreground_layer_3rd[(yw * 2) + SPRITE_RIGHT];
+
+						putSprite(coord_x - SPRITE_SIZE, coord_y + (yw * SPRITE_SIZE), left_background_layer, left_foreground_layer_1st, left_foreground_layer_2nd, left_foreground_layer_3rd);
+						putSprite(coord_x + (widthw * SPRITE_SIZE), coord_y + (yw * SPRITE_SIZE), right_background_layer, right_foreground_layer_1st, right_foreground_layer_2nd, right_foreground_layer_3rd);
+					}
+
 					for (word xw = 0; xw < widthw; xw++) {
 						word background_layer = character[i][SPRITE_PREVIOUS]->background_layer[(yw * widthw) + xw];
 						word foreground_layer_1st = character[i][SPRITE_PREVIOUS]->foreground_layer_1st[(yw * widthw) + xw];
@@ -631,6 +640,21 @@ void Video::drawCharacter(word view_coord_xw, word view_coord_yw, word view_marg
 				word coord_y = ((character[i][SPRITE_CURRENT]->coord_yw - view_coord_yw) * SPRITE_SIZE) + view_margin_y;
 
 				for (word yw = 0; yw < heightw; yw++) {
+					if (option->is_filter) {
+						word left_background_layer = character[i][SPRITE_CURRENT]->neighbour_background_layer[(yw * 2) + SPRITE_LEFT];
+						word left_foreground_layer_1st = character[i][SPRITE_CURRENT]->neighbour_foreground_layer_1st[(yw * 2) + SPRITE_LEFT];
+						word left_foreground_layer_2nd = character[i][SPRITE_CURRENT]->neighbour_foreground_layer_2nd[(yw * 2) + SPRITE_LEFT];
+						word left_foreground_layer_3rd = character[i][SPRITE_CURRENT]->neighbour_foreground_layer_3rd[(yw * 2) + SPRITE_LEFT];
+
+						word right_background_layer = character[i][SPRITE_CURRENT]->neighbour_background_layer[(yw * 2) + SPRITE_RIGHT];
+						word right_foreground_layer_1st = character[i][SPRITE_CURRENT]->neighbour_foreground_layer_1st[(yw * 2) + SPRITE_RIGHT];
+						word right_foreground_layer_2nd = character[i][SPRITE_CURRENT]->neighbour_foreground_layer_2nd[(yw * 2) + SPRITE_RIGHT];
+						word right_foreground_layer_3rd = character[i][SPRITE_CURRENT]->neighbour_foreground_layer_3rd[(yw * 2) + SPRITE_RIGHT];
+
+						putSprite(coord_x - SPRITE_SIZE, coord_y + (yw * SPRITE_SIZE), left_background_layer, left_foreground_layer_1st, left_foreground_layer_2nd, left_foreground_layer_3rd);
+						putSprite(coord_x + (widthw * SPRITE_SIZE), coord_y + (yw * SPRITE_SIZE), right_background_layer, right_foreground_layer_1st, right_foreground_layer_2nd, right_foreground_layer_3rd);
+					}
+
 					for (word xw = 0; xw < widthw; xw++) {
 						word background_layer = character[i][SPRITE_CURRENT]->background_layer[(yw * widthw) + xw];
 						word foreground_layer_1st = character[i][SPRITE_CURRENT]->foreground_layer_1st[(yw * widthw) + xw];
@@ -638,7 +662,7 @@ void Video::drawCharacter(word view_coord_xw, word view_coord_yw, word view_marg
 						word foreground_layer_3rd = character[i][SPRITE_CURRENT]->foreground_layer_3rd[(yw * widthw) + xw];
 
 						putSprite(coord_x + (xw * SPRITE_SIZE), coord_y + (yw * SPRITE_SIZE), background_layer, foreground_layer_1st, foreground_layer_2nd, foreground_layer_3rd);
-						updateScreen(coord_x + (xw * SPRITE_SIZE), coord_y + (yw * SPRITE_SIZE), SPRITE_SIZE, SPRITE_SIZE);
+						updateScreen(coord_x + (xw * SPRITE_SIZE), coord_y +(yw * SPRITE_SIZE), SPRITE_SIZE, SPRITE_SIZE);
 					}
 				}
 			}
