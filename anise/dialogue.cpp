@@ -32,10 +32,14 @@ Dialogue::~Dialogue()
 
 bool Dialogue::initialize()
 {
-	FILE *handle = fopen(config->font_file_name, "rb");
+	//HACK: should be substituted
+	string name = config->path_name;
+	name += config->font_file_name;
+
+	FILE *handle = fopen(name.data(), "rb");
 	if (handle == NULL) {
 		//TODO: process error
-		PRINT("[Dialogue::initialize()] unable to open font file: %s\n", config->font_file_name);
+		ERROR("[Dialogue::initialize()] unable to open font file: %s\n", config->font_file_name);
 		exit(1);
 		return false;
 	}
@@ -49,7 +53,7 @@ bool Dialogue::initialize()
 	size_t read_size = fread((byte*) font, sizeof(byte), size, handle);
 	if (read_size != size) {
 		//TODO: process error
-		PRINT("[Dialogue::intialize()] unable to load font file: %s\n", config->font_file_name);
+		ERROR("[Dialogue::intialize()] unable to load font file: %s\n", config->font_file_name);
 		exit(1);
 		return false;
 	}
@@ -140,7 +144,7 @@ void Dialogue::putFullWidthCharacter(byte first_code, byte second_code)
 		}
 		else {
 			//TODO: process error
-			PRINT("[Dialogue::putFullWidthCharacter()] invalid first_code: %2x\n", first_code);
+			ERROR("[Dialogue::putFullWidthCharacter()] invalid first_code: %2x\n", first_code);
 		}
 
 		if ((second_code >= 0x40) && (second_code <= 0x7F)) {
@@ -151,7 +155,7 @@ void Dialogue::putFullWidthCharacter(byte first_code, byte second_code)
 		}
 		else {
 			//TODO: process error
-			PRINT("[Dialogue::putFullWidthCharacter()] invalid second_code: %2x\n", second_code);
+			ERROR("[Dialogue::putFullWidthCharacter()] invalid second_code: %2x\n", second_code);
 		}
 
 		offset = ((first_code * 0xBC) + second_code + 0x70) * (FONT_FULL_WIDTH / FONT_BPB) * FONT_FULL_HEIGHT;
