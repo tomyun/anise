@@ -368,6 +368,9 @@ void Script::load(const char *filename)
 	word script_offset = memory->b_SystemVariable->queryWord(iwpo_Script);
 	MemoryBlock *b_Script = memory->s_Core->get(&script_offset);
 
+	//TODO: need this?
+	//b_Script->clear();
+
 	file->open(filename, FILE_READ);
 	file->load(b_Script, script_offset);
 	file->close();
@@ -453,7 +456,7 @@ SCRIPTCALL Script::parse()
 			dialogue->putPredefinedText();
 		}
 		else {
-			PRINT("[Script::parse()] invalid opcode = %2x, offset = %x\n", code, getOffset());
+			PRINT_ERROR("[Script::parse()] invalid opcode = %2x, offset = %x\n", code, getOffset());
 			condition = RETURN_ERROR;
 			break;
 		}
@@ -467,7 +470,7 @@ SCRIPTCALL Script::parse()
 	}
 	else {
 		//TODO: process exit with error
-		PRINT("[Script::parse()] exit with error\n");
+		PRINT_ERROR("[Script::parse()] exit with error: parse_level = %d, offset = %x\n", parse_level, getOffset());
 		return RETURN_ERROR;
 	}
 }
