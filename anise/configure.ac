@@ -1,15 +1,17 @@
 AC_PREREQ(2.53)
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([Project ANISE], [beta7-20040205-linux], [tomyun@yonsei.ac.kr], anise)
-AC_CONFIG_SRCDIR(anise.h)
+#AC_INIT([Project ANISE], [beta7-20040205-linux], [tomyun@yonsei.ac.kr], anise)
+#AC_CONFIG_SRCDIR(anise.h)
+AC_INIT(anise.h)
 
 dnl Detect the canonical host and target build environment
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
 dnl Initialize for automake
-AM_INIT_AUTOMAKE(1.6)
+#AM_INIT_AUTOMAKE(1.6)
+AM_INIT_AUTOMAKE(anise, [beta7-20040205-linux])
 
 dnl Checks for programs.
 AC_PROG_CPP
