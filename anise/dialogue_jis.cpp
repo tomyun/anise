@@ -19101,3 +19101,31 @@ void Dialogue::initializeJisFont()
 	code_newline_first = 0x81;
 	code_newline_second = 0x93;
 }
+
+
+int Dialogue::getJisFontOffset(byte first_code, byte second_code)
+{
+	// calculate font code
+	if ((first_code >= 0x81) && (first_code <= 0x9F)) {
+		first_code = first_code - 0x81;
+	}
+	else if ((first_code >= 0xE0) && (first_code <= 0xFF)) {
+		first_code = first_code - 0x81 - 0x40;
+	}
+	else {
+		PRINT_ERROR("[Dialogue::getJisFontOffset()] invalid first_code: %2x\n", first_code);
+	}
+
+	if ((second_code >= 0x40) && (second_code <= 0x7F)) {
+		second_code = second_code - 0x40;
+	}
+	else if ((second_code >= 0x80) && (second_code <= 0xFC)) {
+		second_code = second_code - 0x40 - 1;
+	}
+	else {
+		PRINT_ERROR("[Dialogue::getJisFontOffset()] invalid second_code: %2x\n", second_code);
+	}
+
+	int offset = ((first_code * 0xBC) + second_code + 0x70) * (FONT_FULL_WIDTH / FONT_BPB) * FONT_FULL_HEIGHT;
+	return offset;
+}
