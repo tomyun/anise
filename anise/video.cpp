@@ -95,27 +95,7 @@ void Video::setColor(byte index, word gp4_color)
 		PRINT_ERROR("[Video::setColor()] out of bound: index = %d, gp4_color = %d\n", index, gp4_color);
 	}
 
-	//HACK: need clean up
-	///*
-	for (int i = 0; i < VIDEO_BUFFER; i++) {
-		//TODO: remove one of these
-		SDL_SetPalette(sdl_buffer[i], SDL_LOGPAL, screen_palette, index, 1);
-		if (SDL_SetColors(sdl_buffer[i], screen_palette, index, 1) != 1) {
-			PRINT_ERROR("[Video::setColor()] unable to set color: surface_type = %d, index = %d, gp4_color = %d\n", i, index, gp4_color);
-		}
-
-		(sdl_buffer[i]->format->palette->colors + index)->r = screen_palette[index].r;
-		(sdl_buffer[i]->format->palette->colors + index)->g = screen_palette[index].g;
-		(sdl_buffer[i]->format->palette->colors + index)->b = screen_palette[index].b;
-	}
-	//*/
-	/*
-	(sdl_buffer[i]->format->palette->colors + index)->r = screen_palette[index].r;
-	(sdl_buffer[i]->format->palette->colors + index)->g = screen_palette[index].g;
-	(sdl_buffer[i]->format->palette->colors + index)->b = screen_palette[index].b;
-	*/
-
-	//SDL_SetColors(sdl_buffer[SURFACE_SCREEN], screen_palette, index, 1);
+	updateColor(&screen_palette[index], index);
 }
 
 
@@ -158,6 +138,12 @@ void Video::splitColor(SDL_Color *sdl_color, word gp4_color)
 	sdl_color->r = (Uint8) (((gp4_color >> 4) & COLOR_MASK) * 0x11);
 	sdl_color->g = (Uint8) (((gp4_color >> 8) & COLOR_MASK) * 0x11);
 	sdl_color->b = (Uint8) (((gp4_color >> 0) & COLOR_MASK) * 0x11);
+}
+
+
+void Video::updateColor(SDL_Color *sdl_color, int index, SurfaceType surface_type)
+{
+	SDL_SetColors(sdl_buffer[surface_type], sdl_color, index, 1);
 }
 
 
