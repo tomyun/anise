@@ -80,7 +80,7 @@ void Image::decode(word destination_x, word destination_y)
 						}
 
 						table_index = color;
-						video->putPoint(surface_type, (coord_x + destination_x) + x, coord_y + destination_y, color);
+						video->putPoint((coord_x + destination_x) + x, coord_y + destination_y, color, surface_type);
 					}
 
 					destination_y++;
@@ -145,8 +145,8 @@ void Image::decode(word destination_x, word destination_y)
 
 					for (word y = 0; y < length; y++) {
 						for (word x = 0; x < 4; x++) {
-							byte color = video->getPoint(surface_type, (coord_x + replica_x) + x, coord_y + replica_y);
-							video->putPoint(surface_type, (coord_x + destination_x) + x, coord_y + destination_y, color);
+							byte color = video->getPoint((coord_x + replica_x) + x, coord_y + replica_y, surface_type);
+							video->putPoint((coord_x + destination_x) + x, coord_y + destination_y, color, surface_type);
 						}
 
 						replica_y++;

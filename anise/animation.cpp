@@ -90,10 +90,10 @@ void Animation::initializeBlit(word script_offset, BlitStruct *order)
 
 	order->source.x = source_coord_x0b << 3;
 	order->source.y = source_coord_y0;
-	order->source.s = video->getSurface((b_Script->queryByte(script_offset) >> 1) & 1);
+	order->source.surface_type = (SurfaceType) ((b_Script->queryByte(script_offset) >> 1) & 1);
 	order->destination.x = destination_coord_x << 3;
 	order->destination.y = destination_coord_y;
-	order->destination.s = video->getSurface(b_Script->queryByte(script_offset) & 1);
+	order->destination.surface_type = (SurfaceType) (b_Script->queryByte(script_offset) & 1);
 	order->w = width;
 	order->h = height;
 }

@@ -156,7 +156,7 @@ void Video::setPalette()
 }
 
 
-byte* Video::getSurface(byte surface_type)
+byte* Video::getSurface(SurfaceType surface_type)
 {
 	byte *surface;
 
@@ -199,7 +199,7 @@ bool Video::isScreen(byte *surface)
 }
 
 
-bool Video::isScreen(byte surface_type)
+bool Video::isScreen(SurfaceType surface_type)
 {
 	return (surface_type == SURFACE_SCREEN);
 }
@@ -368,7 +368,7 @@ void Video::drawBox(byte mode, word coord_x0b, word coord_y0, word coord_x1b, wo
 			{
 				for (word y = 0; y < height; y++) {
 					for (word x = 0; x < width; x++) {
-						putPoint(surface_type, coord_x + x, coord_y + y, color);
+						putPoint(coord_x + x, coord_y + y, color, surface_type);
 					}
 				}
 
@@ -379,8 +379,8 @@ void Video::drawBox(byte mode, word coord_x0b, word coord_y0, word coord_x1b, wo
 			{
 				for (word y = 0; y < height; y++) {
 					for (word x = 0; x < width; x++) {
-						byte original_color = getPoint(surface_type, coord_x + x, coord_y + y);
-						putPoint(surface_type, coord_x + x, coord_y + y, (original_color ^ color));
+						byte original_color = getPoint(coord_x + x, coord_y + y, surface_type);
+						putPoint(coord_x + x, coord_y + y, original_color ^ color, surface_type);
 					}
 				}
 			}
@@ -412,10 +412,10 @@ void Video::blit(byte mode, word source_coord_x0b, word source_coord_y0, word so
 	BlitStruct order;
 	order.source.x = source_coord_x0b << 3;
 	order.source.y = source_coord_y0;
-	order.source.s = getSurface(source_type);
+	order.source.surface_type = (SurfaceType) source_type;
 	order.destination.x = destination_coord_xb << 3;
 	order.destination.y = destination_coord_y;
-	order.destination.s = getSurface(destination_type);
+	order.destination.surface_type = (SurfaceType) destination_type;
 	order.w = width;
 	order.h = height;
 
@@ -441,12 +441,12 @@ void Video::blitDirect(BlitStruct *order)
 {
 	for (word y = 0; y < order->h; y++) {
 		for (word x = 0; x < order->w; x++) {
-			byte color = order->source.s[((order->source.y + y) * VIDEO_WIDTH) + (order->source.x + x)];
-			order->destination.s[((order->destination.y + y) * VIDEO_WIDTH) + (order->destination.x + x)] = color;
+			byte color = getPoint(order->source.x + x, order->source.y + y, order->source.surface_type);
+			putPoint(order->destination.x + x, order->destination.y + y, color, order->destination.surface_type);
 		}
 	}
 
-	if (isScreen(order->destination.s)) {
+	if (isScreen(order->destination.surface_type)) {
 		updateScreen(order->destination.x, order->destination.y, order->w, order->h);
 	}
 }
@@ -454,23 +454,23 @@ void Video::blitDirect(BlitStruct *order)
 
 void Video::blitSwapped(BlitStruct *order)
 {
-	if (isScreen(order->source.s) || isScreen(order->destination.s)) {
+	if (isScreen(order->source.surface_type) || isScreen(order->destination.surface_type)) {
 		for (word y = 0; y < order->h; y++) {
 			//HACK: is a meaning of width different here?
 			//for (word x = 0; x < order->w; x++) {
 			for (word x = 0; x < order->w - 8; x++) {
-				byte source_color = order->source.s[((order->source.y + y) * VIDEO_WIDTH) + (order->source.x + x)];
-				byte destination_color = order->destination.s[((order->destination.y + y) * VIDEO_WIDTH) + (order->destination.x + x)];
+				byte source_color = getPoint(order->source.x + x, order->source.y + y, order->source.surface_type);
+				byte destination_color = getPoint(order->destination.x + x, order->destination.y + y, order->destination.surface_type);
 
-				order->source.s[((order->source.y + y) * VIDEO_WIDTH) + (order->source.x + x)] = destination_color;
-				order->destination.s[((order->destination.y + y) * VIDEO_WIDTH) + (order->destination.x + x)] = source_color;
+				putPoint(order->source.x + x, order->source.y + y, destination_color, order->source.surface_type);
+				putPoint(order->destination.x + x, order->destination.y + y, source_color, order->destination.surface_type);
 			}
 		}
 
-		if (isScreen(order->source.s)) {
+		if (isScreen(order->source.surface_type)) {
 			updateScreen(order->source.x, order->source.y, order->w, order->h);
 		}
-		else if (isScreen(order->destination.s)) {
+		else if (isScreen(order->destination.surface_type)) {
 			updateScreen(order->destination.x, order->destination.y, order->w, order->h);
 		}
 	}
@@ -484,15 +484,15 @@ void Video::blitMasked(BlitStruct *order)
 {
 	for (word y = 0; y < order->h; y++) {
 		for (word x = 0; x < order->w; x++) {
-			byte color = order->source.s[((order->source.y + y) * VIDEO_WIDTH) + (order->source.x + x)];
+			byte color = getPoint(order->source.x + x, order->source.y + y, order->source.surface_type);
 
 			if (color != COLOR_KEY) {
-				order->destination.s[((order->destination.y + y) * VIDEO_WIDTH) + (order->destination.x + x)] = color;
+				putPoint(order->destination.x + x, order->destination.y + y, color, order->destination.surface_type);
 			}
 		}
 	}
 
-	if (isScreen(order->destination.s)) {
+	if (isScreen(order->destination.surface_type)) {
 		updateScreen(order->destination.x, order->destination.y, order->w, order->h);
 	}
 }
@@ -500,14 +500,14 @@ void Video::blitMasked(BlitStruct *order)
 
 void Video::blitMerged(byte mode, word foreground_coord_x, word foreground_coord_y, word background_coord_x, word background_coord_y, word destination_coord_x, word destination_coord_y, word width, word height)
 {
-	byte foreground_type = (mode >> 1) & 1;
-	byte background_type = mode & 1;
-	byte destination_type = (mode >> 2) & 1 ;
+	SurfaceType foreground_type = (SurfaceType) ((mode >> 1) & 1);
+	SurfaceType background_type = (SurfaceType) (mode & 1);
+	SurfaceType destination_type = (SurfaceType) ((mode >> 2) & 1);
 
 	for (word y = 0; y < height; y++) {
 		for (word x = 0; x < width; x++) {
-			byte foreground_color = getPoint(foreground_type, foreground_coord_x + x, foreground_coord_y + y);
-			byte background_color = getPoint(background_type, background_coord_x + x, background_coord_y + y);
+			byte foreground_color = getPoint(foreground_coord_x + x, foreground_coord_y + y, foreground_type);
+			byte background_color = getPoint(background_coord_x + x, background_coord_y + y, background_type);
 			byte color;
 
 			if (foreground_color != COLOR_KEY) {
@@ -517,7 +517,7 @@ void Video::blitMerged(byte mode, word foreground_coord_x, word foreground_coord
 				color = background_color;
 			}
 
-			putPoint(destination_type, destination_coord_x + x, destination_coord_y + y, color);
+			putPoint(destination_coord_x + x, destination_coord_y + y, color, destination_type);
 		}
 	}
 
@@ -682,7 +682,7 @@ void Video::drawCharacter(word view_coord_xw, word view_coord_yw, word view_marg
 #endif
 
 
-void Video::putSprite(word coord_x, word coord_y, word background_layer, word foreground_layer_1st, word foreground_layer_2nd, word foreground_layer_3rd, byte surface_type)
+void Video::putSprite(word coord_x, word coord_y, word background_layer, word foreground_layer_1st, word foreground_layer_2nd, word foreground_layer_3rd, SurfaceType surface_type)
 {
 	word background_coord_x = (word) ((background_layer & SPRITE_LAYER_MASK) % (VIDEO_WIDTH / SPRITE_SIZE)) * SPRITE_SIZE;
 	word background_coord_y = (word) ((background_layer & SPRITE_LAYER_MASK) / (VIDEO_WIDTH / SPRITE_SIZE)) * SPRITE_SIZE;
@@ -695,20 +695,20 @@ void Video::putSprite(word coord_x, word coord_y, word background_layer, word fo
 
 	for (word y = 0; y < SPRITE_SIZE; y++) {
 		for (word x = 0; x < SPRITE_SIZE; x++) {
-			byte background_color = getPoint(SURFACE_BUFFER2, background_coord_x + x, background_coord_y + y);
+			byte background_color = getPoint(background_coord_x + x, background_coord_y + y, SURFACE_BUFFER2);
 
 			byte foreground1_color;
 			byte foreground2_color;
 			byte foreground3_color;
 			if (option->game_type == GAME_NANPA2) {
-				foreground1_color = getPoint(SURFACE_BUFFER3, foreground1_coord_x + x, foreground1_coord_y + y);
-				foreground2_color = getPoint(SURFACE_BUFFER3, foreground2_coord_x + x, foreground2_coord_y + y);
-				foreground3_color = getPoint(SURFACE_BUFFER3, foreground3_coord_x + x, foreground3_coord_y + y);
+				foreground1_color = getPoint(foreground1_coord_x + x, foreground1_coord_y + y, SURFACE_BUFFER3);
+				foreground2_color = getPoint(foreground2_coord_x + x, foreground2_coord_y + y, SURFACE_BUFFER3);
+				foreground3_color = getPoint(foreground3_coord_x + x, foreground3_coord_y + y, SURFACE_BUFFER3);
 			}
 			else {
-				foreground1_color = getPoint(SURFACE_BUFFER2, foreground1_coord_x + x, foreground1_coord_y + y);
-				foreground2_color = getPoint(SURFACE_BUFFER2, foreground2_coord_x + x, foreground2_coord_y + y);
-				foreground3_color = getPoint(SURFACE_BUFFER2, foreground3_coord_x + x, foreground3_coord_y + y);
+				foreground1_color = getPoint(foreground1_coord_x + x, foreground1_coord_y + y, SURFACE_BUFFER2);
+				foreground2_color = getPoint(foreground2_coord_x + x, foreground2_coord_y + y, SURFACE_BUFFER2);
+				foreground3_color = getPoint(foreground3_coord_x + x, foreground3_coord_y + y, SURFACE_BUFFER2);
 			}
 
 			byte color;
@@ -731,7 +731,7 @@ void Video::putSprite(word coord_x, word coord_y, word background_layer, word fo
 				continue;
 			}
 
-			putPoint(surface_type, coord_x + x, coord_y + y, color);
+			putPoint(coord_x + x, coord_y + y, color, surface_type);
 		}
 	}
 
@@ -740,7 +740,7 @@ void Video::putSprite(word coord_x, word coord_y, word background_layer, word fo
 }
 
 
-void Video::putPoint(byte surface_type, word coord_x, word coord_y, byte color_index)
+void Video::putPoint(word coord_x, word coord_y, byte color_index, SurfaceType surface_type)
 {
 #ifdef FIELD_EXPERIMENT
 	word max_coord_x;
@@ -772,13 +772,7 @@ void Video::putPoint(byte surface_type, word coord_x, word coord_y, byte color_i
 }
 
 
-void Video::putPoint(word coord_x, word coord_y, byte color_index)
-{
-	putPoint(SURFACE_SCREEN, coord_x, coord_y, color_index);
-}
-
-
-byte Video::getPoint(byte surface_type, word coord_x, word coord_y)
+byte Video::getPoint(word coord_x, word coord_y, SurfaceType surface_type)
 {
 #ifdef FIELD_EXPERIMENT
 	word max_coord_x;
@@ -806,12 +800,6 @@ byte Video::getPoint(byte surface_type, word coord_x, word coord_y)
 		PRINT_ERROR("[Video::getPoint()] out of bound: type = %d, coord_x = %d, coord_y = %d\n", surface_type, coord_x, coord_y);
 		return COLOR_NONE;
 	}
-}
-
-
-byte Video::getPoint(word coord_x, word coord_y)
-{
-	return getPoint(SURFACE_SCREEN, coord_x, coord_y);
 }
 
 
@@ -895,7 +883,7 @@ void Video::drawPixel(SDL_Surface *sdl_surface, int x, int y, Uint32 sdl_color)
 }
 
 
-Uint32 Video::getFilteredColor(word coord_x, word coord_y, byte surface_type)
+Uint32 Video::getFilteredColor(word coord_x, word coord_y, SurfaceType surface_type)
 {
 	if (option->is_filter) {
 #ifdef FIELD_EXPERIMENT
@@ -919,7 +907,7 @@ Uint32 Video::getFilteredColor(word coord_x, word coord_y, byte surface_type)
 #else
 			if (((coord_x + dx) >= 0) && ((coord_x + dx) < VIDEO_WIDTH)) {
 #endif
-				byte color_index = getPoint(surface_type, coord_x + dx, coord_y);
+				byte color_index = getPoint(coord_x + dx, coord_y, surface_type);
 				Uint32 color = getColor(color_index);
 
 				Uint8 color_red, color_green, color_blue;
@@ -957,7 +945,7 @@ Uint32 Video::getFilteredColor(word coord_x, word coord_y, byte surface_type)
 		return SDL_MapRGB(sdl_screen->format, filtered_color_red, filtered_color_green, filtered_color_blue);
 	}
 	else {
-		return getColor(getPoint(surface_type, coord_x, coord_y));
+		return getColor(getPoint(coord_x, coord_y, surface_type));
 	}
 }
 
@@ -979,10 +967,10 @@ void Video::drawFont(word coord_x, word coord_y, const byte *font, long int offs
 		for (word x = 0; x < width; x++) {
 			switch (b_Font->readBit()) {
 				case FONT_BACKGROUND:
-					putPoint(surface_type, coord_x + x, coord_y + y, background_color);
+					putPoint(coord_x + x, coord_y + y, background_color, surface_type);
 					break;
 				case FONT_FOREGROUND:
-					putPoint(surface_type, coord_x + x, coord_y + y, foreground_color);
+					putPoint(coord_x + x, coord_y + y, foreground_color, surface_type);
 					break;
 			}
 		}
@@ -995,7 +983,7 @@ void Video::drawFont(word coord_x, word coord_y, const byte *font, long int offs
 			switch (b_Font->readBit()) {
 				case FONT_FOREGROUND:
 					if (x != (width - 1)) {
-						putPoint(surface_type, (coord_x + x) + 1, coord_y + y, foreground_color);
+						putPoint((coord_x + x) + 1, coord_y + y, foreground_color, surface_type);
 					}
 					break;
 			}

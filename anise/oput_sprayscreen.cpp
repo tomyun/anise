@@ -26,8 +26,8 @@ SCRIPTCALL Script::oput_sprayScreen()
 
 			for (int x = 0; x < width; x++) {
 				if (((current_mask >> (7 - (x % 8))) & 1) == 1) {
-					byte pixel = video->getPoint(SURFACE_BUFFER2, coord_x + x, coord_y + y);
-					video->putPoint(SURFACE_SCREEN, coord_x + x, coord_y + y, pixel);
+					byte pixel = video->getPoint(coord_x + x, coord_y + y, SURFACE_BUFFER2);
+					video->putPoint(coord_x + x, coord_y + y, pixel);
 				}
 			}
 		}

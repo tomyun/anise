@@ -86,7 +86,7 @@ enum CharacterSpriteNeighbor {
 struct BlitStruct {
 	struct BlitPlane {		
 		word x, y;
-		byte *s;
+		SurfaceType surface_type;
 	} source, destination;
 
 	word w, h;
@@ -245,11 +245,11 @@ public:
 	void drawBox(byte mode, word coord_x0b, word coord_y0, word coord_x1b, word coord_y1);
 	void clearScreen();
 
-	byte* getSurface(byte surface_type);
+	byte* getSurface(SurfaceType surface_type);
 	SurfaceType getDrawSurface();
 
 	bool isScreen(byte *surface);
-	bool isScreen(byte surface_type);
+	bool isScreen(SurfaceType surface_type);
 
 	void updateScreen(word coord_x, word coord_y, word width, word height);
 	void updateScreen();
@@ -271,14 +271,12 @@ public:
 	void updateCharacter(int index, CharacterSprite *new_character);
 	void drawCharacter(word view_coord_xw, word view_coord_yw, word view_margin_xw, word view_margin_y, bool is_forced = false);
 #endif
-	void putSprite(word coord_x, word coord_y, word background_layer, word foreground_layer_1st, word foreground_layer_2nd, word foreground_layer_3rd, byte surface_type = SURFACE_SCREEN);
+	void putSprite(word coord_x, word coord_y, word background_layer, word foreground_layer_1st, word foreground_layer_2nd, word foreground_layer_3rd, SurfaceType surface_type = SURFACE_SCREEN);
 
-	void putPoint(byte surface_type, word coord_x, word coord_y, byte color_index);
-	void putPoint(word coord_x, word coord_y, byte color_index);
-	byte getPoint(byte surface_type, word coord_x, word coord_y);
-	byte getPoint(word coord_x, word coord_y);
+	void putPoint(word coord_x, word coord_y, byte color_index, SurfaceType surface_type = SURFACE_SCREEN);
+	byte getPoint(word coord_x, word coord_y, SurfaceType surface_type = SURFACE_SCREEN);
 
-	Uint32 getFilteredColor(word coord_x, word coord_y, byte surface_type = SURFACE_SCREEN);
+	Uint32 getFilteredColor(word coord_x, word coord_y, SurfaceType surface_type = SURFACE_SCREEN);
 
 	void drawFont(word coord_x, word coord_y, const byte *font, long int offset, word width, word height);
 
