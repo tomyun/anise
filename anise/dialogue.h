@@ -1,12 +1,15 @@
 #ifndef DIALOGUE_H
 #define DIALOGUE_H
 
+#include <string>
 #include "memory.h"
 #include "video.h"
 #include "timer.h"
 #include "input.h"
 #include "animation.h"
 #include "script_code.h"
+
+using std::string;
 
 #define FONT_HALF_WIDTH			8
 #define FONT_HALF_HEIGHT		16
