@@ -62,8 +62,7 @@ void Image::initializeTable()
 void Image::decode(word destination_x, word destination_y)
 {
 	int table_index = VIDEO_COLOR;
-	int remain_height = (int) height;
-	while (remain_height > 0) {
+	while ((destination_y < height) && ((coord_y + destination_y) < VIDEO_HEIGHT)) {
 		switch (scan()) {
 			case DECODE_PIXEL:
 				{
@@ -84,7 +83,6 @@ void Image::decode(word destination_x, word destination_y)
 					}
 
 					destination_y++;
-					remain_height--;
 				}
 				break;
 
@@ -119,8 +117,13 @@ void Image::decode(word destination_x, word destination_y)
 
 					int replica_x = destination_x - (horizontal * 4);
 					int replica_y = destination_y + vertical;
-					word length = 0;
 
+					//HACK: clip the out of bound regions
+					if ((coord_y + replica_y) >= VIDEO_HEIGHT) {
+						break;
+					}
+
+					word length = 0;
 					if (scan() == 0) {
 						length = scan() + 2;
 					}
@@ -141,7 +144,13 @@ void Image::decode(word destination_x, word destination_y)
 						}
 					}
 
-					remain_height -= length;
+					//HACK: clip the out of bound regions
+					if ((coord_y + replica_y) + (length - 1) >= VIDEO_HEIGHT) {
+						length = VIDEO_HEIGHT - (coord_y + replica_y);
+					}
+					if ((coord_y + destination_y) + (length - 1) >= VIDEO_HEIGHT) {
+						length = VIDEO_HEIGHT - (coord_y + destination_y);
+					}
 
 					for (word y = 0; y < length; y++) {
 						for (word x = 0; x < 4; x++) {
