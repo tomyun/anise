@@ -5,6 +5,22 @@ Image::Image(Memory *memory, Video *video, File *file)
 	this->memory = memory;
 	this->video = video;
 	this->file = file;
+
+	b_Image = NULL;
+
+	coord_x = 0;
+	coord_y = 0;
+
+	width = 0;
+	height = 0;
+
+	surface = NULL;
+
+	for (int i = 0; i < (VIDEO_COLOR + 1); i++) {
+		for (int j = 0; j < VIDEO_COLOR; j++) {
+			table[i][j] = 0;
+		}
+	}
 }
 
 
@@ -13,7 +29,7 @@ Image::~Image()
 }
 
 
-word Image::scan(byte length = 1)
+word Image::scan(byte length)
 {
 	return b_Image->readBits(length);
 }
