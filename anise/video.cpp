@@ -7,18 +7,18 @@ Video::Video(Memory *memory, Timer *timer, Option *option)
 	this->option = option;
 
 	if (option->is_fullscreen) {
-		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, SDL_SWSURFACE | SDL_FULLSCREEN);
+		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, SDL_SWSURFACE | SDL_FULLSCREEN);
 	}
 	else {
-		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, SDL_SWSURFACE);
+		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, SDL_SWSURFACE);
 	}
 
 	if (sdl_screen == NULL) {
-		PRINT_ERROR("[Video::Video()] unable to set %dx%dx%d video mode: %s\n", VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, SDL_GetError());
+		PRINT_ERROR("[Video::Video()] unable to set %dx%dx%d video mode: %s\n", VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, SDL_GetError());
 	}
 
 	for (int i = 0; i < VIDEO_BUFFER; i++) {
-		sdl_buffer[i] = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, 8, 0, 0, 0, 0);
+		sdl_buffer[i] = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_BUFFER_DEPTH, 0, 0, 0, 0);
 	}
 
 	const SDL_VideoInfo *video_info = SDL_GetVideoInfo();
@@ -99,40 +99,6 @@ void Video::setColor(byte index, word gp4_color)
 }
 
 
-/*
-Uint32 Video::getColor(byte color_index)
-{
-	if (color_index < VIDEO_COLOR) {
-		return sdl_palette[color_index];
-	}
-	else {
-		//TODO: process error
-		PRINT_ERROR("[Video::getColor()] out of bound: color_index = %d\n", color_index);
-		return 0;
-	}
-}
-*/
-
-
-/*
-Uint32 Video::convertColor(word color)
-{
-	Uint8 color_red, color_green, color_blue;
-	splitColor(color, &color_red, &color_green, &color_blue);
-
-	return SDL_MapRGB(sdl_screen->format, color_red, color_green, color_blue);
-}
-*/
-
-
-/*
-void Video::splitColor(word color, Uint8 *color_red, Uint8 *color_green, Uint8 *color_blue)
-{
-	*color_red = (Uint8) (((color >> 4) & COLOR_MASK) * 0x11);
-	*color_green = (Uint8) (((color >> 8) & COLOR_MASK) * 0x11);
-	*color_blue = (Uint8) (((color >> 0) & COLOR_MASK) * 0x11);
-}
-*/
 void Video::splitColor(SDL_Color *sdl_color, word gp4_color)
 {
 	sdl_color->r = (Uint8) (((gp4_color >> 4) & COLOR_MASK) * 0x11);
@@ -190,51 +156,12 @@ void Video::setPalette()
 }
 
 
-/*
-byte* Video::getSurface(SurfaceType surface_type)
-{
-	byte *surface;
-
-	switch (surface_type) {
-		case SURFACE_SCREEN:
-			surface = screen;
-			break;
-		case SURFACE_BUFFER1:
-			surface = buffer[0];
-			break;
-		case SURFACE_BUFFER2:
-			surface = buffer[1];
-			break;
-		case SURFACE_BUFFER3:
-		default:
-			surface = buffer[2];
-			break;
-#ifdef FIELD_EXPERIMENT
-		case SURFACE_MAP:
-			surface = map;
-			break;
-#endif
-	}
-
-	return surface;
-}
-*/
-
-
 SurfaceType Video::getDrawSurface()
 {
 	byte surface_type = (byte) (memory->b_SystemVariable->queryWord(iw_DisplayBuffer));
 
 	return (SurfaceType) surface_type;
 }
-
-
-/*
-bool Video::isScreen(byte *surface)
-{
-	return (surface == screen);
-}
-*/
 
 
 bool Video::isScreen(SurfaceType surface_type)
@@ -298,8 +225,8 @@ void Video::fadeScreen()
 		setColor(i, intermediate_palette[i]);
 	}
 
-	SDL_Surface *old_screen = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
-	SDL_Surface *new_screen = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
+	SDL_Surface *old_screen = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
+	SDL_Surface *new_screen = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
 
 	SDL_BlitSurface(sdl_screen, NULL, old_screen, NULL);
 
@@ -336,12 +263,12 @@ void Video::initializeOverlapScreen()
 	if (overlap_old_screen != NULL) {
 		SDL_FreeSurface(overlap_old_screen);
 	}
-	overlap_old_screen = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
+	overlap_old_screen = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
 
 	if (overlap_new_screen != NULL) {
 		SDL_FreeSurface(overlap_new_screen);
 	}
-	overlap_new_screen = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
+	overlap_new_screen = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
 
 	SDL_BlitSurface(sdl_screen, NULL, overlap_old_screen, NULL);
 
@@ -591,7 +518,7 @@ void Video::initializeMap(word width, word height)
 	map_width = width;
 	map_height = height;
 
-	sdl_map = SDL_CreateRGBSurface(SDL_SWSURFACE, map_width, map_height, VIDEO_COLOR_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
+	sdl_map = SDL_CreateRGBSurface(SDL_SWSURFACE, map_width, map_height, VIDEO_SCREEN_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
 	map = new byte[map_width * map_height];
 }
 
@@ -807,16 +734,12 @@ void Video::putPoint(word coord_x, word coord_y, byte color_index, SurfaceType s
 	}
 
 	if (((coord_x >= 0) && (coord_x < max_coord_x)) && ((coord_y >= 0) && (coord_y < max_coord_y))) {
-		//byte *surface = getSurface(surface_type);
-		//surface[(coord_y * max_coord_x) + coord_x] = color_index;
 		lockScreen(sdl_buffer[surface_type]);
 		putPixel(sdl_buffer[surface_type], coord_x, coord_y, color_index);
 		unlockScreen(sdl_buffer[surface_type]);
 	}
 #else
 	if (((coord_x >= 0) && (coord_x < VIDEO_WIDTH)) && ((coord_y >= 0) && (coord_y < VIDEO_HEIGHT))) {
-		//byte *surface = getSurface(surface_type);
-		//surface[(coord_y * VIDEO_WIDTH) + coord_x] = color_index;
 		lockScreen(sdl_buffer[surface_type]);
 		putPixel(sdl_buffer[surface_type], coord_x, coord_y, color_index);
 		unlockScreen(sdl_buffer[surface_type]);
@@ -844,15 +767,11 @@ byte Video::getPoint(word coord_x, word coord_y, SurfaceType surface_type)
 	}
 
 	if (((coord_x >= 0) && (coord_x < max_coord_x)) && ((coord_y >= 0) && (coord_y < max_coord_y))) {
-		//byte *surface = getSurface(surface_type);
-		//return surface[(coord_y * max_coord_x) + coord_x];
 		return (byte) getPixel(sdl_buffer[surface_type], coord_x, coord_y);
 
 	}
 #else
 	if (((coord_x >= 0) && (coord_x < VIDEO_WIDTH)) && ((coord_y >= 0) && (coord_y < VIDEO_HEIGHT))) {
-		//byte *surface = getSurface(surface_type);
-		//return surface[(coord_y * VIDEO_WIDTH) + coord_x];
 		return (byte) getPixel(sdl_buffer[surface_type], coord_x, coord_y);
 	}
 #endif
@@ -895,36 +814,6 @@ void Video::unlockScreen()
 }
 
 
-Uint32 Video::getPixel(SDL_Surface *sdl_surface, int coord_x, int coord_y)
-{
-	Uint8 bpp = sdl_surface->format->BytesPerPixel;
-	Uint8 *pixel = (Uint8 *) ((Uint8 *)(sdl_surface->pixels) + (coord_y * sdl_surface->pitch) + (coord_x * bpp));
-
-	switch (bpp) {
-		case 1:
-			return *pixel;
-
-		case 2:
-			return *(Uint16 *) pixel;
-
-		case 3:
-			if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-				return ((pixel[0] << 16) | (pixel[1] << 8) | pixel[2]);
-			}
-			else {
-				return (pixel[0] | (pixel[1] << 8) | (pixel[2] << 16));
-			}
-
-		case 4:
-			return *(Uint32 *) pixel;
-
-		default:
-			//ACK: just for avoiding warnings
-			return 0;
-	}
-}
-
-
 void Video::putPixel(SDL_Surface *sdl_surface, int coord_x, int coord_y, Uint32 sdl_color)
 {
 	Uint8 bpp = sdl_surface->format->BytesPerPixel;
@@ -960,54 +849,34 @@ void Video::putPixel(SDL_Surface *sdl_surface, int coord_x, int coord_y, Uint32 
 }
 
 
-/*
-void Video::drawPixel(SDL_Surface *sdl_surface, int x, int y, Uint32 sdl_color)
+Uint32 Video::getPixel(SDL_Surface *sdl_surface, int coord_x, int coord_y)
 {
-	switch (sdl_surface->format->BytesPerPixel) {
+	Uint8 bpp = sdl_surface->format->BytesPerPixel;
+	Uint8 *pixel = (Uint8 *) ((Uint8 *)(sdl_surface->pixels) + (coord_y * sdl_surface->pitch) + (coord_x * bpp));
+
+	switch (bpp) {
 		case 1:
-			{
-				Uint8 *buffer;
-				buffer = ((Uint8*) sdl_surface->pixels) + (y * sdl_surface->pitch) + x;
-				*buffer = sdl_color;
-			}
-			break;
-		
+			return *pixel;
+
 		case 2:
-			{
-				Uint16 *buffer;
-				buffer = ((Uint16*) sdl_surface->pixels) + (y * sdl_surface->pitch / 2) + x;
-				*buffer = sdl_color;
-			}
-			break;
-		
+			return *(Uint16 *) pixel;
+
 		case 3:
-			{
-				Uint8 *buffer;
-				buffer = ((Uint8*) sdl_surface->pixels) + (y * sdl_surface->pitch) + (x * 3);
-				if (SDL_BYTEORDER == SDL_LIL_ENDIAN) {
-					buffer[0] = sdl_color;
-					buffer[1] = sdl_color >> 8;
-					buffer[2] = sdl_color >> 16;
-				}
-				else {
-					buffer[2] = sdl_color;
-					buffer[1] = sdl_color >> 8;
-					buffer[0] = sdl_color >> 16;
-				}
+			if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+				return ((pixel[0] << 16) | (pixel[1] << 8) | pixel[2]);
 			}
-			break;
-		
+			else {
+				return (pixel[0] | (pixel[1] << 8) | (pixel[2] << 16));
+			}
+
 		case 4:
-			{
-				Uint32 *buffer;
-				//buffer = ((Uint32*) sdl_surface->pixels) + (y * sdl_surface->pitch / 4) + x;
-				buffer = ((Uint32*) sdl_surface->pixels) + (y * sdl_surface->w) + x;
-				*buffer = sdl_color;
-			}
-			break;
+			return *(Uint32 *) pixel;
+
+		default:
+			//ACK: just for avoiding warnings
+			return 0;
 	}
 }
-*/
 
 
 Uint32 Video::getFilteredColor(word coord_x, word coord_y, SurfaceType surface_type)
