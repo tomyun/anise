@@ -20,47 +20,21 @@ Dialogue::Dialogue(Memory *memory, Video *video, Timer *timer, Input *input, Ani
 
 	previous_code = NULL;
 
-	initialize();
+	if (option->font_type == FONT_JIS) {
+		font = font_jis;
+	}
+	else if (option->font_type == FONT_JISHAN) {
+		font = font_jishan;
+	}
+	else if (option->font_type == FONT_GAMEBOX) {
+		font = font_gamebox;
+	}
 }
 
 
 Dialogue::~Dialogue()
 {
 	delete font;
-}
-
-
-bool Dialogue::initialize()
-{
-	//HACK: should be substituted
-	string name = option->path_name;
-	name += option->font_file_name;
-
-	FILE *handle = fopen(name.data(), "rb");
-	if (handle == NULL) {
-		//TODO: process error
-		PRINT_ERROR("[Dialogue::initialize()] unable to open font file: %s\n", option->font_file_name);
-		exit(1);
-		return false;
-	}
-
-	fseek(handle, 0, SEEK_END);
-	size = ftell(handle);
-	fseek(handle, 0, SEEK_SET);
-
-	font = new byte[size];
-
-	size_t read_size = fread((byte*) font, sizeof(byte), size, handle);
-	if (read_size != size) {
-		//TODO: process error
-		PRINT_ERROR("[Dialogue::intialize()] unable to load font file: %s\n", option->font_file_name);
-		exit(1);
-		return false;
-	}
-
-	fclose(handle);
-
-	return true;
 }
 
 
