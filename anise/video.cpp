@@ -41,8 +41,7 @@ void Video::setColor(byte color_index, word color)
 	}
 	else {
 		//TODO: process error
-		PRINT_ERROR("[Video::setColor()] out of bound\n");
-		PAUSE;
+		PRINT_ERROR("[Video::setColor()] out of bound: color_index = %d, color = %d\n", color_index, color);
 	}
 
 	//updateScreen();
@@ -55,13 +54,9 @@ Uint32 Video::getColor(byte color_index)
 		return sdl_palette[color_index];
 	}
 	else {
-		//HACK: improve it
-		return 0x000000;
-
 		//TODO: process error
-		PRINT_ERROR("[Video::getColor()] out of bound\n");
-		PAUSE;
-		exit(1);
+		PRINT_ERROR("[Video::getColor()] out of bound: color_index = %d\n", color_index);
+		return 0;
 	}
 }
 
@@ -90,8 +85,7 @@ void Video::setIntermediateColor(byte color_index, word color)
 	}
 	else {
 		//TODO: process error
-		PRINT_ERROR("[Video::setIntermediateColor()] out of bound\n");
-		PAUSE;
+		PRINT_ERROR("[Video::setIntermediateColor()] out of bound: color_index = %d, color = %d\n", color_index, color);
 	}
 }
 
@@ -103,9 +97,8 @@ word Video::getIntermediateColor(byte color_index)
 	}
 	else {
 		//TODO: process error
-		PRINT_ERROR("[Video::getIntermediateColor()] out of bound\n");
-		PAUSE;
-		exit(1);
+		PRINT_ERROR("[Video::getIntermediateColor()] out of bound: color_index = %d\n", color_index);
+		return COLOR_NONE;
 	}
 }
 
@@ -588,8 +581,7 @@ void Video::putPoint(byte surface_type, word coord_x, word coord_y, byte color_i
 	}
 	else {
 		//TODO: process error
-		PRINT_ERROR("[Video::putPoint()] out of bound\n");
-		PAUSE;
+		PRINT_ERROR("[Video::putPoint()] out of bound: st = %d, x = %d, y = %d, c = %d\n", surface_type, coord_x, coord_y, color_index);
 	}
 }
 
@@ -607,6 +599,7 @@ byte Video::getPoint(byte surface_type, word coord_x, word coord_y)
 		return surface[(coord_y * VIDEO_WIDTH) + coord_x];
 	}
 	else {
+		PRINT_ERROR("[Video::getPoint()] out of bound: st = %d, x = %d, y = %d\n", surface_type, coord_x, coord_y);
 		return COLOR_NONE;
 	}
 }
@@ -699,7 +692,7 @@ void Video::drawPixel(SDL_Surface *sdl_surface, int x, int y, Uint32 sdl_color)
 		}
 	}
 	else {
-		PRINT("[Video::drawPixel()] out of bound\n");
+		PRINT("[Video::drawPixel()] out of bound: x = %d, y = %d\n", x, y);
 		PAUSE;
 	}
 }
