@@ -3,6 +3,7 @@
 
 #include "memory.h"
 #include "video.h"
+#include "sound.h"
 #include "timer.h"
 #include "input.h"
 #include "file.h"
@@ -40,6 +41,7 @@ class Script {
 private:
 	Memory *memory;
 	Video *video;
+	Sound *sound;
 	Timer *timer;
 	Input *input;
 	File *file;
@@ -164,7 +166,7 @@ private:
 
 public:
 	// constructor & destructor
-	Script(Memory *memory, Video *video, Timer *timer, Input *input, Config *config);
+	Script(Memory *memory, Video *video, Sound *sound, Timer *timer, Input *input, Config *config);
 	~Script();
 
 	// methods

@@ -1,9 +1,10 @@
 #include "script.h"
 
-Script::Script(Memory *memory, Video *video, Timer *timer, Input *input, Config *config)
+Script::Script(Memory *memory, Video *video, Sound *sound, Timer *timer, Input *input, Config *config)
 {
 	this->memory = memory;
 	this->video = video;
+	this->sound = sound;
 	this->timer = timer;
 	this->input = input;
 	this->config = config;
