@@ -2,9 +2,8 @@
 
 Config::Config()
 {
-	static const char title[] = "ANISE beta 3";
+	static const char title[] = TITLE TITLE_EXTRA;
 	static const char usage[] =
-		" - A Newly Implemented Scripting Engine for ai5v\n"
 		"\n"
 		"Usage: anise [OPTIONS] ... [GAME]\n"
 		"\n"
@@ -14,6 +13,7 @@ Config::Config()
 		"\n"
 		"Supported Games:\n"
 		"  nanpa2	Dokyusei 2\n"
+		"  nanpa1	Dokyusei 1\n"
 		"\n"
 		"Example:\n"
 		"  anise -pC:\\NANPA2 -lK nanpa2\n";
@@ -47,8 +47,9 @@ Config::~Config()
 
 bool Config::initialize(int argc, char *argv[])
 {
+	printf(title);
+
 	if (argc < 2) {
-		printf(title);
 		printf(usage);
 
 		return false;
@@ -64,6 +65,11 @@ bool Config::initialize(int argc, char *argv[])
 					case 'p':
 						{
 							path_name = option + 2;
+
+							//HACK: should be platform independent
+							if (path_name.at(path_name.length() - 1) != '\\') {
+								path_name += '\\';
+							}
 						}
 						break;
 
@@ -130,7 +136,6 @@ bool Config::initialize(int argc, char *argv[])
 
 		if (game_type == GAME_UNKNOWN) {
 			//TODO: process error
-			printf(title);
 			printf(usage);
 
 			return false;
