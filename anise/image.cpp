@@ -102,13 +102,13 @@ void Image::decode(word destination_x, word destination_y)
 
 							vertical = (int) (scan(3) - 8);
 							if (vertical <= -7) {
-								if (vertical == -7) {	// -8(?)
+								if (vertical == -7) {		// -8(?)
 									vertical = 0;
 								}
 								vertical = vertical - 8;	// -16(?)
 							}
 						}
-						else {							// horizontal (6 ~ 4)
+						else {						// horizontal (6 ~ 4)
 							do {
 								horizontal++;
 							} while (scan() == 1);
@@ -192,8 +192,8 @@ void Image::load(const char *filename)
 	if (memory->b_SystemVariable->testByte(ibf_DisabledStatus, DISABLE_PRESERVEIMAGEPALETTE) == false) {
 		for (int i = 0; i < VIDEO_COLOR; i++) {
 			word image_color = b_Image->readWordBE(image_offset + GP4_PALETTE_OFFSET + (i * 2));
-			word color = (((image_color >> 12) & COLOR_MASK) << 8) | (((image_color >> 7) & COLOR_MASK) << 4) | ((image_color >> 2) & COLOR_MASK);
-			memory->b_SystemVariable->writeWord(iw_Video_Palette0 + (i * 2), color);
+			word gp4_color = (((image_color >> 12) & COLOR_MASK) << 8) | (((image_color >> 7) & COLOR_MASK) << 4) | ((image_color >> 2) & COLOR_MASK);
+			memory->b_SystemVariable->writeWord(iw_Video_Palette0 + (i * 2), gp4_color);
 		}
 	}
 
