@@ -77,3 +77,9 @@ anise_SOURCES = \
 	field_move.cpp \
 	field_path.cpp \
 	option.cpp option.h
+
+EXTRA_DIST = \
+	anise.ico \
+	anise.rc \
+	anise.vcproj \
+	resource.h
