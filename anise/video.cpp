@@ -177,14 +177,28 @@ void Video::updateScreen(word coord_x, word coord_y, word width, word height)
 {
 	lockScreen();
 
-	//TODO: implement this
-	//filter(coord_x, coord_y, width, height);
-
 //Uint32 start_ticks = SDL_GetTicks();
+
+	if (option->is_filter) {
+		if (coord_x >= FILTER_RADIUS) {
+			coord_x -= FILTER_RADIUS;
+		}
+		if (coord_y >= FILTER_RADIUS) {
+			coord_y -= FILTER_RADIUS;
+		}
+		if (((coord_x + width) + FILTER_RADIUS) < VIDEO_WIDTH) {
+			width += FILTER_RADIUS;
+		}
+		if (((coord_y + height) + FILTER_RADIUS) < VIDEO_HEIGHT) {
+			height += FILTER_RADIUS;
+		}
+	}
 
 	for (word y = 0; y < height; y++) {
 		for (word x = 0; x < width; x++) {
-			Uint32 sdl_color = getColor(getPoint(coord_x + x, coord_y + y));
+			//TODO: change or not?
+			//Uint32 sdl_color = getColor(getPoint(coord_x + x, coord_y + y));
+			Uint32 sdl_color = getFilteredColor(coord_x + x, coord_y + y);
 			drawPixel(sdl_screen, (coord_x + x), (coord_y + y), sdl_color);
 		}
 	}
@@ -224,7 +238,9 @@ void Video::fadeScreen()
 
 	for (word y = 0; y < VIDEO_HEIGHT; y++) {
 		for (word x = 0; x < VIDEO_WIDTH; x++) {
-			Uint32 sdl_color = getColor(getPoint(x, y));
+			//TODO: change or not?
+			//Uint32 sdl_color = getColor(getPoint(x, y));
+			Uint32 sdl_color = getFilteredColor(x, y);
 			drawPixel(new_screen, x, y, sdl_color);
 		}
 	}
@@ -273,7 +289,9 @@ void Video::initializeOverlapScreen()
 
 	for (word y = 0; y < VIDEO_HEIGHT; y++) {
 		for (word x = 0; x < VIDEO_WIDTH; x++) {
-			Uint32 sdl_color = getColor(getPoint(x, y));
+			//TODO: change or not?
+			//Uint32 sdl_color = getColor(getPoint(x, y));
+			Uint32 sdl_color = getFilteredColor(x, y);
 			drawPixel(overlap_new_screen, x, y, sdl_color);
 		}
 	}
@@ -687,6 +705,60 @@ void Video::drawPixel(SDL_Surface *sdl_surface, int x, int y, Uint32 sdl_color)
 }
 
 
+Uint32 Video::getFilteredColor(word coord_x, word coord_y)
+{
+	if (option->is_filter) {
+		int color_red_sum = 0;
+		int color_green_sum = 0;
+		int color_blue_sum = 0;
+
+		int count = 0;
+
+		for (int dy = -FILTER_RADIUS; dy <= FILTER_RADIUS; dy++) {
+			for (int dx = -FILTER_RADIUS; dx <= FILTER_RADIUS; dx++) {
+				byte color_index = getPoint(coord_x + dx, coord_y + dy);
+				if (color_index != COLOR_NONE) {
+					Uint32 color = getColor(color_index);
+					Uint8 color_red, color_green, color_blue;
+					SDL_GetRGB(color, sdl_screen->format, &color_red, &color_green, &color_blue);
+
+					//HACK: to stress original color
+					if ((dx == 0) && (dy == 0)) {
+						color_red_sum += color_red * 5;
+						color_green_sum += color_green * 5;
+						color_blue_sum += color_blue * 5;
+
+						count += 5;
+					}
+					else {
+						color_red_sum += color_red;
+						color_green_sum += color_green;
+						color_blue_sum += color_blue;
+
+						count++;
+					}
+				}
+			}
+		}
+
+		Uint8 filtered_color_red = 0;
+		Uint8 filtered_color_green = 0;
+		Uint8 filtered_color_blue = 0;
+
+		if (count > 0) {
+			filtered_color_red = (Uint8) (color_red_sum / count);
+			filtered_color_green = (Uint8) (color_green_sum / count);
+			filtered_color_blue = (Uint8) (color_blue_sum / count);
+		}
+
+		return SDL_MapRGB(sdl_screen->format, filtered_color_red, filtered_color_green, filtered_color_blue);
+	}
+	else {
+		return getColor(getPoint(coord_x, coord_y));
+	}
+}
+
+
 void Video::drawFont(word coord_x, word coord_y, const byte *font, long int offset, word width, word height)
 {
 	word length = (width / FONT_BPB) * height;
@@ -731,50 +803,6 @@ void Video::drawFont(word coord_x, word coord_y, const byte *font, long int offs
 
 	if (isScreen(surface)) {
 		updateScreen(coord_x, coord_y, width, height);
-	}
-}
-
-
-void Video::filter(word coord_x, word coord_y, word width, word height)
-{
-	for (word y = 0; y < height; y++) {
-		for (word x = 0; x < width; x++) {
-			Uint32 sdl_color = getColor(getPoint(coord_x + x, coord_y + y));;
-/*
-			if (sdl_color == 0x00000000) {
-				drawPixel(sdl_screen, (coord_x + x), (coord_y + y), sdl_color);
-			}
-			else {
-*/
-				Uint8 color_red, color_green, color_blue;
-				int color_red_sum = 0;
-				int color_green_sum = 0;
-				int color_blue_sum = 0;
-				int count = 0;
-
-				for (int dy = -FILTER_RADIUS; dy <= FILTER_RADIUS; dy++) {
-					for (int dx = -FILTER_RADIUS; dx <= FILTER_RADIUS; dx++) {
-						word color = getPoint(coord_x + x + dx, coord_y + y + dy);
-						if (color != COLOR_NONE) {
-							splitColor(color, &color_red, &color_green, &color_blue);
-
-							color_red_sum += color_red;
-							color_green_sum += color_green;
-							color_blue_sum += color_blue;
-
-							count++;
-						}
-					}
-				}
-
-				color_red = (int) (color_red_sum / count);
-				color_green = (int) (color_green_sum / count);
-				color_blue = (int) (color_blue_sum / count);
-
-				sdl_color = SDL_MapRGB(sdl_screen->format, color_red, color_green, color_blue);
-				drawPixel(sdl_screen, (coord_x + x), (coord_y + y), sdl_color);
-//			}
-		}
 	}
 }
 

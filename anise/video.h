@@ -14,7 +14,7 @@
 #define SPRITE_SIZE			16
 #define SPRITE_LAYER_MASK	0x0FFF
 #define SPRITE_COLOR_MASK	0x07
-#define FILTER_RADIUS		2
+#define FILTER_RADIUS		1
 
 enum VideoSpecification {
 	VIDEO_WIDTH = 640,
@@ -146,9 +146,9 @@ public:
 	byte getPoint(byte surface_type, word coord_x, word coord_y);
 	byte getPoint(word coord_x, word coord_y);
 
-	void drawFont(word coord_x, word coord_y, const byte *font, long int offset, word width, word height);
+	Uint32 getFilteredColor(word coord_x, word coord_y);
 
-	void filter(word coord_x, word coord_y, word width, word height);
+	void drawFont(word coord_x, word coord_y, const byte *font, long int offset, word width, word height);
 
 	void dump();
 };
