@@ -432,7 +432,7 @@ bool Animation::show()
 
 	for (int i = 0; i < SLOTS; i++) {
 		word slot_offset = getSlotOffset(i);
-		MemoryBlock *b_Slot = memory->s_Core->get(&slot_offset);
+		b_Slot = memory->s_Core->get(&slot_offset);
 		
 		if (parse(slot_offset) == false) {
 			return false;
