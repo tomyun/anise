@@ -9,7 +9,7 @@ Option::Option()
 		"\n"
 		"Options:\n"
 		"  -p\t\tPath to the game\n"
-		"  -l[j,k,K]\tLanguage (j: Japanese, *k: Korean, K: Korean (gamebox))\n"
+		"  -l[j,k,K,s]\tLanguage (j: Japanese, *k: Korean, K: Korean (gamebox), s: Sagwanamu)\n"
 		"  -u\t\tUse unpacked game files\n"
 		"  -f\t\tFullscreen mode\n"
 		"  -b[s]\t\tBlurring filter mode (s: scanline)\n"
@@ -106,6 +106,9 @@ bool Option::initialize(int argc, char *argv[])
 
 								case 'K':
 									font_type = FONT_GAMEBOX;
+									break;
+								case 's':
+									font_type = FONT_SAGWA;
 									break;
 							}
 						}
@@ -227,7 +230,7 @@ bool Option::initialize(int argc, char *argv[])
 			}
 			else if (strcmp(option, "kawa") == 0) {
 				game_type = GAME_KAWA;
-				font_type = FONT_JIS;
+				//font_type = FONT_JIS;
 
 				packed_file_name = "silk";
 				packed_file_extension = ".dat";
@@ -243,7 +246,7 @@ bool Option::initialize(int argc, char *argv[])
 			}
 			else if (strcmp(option, "nono") == 0) {
 				game_type = GAME_NONO;
-				font_type = FONT_JIS;
+				//font_type = FONT_JIS;
 
 				packed_file_name = "silk";
 				packed_file_extension = ".dat";

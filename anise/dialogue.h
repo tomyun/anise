@@ -54,10 +54,12 @@ private:
 	void initializeJisFont();
 	void initializeJisHanFont();
 	void initializeGameboxFont();
+	void initializeSagwaFont();
 
 	int getJisFontOffset(byte first_code, byte second_code);
 	int getJisHanFontOffset(byte first_code, byte second_code);
 	int getGameboxFontOffset(byte first_code, byte second_code);
+	int getSagwaFontOffset(byte first_code, byte second_code);
 
 	void updatePosition();
 	void breakNewLine();

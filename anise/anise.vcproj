@@ -143,6 +143,9 @@
 				RelativePath=".\dialogue_jishan.cpp">
 			</File>
 			<File
+				RelativePath=".\dialogue_sagwa.cpp">
+			</File>
+			<File
 				RelativePath=".\engine.cpp">
 			</File>
 			<File

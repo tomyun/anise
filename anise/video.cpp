@@ -1,4 +1,7 @@
 #include "video.h"
+#ifdef _WIN32_WCE
+#include <windows.h>
+#endif
 
 Video::Video(Memory *memory, Timer *timer, Option *option)
 {
@@ -7,11 +10,7 @@ Video::Video(Memory *memory, Timer *timer, Option *option)
 	this->option = option;
 
 #ifdef _WIN32_WCE
-#ifdef _WIN32_WCE_IBEE
-	sdl_screen = SDL_SetVideoMode(640, 480, 16, SDL_SWSURFACE | SDL_ANYFORMAT | SDL_FULLSCREEN);
-#else
 	sdl_screen = SDL_SetVideoMode(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), 16, SDL_SWSURFACE | SDL_ANYFORMAT | SDL_FULLSCREEN);
-#endif
 #else
 	if (option->is_fullscreen) {
 		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, SDL_SWSURFACE | SDL_ANYFORMAT | SDL_FULLSCREEN);

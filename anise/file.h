@@ -26,6 +26,8 @@ using std::string;
 
 #define WAV_FILE_EXTENSION		".wav"
 
+#define SAGWA_DAT_SLOTS 3
+
 class File {
 private:
 	Memory *memory;
@@ -49,8 +51,17 @@ private:
 		int size;
 	} packed_dat_table[FILE_PACKED_SLOTS][FILE_PACKED_DAT_TABLE_SIZE];
 
+	bool is_sagwa_dat;
+	bool is_sagwa_dat_load;
+	int sagwa_dat_slot_index;
+	FILE *sagwa_dat_handle[SAGWA_DAT_SLOTS];
+	int sagwa_dat_size[SAGWA_DAT_SLOTS];
+	DATFile *sagwa_dat_table[SAGWA_DAT_SLOTS];
+
 	void openDirect(const char *filename, const char *mode);
 	void openFromDAT(const char *filename);
+	void openFromSagwaDAT(const char *filename);
+	void initializeSagwaDAT(void);
 
 	string concatenatePath(const char *filename);
 

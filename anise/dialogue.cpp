@@ -30,6 +30,9 @@ Dialogue::Dialogue(Memory *memory, Timer *timer, Input *input, Video *video, Ani
 	else if (option->font_type == FONT_GAMEBOX) {
 		initializeGameboxFont();
 	}
+	else if (option->font_type == FONT_SAGWA) {
+		initializeSagwaFont();
+	}
 }
 
 
@@ -122,6 +125,9 @@ void Dialogue::putFullWidthCharacter(byte first_code, byte second_code)
 	}
 	else if (option->font_type == FONT_GAMEBOX) {
 		offset = getGameboxFontOffset(first_code, second_code);
+	}
+	else if (option->font_type == FONT_SAGWA) {
+		offset = getSagwaFontOffset(first_code, second_code);
 	}
 
 	if (offset < size) {

@@ -27,7 +27,8 @@ enum GameType {
 enum FontType {
 	FONT_JIS,
 	FONT_JISHAN,
-	FONT_GAMEBOX
+	FONT_GAMEBOX,
+	FONT_SAGWA
 };
 
 

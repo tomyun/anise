@@ -74,6 +74,7 @@ anise_SOURCES = \
 	dialogue_jis.cpp \
 	dialogue_jishan.cpp \
 	dialogue_gamebox.cpp \
+	dialogue_sagwa.cpp \
 	field.cpp field.h \
 	field_move.cpp \
 	field_path.cpp \

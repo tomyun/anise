@@ -299,6 +299,10 @@ SOURCE=.\dialogue_jishan.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\dialogue_sagwa.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\engine.cpp
 # End Source File
 # Begin Source File
