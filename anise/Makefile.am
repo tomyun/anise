@@ -29,6 +29,7 @@ anise_SOURCES = \
 	op4_blitswapped.cpp \
 	op4_break.cpp \
 	op4_callscript.cpp \
+	op4_changeslot.cpp \
 	op4_checkclick.cpp \
 	op4_continue.cpp \
 	op4_displayselection.cpp \
