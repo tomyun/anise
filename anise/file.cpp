@@ -7,13 +7,30 @@ File::File(Memory *memory, Option *option)
 
 	handle = NULL;
 	size = 0;
+
+	packed_slot_index = 0;
+
+	for (int i = 0; i < FILE_PACKED_SLOTS; i++) {
+		packed_handle[i] = NULL;
+		packed_entry_offset[i] = 0;
+		packed_table_size[i] = 0;
+	}
+
+	if (!option->is_unpacked) {
+		initializeDAT(0, 0);
+		initializeDAT(1, 1);
+	}
 }
 
 
 File::~File()
 {
-	if (handle != NULL) {
-		close();
+	close();
+
+	for (int i = 0; i < FILE_PACKED_SLOTS; i++) {
+		if (packed_handle[i] != NULL) {
+			fclose(packed_handle[i]);
+		}
 	}
 }
 
@@ -36,7 +53,7 @@ void File::open(const char *filename, bool is_flag)
 
 void File::openDirect(const char *filename, const char *mode)
 {
-	PRINT("[File::open()] %s\n", filename);
+	PRINT("[File::openDirect()] %s\n", filename);
 
 	if (handle != NULL) {
 		PRINT_ERROR("[File::open()] %s is already opened\n", filename);
@@ -44,19 +61,11 @@ void File::openDirect(const char *filename, const char *mode)
 	}
 
 	// concatenate path name with file name
-	name = option->path_name;
-	for (int i = 0; i < FILE_NAME_LENGTH; i++) {
-		if (filename[i] != '\0') {
-			name += tolower(filename[i]);
-		}
-		else {
-			break;
-		}
-	}
+	name = concatenatePath(filename);
 
 	handle = fopen(name.c_str(), mode);
 	if (handle == NULL) {
-		PRINT_ERROR("[File::open()] fopen() failed: %s\n", name.c_str());
+		PRINT_ERROR("[File::openDirect()] fopen() failed: %s\n", name.c_str());
 		exit(1);
 	}
 
@@ -69,8 +78,8 @@ void File::openDirect(const char *filename, const char *mode)
 	//HACK: script files in crescent have .m extension
 	if (option->game_type != GAME_CRESCENT) {
 		// check if it is a music file
-		string extension = name.substr(name.size() - M_FILE_EXTENSION_LENGTH);
-		if (extension == M_FILE_EXTENSION) {
+		string file_extension = name.substr(name.size() - M_FILE_EXTENSION_LENGTH);
+		if (file_extension == M_FILE_EXTENSION) {
 			string wav_file_name = name.substr(0, name.size() - M_FILE_EXTENSION_LENGTH);
 			wav_file_name.append(WAV_FILE_EXTENSION);
 
@@ -88,14 +97,117 @@ void File::openDirect(const char *filename, const char *mode)
 }
 
 
+void File::initializeDAT(int slot_index, int packed_index)
+{
+	if (packed_handle[slot_index] != NULL) {
+		fclose(packed_handle[slot_index]);
+	}
+
+	// concatenate path name with file name
+	char packed_index_c_str[2];
+	sprintf(packed_index_c_str, "%1d", packed_index);
+	string filename = option->packed_file_name + packed_index_c_str + option->packed_file_extension;
+	string packed_name = concatenatePath(filename.c_str());
+
+	packed_handle[slot_index] = fopen(packed_name.c_str(), FILE_READ);
+	packed_entry_offset[slot_index] = 0;
+
+	fseek(packed_handle[slot_index], 500, SEEK_SET);
+
+	int table_size;
+	fread(&table_size, sizeof(int), 1, packed_handle[slot_index]);
+	packed_table_size[slot_index] = table_size / sizeof(DATFile);
+
+	/*
+	byte packed_table[FILE_PACKED_TABLE_SIZE];
+	//TODO: is it necessary?
+	//for (int i = 0; i < (table_size + 16); i++) {
+	for (int i = 0; i < table_size; i++) {
+		packed_table[slot_index][i] = 0;
+	}
+	*/
+
+	fread(packed_dat_table[slot_index], sizeof(DATFile), packed_table_size[slot_index], packed_handle[slot_index]);
+
+	byte *packed_table = (byte*) &packed_dat_table[slot_index];
+	for (int i = (table_size - 1); i > 0; i--) {
+		byte data = packed_table[i - 1];
+		packed_table[i] ^= data;
+	}
+	packed_table[0] ^= FILE_PACKED_DAT_KEY;
+
+	//TODO: isn't it possible?
+	//packed_entry_offset[slot_index] = ftell(packed_handle[slot_index]);
+	packed_entry_offset[slot_index] = table_size + 500 + 4;
+}
+
+
 void File::openFromDAT(const char *filename)
 {
+	char uppercase_filename[FILE_NAME_LENGTH];
+	for (int i = 0; i < FILE_NAME_LENGTH; i++) {
+		if (filename[i] != '\0') {
+			uppercase_filename[i] = toupper(filename[i]);
+		}
+		else {
+			uppercase_filename[i] = '\0';
+		}
+	}
+	
+	bool is_found = false;
+	int slot_index;
+	int table_index;
+	for (slot_index = 0; slot_index < FILE_PACKED_SLOTS; slot_index++) {
+		if (packed_handle[slot_index] == NULL) {
+			continue;
+		}
+
+		for (table_index = 0; table_index < packed_table_size[slot_index]; table_index++) {
+			if (strcmp(uppercase_filename, packed_dat_table[slot_index][table_index].filename) == 0) {
+				is_found = true;
+				break;
+			}
+		}
+
+		if (is_found) {
+			break;
+		}
+	}
+
+	if (is_found) {
+		packed_slot_index = slot_index;
+
+		size = packed_dat_table[slot_index][table_index].size;
+		memory->b_SystemVariable->writeWord(iw_File_Size, size);
+
+		int offset = packed_entry_offset[slot_index] + packed_dat_table[slot_index][table_index].offset;
+		fseek(packed_handle[slot_index], offset, SEEK_SET);
+	}
+	else {
+		PRINT_ERROR("[File::openFromDAT()] cannot find file: %s\n", filename);
+	}
+}
+
+
+string File::concatenatePath(const char *filename)
+{
+	string concatenated_name = option->path_name;
+	for (int i = 0; i < FILE_NAME_LENGTH; i++) {
+		if (filename[i] != '\0') {
+			concatenated_name += tolower(filename[i]);
+		}
+		else {
+			break;
+		}
+	}
+
+	return concatenated_name;
 }
 
 
 void File::close()
 {
-	//PRINT("[File::close()]\n");
+	PRINT("[File::close()]\n");
 
 	if (handle != NULL) {
 		fclose(handle);
@@ -122,21 +234,28 @@ void File::seek(word offset, int mode)
 }
 
 
-bool File::load(MemoryBlock *memory_block, word offset)
+bool File::load(MemoryBlock *memory_block, word offset, bool is_flag)
 {
-	//assert(offset < memory_block->getSize());
+	PRINT("[File::load()]\n");
 
-	//PRINT("[File::load()]\n");
+	//assert(offset < memory_block->getSize());
 
 	byte *raw = memory_block->getRaw();
 
-	word read_length = (word) (fread((byte*) (raw + offset), sizeof(byte), size, handle));
+	FILE *file_handle;
+	if (is_flag || option->is_unpacked) {
+		file_handle = handle;
+	}
+	else {
+		file_handle = packed_handle[packed_slot_index];	
+	}
+
+	word read_length = (word) (fread((byte*) (raw + offset), sizeof(byte), size, file_handle));
 	if (read_length == size) {
 		return true;
 	}
 	else {
-		//TODO: process error
-		PRINT_ERROR("[File::open()] fread() failed: %s (read %d of %d)\n", name.c_str(), read_length, size);
+		PRINT_ERROR("[File::load()] fread() failed: %s (read %d of %d)\n", name.c_str(), read_length, size);
 		return false;
 	}
 }
@@ -152,8 +271,7 @@ bool File::store(MemoryBlock *memory_block)
 		return true;
 	}
 	else {
-		//TODO: process error
-		PRINT_ERROR("[File::open()] fwrite() failed: %s (written %d of %d)\n", name.c_str(), write_length, size);
+		PRINT_ERROR("[File::store()] fwrite() failed: %s (written %d of %d)\n", name.c_str(), write_length, size);
 		return false;
 	}
 }
