@@ -40,7 +40,6 @@ public:
 	FontType font_type;
 
 	bool is_unpacked;
-
 	bool is_fullscreen;
 	bool is_filter;
 	bool is_scanline;
@@ -50,6 +49,7 @@ public:
 	string packed_file_extension;
 	string script_file_name;
 	string sound_file_name;
+	string sound_file_extension;
 
 	word variable_size;
 	word selection_item_entry;
