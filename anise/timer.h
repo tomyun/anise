@@ -21,6 +21,7 @@ private:
 
 	static Uint32 callback(Uint32 interval, void *pointer);
 	void accumulate();
+	void display();
 
 public:
 	Timer(Video *video);
