@@ -27,18 +27,18 @@ Option::Option()
 	font_type = FONT_JISHAN;
 
 	for (int i = 0; i < FILE_NAME_LENGTH; i++) {
-		script_file_name[i] = NULL;
-		font_file_name[i] = NULL;
+		script_file_name[i] = 0;
+		font_file_name[i] = 0;
 	}
 
 	//TODO: move this to proper position
 	sprintf(font_file_name, "jishan.fnt");
 
-	variable_size = NULL;
-	selection_item_entry = NULL;
-	procedure_entry = NULL;
-	animation_slot_entry = NULL;
-	animation_script_entry = NULL;
+	variable_size = 0;
+	selection_item_entry = 0;
+	procedure_entry = 0;
+	animation_slot_entry = 0;
+	animation_script_entry = 0;
 }
 
 
