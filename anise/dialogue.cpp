@@ -9,6 +9,15 @@ Dialogue::Dialogue(Memory *memory, Timer *timer, Input *input, Video *video, Ani
 	this->animation = animation;
 	this->option = option;
 
+	previous_code = 0x00;
+
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 2; j++) {
+			josa_table[i][j] = 0;
+		}
+	}
+	josa_array = NULL;
+
 	if (option->font_type == FONT_JIS) {
 		initializeJisFont();
 	}
@@ -18,13 +27,14 @@ Dialogue::Dialogue(Memory *memory, Timer *timer, Input *input, Video *video, Ani
 	else if (option->font_type == FONT_GAMEBOX) {
 		initializeGameboxFont();
 	}
-
-	previous_code = 0x00;
 }
 
 
 Dialogue::~Dialogue()
 {
+	if (josa_array != NULL) {
+		delete josa_array;
+	}
 }
 
 

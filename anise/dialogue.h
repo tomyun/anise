@@ -22,6 +22,15 @@ using std::string;
 
 #define WAIT_DURATION		1
 
+enum JosaType {
+	IandGA = 0,
+	EULandREUL = 1,
+	AandYA = 2,
+	EUNandNEUN = 3,
+	GWAandWA = 4
+};
+
+
 class Dialogue {
 private:
 	Memory *memory;
@@ -38,6 +47,9 @@ private:
 	byte code_newline_second;
 
 	word previous_code;
+
+	word josa_table[5][2];
+	byte *josa_array;
 
 	void initializeJisFont();
 	void initializeJisHanFont();
