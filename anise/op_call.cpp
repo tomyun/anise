@@ -7,17 +7,17 @@ SCRIPTCALL Script::op_call()
 	deleteParameter();
 
 	//TODO: check this out
-	MemoryBlock *b_Script = memory->b_Script;
-	word script_offset = getOffset();
+	MemoryBlock *caller = memory->b_Script;
+	word caller_offset = getOffset();
 
-	MemoryBlock *calle = memory->s_Core->get(&callee_offset);
-	memory->b_Script = calle;
+	MemoryBlock *callee = memory->s_Core->get(&callee_offset);
+	memory->b_Script = callee;
 	setOffset(callee_offset);
 
 	parse();
 
-	memory->b_Script = b_Script;
-	setOffset(script_offset);
+	memory->b_Script = caller;
+	setOffset(caller_offset);
 
 	return RETURN_NORMAL;
 }
