@@ -27,7 +27,11 @@ void File::open(const char *filename, const char *mode)
 		close();
 	}
 
-	handle = fopen(filename, mode);
+	for (int i = 0; i < FILE_NAME_LENGTH; i++) {
+		name[i] = tolower(filename[i]);
+	}
+
+	handle = fopen(name, mode);
 	if (handle == NULL) {
 		//TODO: process error
 		PRINT("[File::open()] fopen() failed\n");

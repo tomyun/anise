@@ -2,6 +2,7 @@
 #define FILE_H
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "memory.h"
 
 #define FILE_READ			"rb"
