@@ -139,7 +139,7 @@ public:
 	byte getPoint(byte surface_type, word coord_x, word coord_y);
 	byte getPoint(word coord_x, word coord_y);
 
-	void drawFont(word coord_x, word coord_y, byte *font, long int offset, word width, word height);
+	void drawFont(word coord_x, word coord_y, const byte *font, long int offset, word width, word height);
 
 	void filter(word coord_x, word coord_y, word width, word height);
 
