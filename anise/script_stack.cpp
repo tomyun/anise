@@ -2,7 +2,7 @@
 
 ScriptStack::ScriptStack()
 {
-	for (int i = 0; i < STACK_SIZE; i++) {
+	for (int i = 0; i <= STACK_SIZE; i++) {
 		data[i] = 0;
 	}
 
@@ -17,13 +17,12 @@ ScriptStack::~ScriptStack()
 
 void ScriptStack::push(word value)
 {
-	if (index < STACK_SIZE) {
-		data[index] = value;
-		index++;
+	if (index <= STACK_SIZE) {
+		data[++index] = value;
 	}
 	else {
 		//TODO: process error
-		PRINT("[Stack::push()] stack overflow\n");
+		PRINT_ERROR("[Stack::push()] stack overflow: STACK_SIZE = %d, index = %d\n", STACK_SIZE, index);
 		exit(1);
 	}
 }
@@ -32,12 +31,11 @@ void ScriptStack::push(word value)
 word ScriptStack::pop()
 {
 	if (index > 0) {
-		index--;
-		return data[index];
+		return data[index--];
 	}
 	else {
 		//TODO: process error
-		PRINT("[Stack::pop()] stack underflow\n");
+		PRINT_ERROR("[Stack::pop()] stack underflow: STACK_SIZE = %d, index = %d\n", STACK_SIZE, index);
 		exit(1);
 	}
 }
