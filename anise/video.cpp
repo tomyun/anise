@@ -707,13 +707,11 @@ Uint32 Video::getFilteredColor(word coord_x, word coord_y)
 
 		int count = 0;
 		for (int dx = -FILTER_RADIUS; dx <= FILTER_RADIUS; dx++) {
-			byte color_index = getPoint(coord_x + dx, coord_y);
-			if (color_index == COLOR_NONE) {
-				continue;
-			}
-			else {
-				Uint8 color_red, color_green, color_blue;
+			if (((coord_x + dx) >= 0) && ((coord_x + dx) < VIDEO_WIDTH)) {
+				byte color_index = getPoint(coord_x + dx, coord_y);
 				Uint32 color = getColor(color_index);
+
+				Uint8 color_red, color_green, color_blue;
 				SDL_GetRGB(color, sdl_screen->format, &color_red, &color_green, &color_blue);
 
 				//HACK: stress original color
@@ -801,9 +799,46 @@ void Video::drawFont(word coord_x, word coord_y, const byte *font, long int offs
 }
 
 
-void Video::dump()
+void Video::capture()
 {
-	SDL_SaveBMP(sdl_screen, "screen.bmp");
+	string screen_str = "scrn";
+	string buffer_str = "buf";
+	string extension_str = ".bmp";
+
+	string screen_name;
+	string buffer_name[VIDEO_BUFFER];
+
+	int count = 0;
+
+	FILE *handle = NULL;
+	while (true) {
+		char count_c_str[5];
+		sprintf(count_c_str, "%04d", count);
+		string count_str = count_c_str;
+
+		screen_name = count_str + screen_str + extension_str;
+		for (int i = 0; i < VIDEO_BUFFER; i++) {
+			char index_str[2];
+			sprintf(index_str, "%d", i);
+
+			buffer_name[i] = count_str + buffer_str + index_str + extension_str;
+		}
+
+		if (fopen(screen_name.c_str(), "r")) {
+			count++;
+			continue;
+		}
+		for (int i = 0; i < VIDEO_BUFFER; i++) {
+			if (fopen(buffer_name[i].c_str(), "r")) {
+				count++;
+				continue;
+			}
+		}
+
+		break;
+	}
+
+	SDL_SaveBMP(sdl_screen, screen_name.c_str());
 
 	for (int i = 0; i < VIDEO_BUFFER; i++) {
 		SDL_Surface *sdl_buffer = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
@@ -815,11 +850,10 @@ void Video::dump()
 			}
 		}
 
-		char dump_filename[] = "buffer0.bmp";
-		dump_filename[6] = (char) (i + '0');
-
-		SDL_SaveBMP(sdl_buffer, dump_filename);
+		SDL_SaveBMP(sdl_buffer, buffer_name[i].c_str());
 
 		SDL_FreeSurface(sdl_buffer);
 	}
+
+	printf("[Video::capture()] screenshots taken: %s and buffers\n", screen_name.c_str());
 }
