@@ -135,6 +135,18 @@ enum CharacterFrame {
 };
 
 
+enum PathDirection {
+	PATH_DIRECTION_UP_LEFT,
+	PATH_DIRECTION_UP_RIGHT,
+	PATH_DIRECTION_DOWN_LEFT,
+	PATH_DIRECTION_DOWN_RIGHT,
+	PATH_DIRECTION_LEFT,
+	PATH_DIRECTION_RIGHT,
+	PATH_DIRECTION_DOWN,
+	PATH_DIRECTION_UP
+};
+
+
 class Field {
 private:
 	Memory *memory;
@@ -202,6 +214,7 @@ private:
 	void setPath(word character_offset, word target_coord_xw, word target_coord_yw, bool use_alternatve);
 	word calculatePathOffset(word coord_xw, word coord_yw);
 	byte getPathMark(word coord_xw, word coord_yw);
+	bool checkPathMark(word coord_xw, word coord_yw, PathDirection direction);
 	void initializePath(word character_offset);
 	bool generatePath(word character_offset, word coord_xw, word coord_yw, word mark, word sequence);
 	void moveCharacterOnPath(word character_offset);
