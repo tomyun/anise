@@ -2,8 +2,10 @@
 #define CONFIG_H
 
 #include <stdio.h>
-#include <string.h>
+#include <string>
 #include "memory_block.h"
+
+using std::string;
 
 #define FILE_NAME_LENGTH	32
 
@@ -36,6 +38,7 @@ public:
 	GameType game_type;
 	FontType font_type;
 
+	string path_name;
 	char script_file_name[FILE_NAME_LENGTH];
 	char font_file_name[FILE_NAME_LENGTH];
 
