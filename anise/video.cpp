@@ -1128,8 +1128,6 @@ void Video::capture()
 	string buffer_name[VIDEO_BUFFER];
 
 	int count = 0;
-
-	FILE *handle = NULL;
 	while (true) {
 		char count_c_str[5];
 		sprintf(count_c_str, "%04d", count);
@@ -1143,13 +1141,22 @@ void Video::capture()
 			buffer_name[i] = count_str + buffer_str + index_str + extension_str;
 		}
 
-		if (fopen(screen_name.c_str(), "r")) {
+		FILE *handle = NULL;
+		handle = fopen(screen_name.c_str(), "r");
+		if (handle != NULL) {
+			fclose(handle);
 			count++;
+
 			continue;
 		}
+
+		handle = NULL;
 		for (int i = 0; i <= VIDEO_BUFFER; i++) {
-			if (fopen(buffer_name[i].c_str(), "r")) {
+			handle = fopen(buffer_name[i].c_str(), "r");
+			if (handle != NULL) {
+				fclose(handle);
 				count++;
+
 				continue;
 			}
 		}
