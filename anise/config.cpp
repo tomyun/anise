@@ -79,18 +79,21 @@ bool Config::initialize(int argc, char *argv[])
 							switch (option[2]) {
 								case 'j':
 									{
+										font_type = FONT_JIS;
 										sprintf(font_file_name, "jis.fnt");
 									}
 									break;
 
-								case 'h':
+								case 'k':
 									{
+										font_type = FONT_JISHAN;
 										sprintf(font_file_name, "jishan.fnt");
 									}
 									break;
 
-								case 'H':
+								case 'K':
 									{
+										font_type = FONT_GAMEBOX;
 										sprintf(font_file_name, "jishan.fnt");
 									}
 									break;
