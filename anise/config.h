@@ -7,7 +7,7 @@
 
 using std::string;
 
-#define TITLE				"ANISE beta 3 (20031230)"
+#define TITLE				"ANISE beta 4 (20040105)"
 #define TITLE_EXTRA			" - A Newly Implemented Scripting Engine for ai5v\n"
 #define FILE_NAME_LENGTH	32
 
@@ -43,6 +43,7 @@ public:
 	string path_name;
 	char script_file_name[FILE_NAME_LENGTH];
 	char font_file_name[FILE_NAME_LENGTH];
+	string sound_file_name;
 
 	word variable_size;
 	word selection_item_entry;
