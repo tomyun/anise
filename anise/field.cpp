@@ -1,10 +1,11 @@
 #include "field.h"
 
-Field::Field(Memory *memory, Video *video, Input *input)
+Field::Field(Memory *memory, Video *video, Input *input, Config *config)
 {
 	this->memory = memory;
 	this->video = video;
 	this->input = input;
+	this->config = config;
 	
 	data = NULL;
 	map = NULL;
@@ -454,7 +455,7 @@ word Field::checkClick()
 	setCharactersOnMap();
 	quickDraw();
 
-	if (input->isLeftClicked()) {
+	if ((config->game_type == GAME_NANPA2) && input->isLeftClicked()) {
 		word coord_x = memory->b_SystemVariable->queryWord(iw_Mouse_CoordX);
 		word coord_y = memory->b_SystemVariable->queryWord(iw_Mouse_CoordY);
 
@@ -1503,6 +1504,10 @@ inline void Field::toggleFrame(word character_offset)
 
 void Field::setPath(word character_offset, word target_coord_xw, word target_coord_yw, bool use_alternative)
 {
+	if (config->game_type != GAME_NANPA2) {
+		return;
+	}
+
 	if (is_path_found) {
 		is_path_found = false;
 		return;
