@@ -39,6 +39,8 @@ public:
 	GameType game_type;
 	FontType font_type;
 
+	bool is_unpacked;
+
 	bool is_fullscreen;
 	bool is_filter;
 	bool is_scanline;

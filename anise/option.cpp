@@ -10,6 +10,7 @@ Option::Option()
 		"Options:\n"
 		"  -p\t\tPath to the game\n"
 		"  -l[j,k,K]\tLanguage (j: Japanese, *k: Korean, K: Korean (gamebox))\n"
+		"  -u\t\tUnpacked game files\n"
 		"  -f\t\tFullscreen mode\n"
 		"  -b[s]\t\tBlurring filter mode (s: scanline)\n"
 		"\n"
@@ -27,6 +28,8 @@ Option::Option()
 
 	game_type = GAME_UNKNOWN;
 	font_type = FONT_JISHAN;
+
+	is_unpacked = false;
 
 	is_fullscreen = false;
 	is_filter = false;
@@ -97,6 +100,11 @@ bool Option::initialize(int argc, char *argv[])
 						}
 						break;
 
+					case 'u':
+						{
+							is_unpacked = true;
+						}
+
 					case 'f':
 						{
 							is_fullscreen = true;
@@ -115,6 +123,8 @@ bool Option::initialize(int argc, char *argv[])
 			}
 			else if (strcmp(option, "nanpa2") == 0) {
 				game_type = GAME_NANPA2;
+
+				is_unpacked = true;
 
 				script_file_name = "start.mes";
 
