@@ -17,7 +17,7 @@ enum FieldFunction {
 	FIELD_SetCharacterOperationOffset = 13,
 	FIELD_ActivateCharacter = 14,
 	FIELD_UnpackMPFile = 15,
-	FIELD_Function16 = 16,
+	FIELD_CopyMapBlock = 16,
 	FIELD_MakeSetPath = 30,
 	FIELD_ClearPathFoundStatus = 32
 };
@@ -110,13 +110,13 @@ SCRIPTCALL Script::op4_field()
 			break;
 
 		case FIELD_UnpackMPFile:
-			PRINT("[Script::op4_field()] Function15\n");
+			PRINT("[Script::op4_field()] UnpackMPFile\n");
 			field->unpackMPFile(parameter->get(1));
 			break;
 
-		case FIELD_Function16:
-			PRINT("[Script::op4_field()] Function16\n");
-			field->function16();
+		case FIELD_CopyMapBlock:
+			PRINT("[Script::op4_field()] CopyMapBlock\n");
+			field->copyMapBlock(parameter->get(1), parameter->get(2), parameter->get(3), parameter->get(4), parameter->get(5), parameter->get(6));
 			break;
 
 		case FIELD_MakeSetPath:
