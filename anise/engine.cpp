@@ -47,12 +47,12 @@ bool Engine::on()
 #endif
 
 	memory = new Memory(option);
-	video = new Video(memory, option);
-	sound = new Sound(option);
-	timer = new Timer(video);
+	timer = new Timer();
 	input = new Input(memory, timer);
+	sound = new Sound(option);
+	video = new Video(memory, timer, option);
 
-	script = new Script(memory, video, sound, timer, input, option);
+	script = new Script(memory, timer, input, sound, video, option);
 
 	return true;
 }
@@ -61,8 +61,9 @@ bool Engine::on()
 bool Engine::off()
 {
 	delete script;
-	delete input;
 	delete video;
+	delete sound;
+	delete input;
 	delete timer;
 	delete memory;
 
