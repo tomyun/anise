@@ -219,7 +219,7 @@ void Script::setOpcodes()
 		OPCODE(oput_dummy)
 	};
 
-	static Opcode opcode_aisi_oput_list[OPCODE_OPUT] = {
+	static Opcode opcode_aisimai_oput_list[OPCODE_OPUT] = {
 		// 00
 		OPCODE(oput_dummy),
 		OPCODE(oput_dummy),			//TODO: getMainArg2
@@ -253,8 +253,12 @@ void Script::setOpcodes()
 	else if (option->game_type == GAME_NANPA1) {
 		opcode_oput_list = opcode_nanpa1_oput_list;
 	}
-	else if (option->game_type == GAME_AISI) {
-		opcode_oput_list = opcode_aisi_oput_list;
+	else if (option->game_type == GAME_AISIMAI) {
+		opcode_oput_list = opcode_aisimai_oput_list;
+	}
+	else if (option->game_type == GAME_CRESCENT) {
+		//HACK: same as aisimai
+		opcode_oput_list = opcode_aisimai_oput_list;
 	}
 }
 
@@ -428,8 +432,7 @@ SCRIPTCALL Script::parse()
 		}
 		else if (code == 0x01) {
 			word offset = getOffset();
-			//condition = parseNested();
-			parseNested();
+			condition = parseNested();
 			setOffset(offset);
 			skipScriptBlock();
 		}
@@ -469,7 +472,7 @@ SCRIPTCALL Script::parse()
 		return condition;
 	}
 	else {
-		//TODO: process exit with error
+		parse_level--;
 		PRINT_ERROR("[Script::parse()] exit with error: parse_level = %d, offset = %x\n", parse_level, getOffset());
 		return RETURN_ERROR;
 	}
