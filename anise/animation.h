@@ -9,6 +9,8 @@
 
 #define SLOTS		10
 #define SLOT_SIZE	16
+//HACK: for Kakyusei
+//#define SLOT_SIZE	18
 #define FRAME_RATE	10
 #define FRAME_DELAY	2
 #define OPERATION_SIZE	33

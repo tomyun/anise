@@ -192,6 +192,8 @@ bool Animation::parse(word slot_offset)
 				{
 					word operation_offset = (code - CODE_ANIMATION_OPERATION) * OPERATION_SIZE;
 					word script_entry = memory->b_SystemVariable->queryWord(iwpo_AnimationScript);
+					//HACK: for Kakyusei
+					//word script_entry = b_Slot->queryWord(slot_offset + iwpo_8) - b_Script->getEntry();
 					b_Script = memory->s_Core->get(&script_entry);
 					byte script_index = b_Script->queryByte(script_entry);
 					word script_offset = script_entry + ((script_index * 2) + 1) + operation_offset;
