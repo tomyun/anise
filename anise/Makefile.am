@@ -79,6 +79,7 @@ anise_SOURCES = \
 	option.cpp option.h
 
 EXTRA_DIST = \
+	autogen.sh \
 	anise.ico \
 	anise.rc \
 	anise.vcproj \
