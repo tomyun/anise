@@ -3,15 +3,20 @@
 
 //#define DEBUG
 
-#if defined(DEBUG)
+#ifdef DEBUG
 	#include <stdio.h>
-	#define PRINT		printf
-	#define PAUSE		{char ch; scanf("%c", &ch);}
+	#define PRINT				printf
+	#define PAUSE				{char ch; scanf("%c", &ch);}
 #else
-	#define PRINT		/##/		//TODO: is this right?
+	#ifdef _WIN32
+		#define PRINT			/##/
+	#else
+		//HACK: for gcc
+		#define PRINT(args...)
+	#endif
 	#define PAUSE
 #endif
 
-#define PRINT_ERROR		printf
+#define PRINT_ERROR				printf
 
 #endif
