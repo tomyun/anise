@@ -71,12 +71,6 @@ void Field::initialize()
 }
 
 
-inline word Field::calculateMapOffset(word coord_xw, word coord_yw)
-{
-	return (((coord_yw * map_widthw) + coord_xw) * 2) + map_offset + 4;
-}
-
-
 word Field::loadMapFile()
 {
 	map_widthw = data->queryWord(map_offset + MAP_WIDTHW);
@@ -111,8 +105,6 @@ void Field::loadC5File()
 
 void Field::initializeMap()
 {
-	word view_offset = calculateMapOffset(view_coord_xw, view_coord_yw);
-
 	for (word yw = 0; yw < view_heightw; yw++) {
 		if (yw >= map_heightw) {
 			break;
@@ -123,7 +115,7 @@ void Field::initializeMap()
 				break;
 			}
 
-			word sprite_index = data->queryWord(view_offset + ((yw * map_widthw) + xw) * 2);
+			word sprite_index = data->queryWord(calculateMapOffset(view_coord_xw + xw, view_coord_yw + yw));
 
 			view[(yw * view_widthw) + xw][0] = sprite_index;
 			view[(yw * view_widthw) + xw][1] = 0;
@@ -546,8 +538,20 @@ void Field::unpackMPFile(word mp_offset)
 }
 
 
-void Field::function16()
+void Field::copyMapBlock(word source_coord_x0w, word source_coord_y0w, word source_coord_x1w, word source_coord_y1w, word destination_coord_xw, word destination_coord_yw)
 {
+	word destination_offset = calculateMapOffset(destination_coord_xw, destination_coord_yw);
+
+	word block_widthw = source_coord_x1w - source_coord_x0w + 1;
+	word block_heightw = source_coord_y1w - source_coord_y0w + 1;
+
+	for (word yw = 0; yw < block_heightw; yw++) {
+		for (word xw = 0; xw < block_widthw; xw++) {
+			word source_offset = calculateMapOffset(source_coord_x0w + xw, source_coord_y0w + yw);
+			word sprite_index = data->queryWord(source_offset);
+			data->writeWord(destination_offset, sprite_index);
+		}
+	}
 }
 
 
@@ -559,7 +563,7 @@ word Field::makeSetPath(word character_index)
 	setPath(character_offset, destination_coord_xw, destination_coord_yw, true);
 
 	if (is_path_found) {
-		return 0;
+		return PATH_FOUND;
 	}
 	else {
 		return PATH_NOTFOUND;
@@ -570,6 +574,12 @@ word Field::makeSetPath(word character_index)
 void Field::clearPathFoundStatus()
 {
 	is_path_found = false;
+}
+
+
+inline word Field::calculateMapOffset(word coord_xw, word coord_yw)
+{
+	return (((coord_yw * map_widthw) + coord_xw) * 2) + map_offset + 4;
 }
 
 
@@ -804,7 +814,7 @@ void Field::executeOperation(word character_offset)
 
 							if ((mouse_coord_x >= view_coord_x0 && mouse_coord_x < view_coord_x1) && ((mouse_coord_y >= view_coord_y0) && (mouse_coord_y < view_coord_y1))) {
 								word destination_coord_xw = (mouse_coord_x >> 4) - view_margin_xw + view_coord_xw;
-								word destination_coord_yw = ((mouse_coord_y - view_margin_y) >> 4) + view_coord_xw;
+								word destination_coord_yw = ((mouse_coord_y - view_margin_y) >> 4) + view_coord_yw;
 
 								setPath(character_offset, destination_coord_xw, destination_coord_yw, false);
 							}
@@ -983,7 +993,7 @@ bool Field::moveCharacterUp(word character_offset)
 				word sprite_offset = calculateMapOffset(character_coord_xw, character_coord_yw + character_heightw - 2);
 								
 				for (int i = 0; i < character_widthw; i++) {
-					if (data->testByte(sprite_offset + 1, MAP_WALL) == false) {
+					if (data->testByte(sprite_offset + 1, MAP_WALL_MASK) == false) {
 						sprite_offset += 2;
 						continue;
 					}
@@ -1017,7 +1027,7 @@ bool Field::moveCharacterUp(word character_offset)
 
 	// blocked
 	word sprite_offset = calculateMapOffset(character_coord_xw - 1, character_coord_yw + character_heightw - 2);
-	if (!(data->testByte(sprite_offset + 1, MAP_WALL)) || !(data->testByte(sprite_offset + 3, MAP_WALL))) {
+	if (!(data->testByte(sprite_offset + 1, MAP_WALL_MASK)) || !(data->testByte(sprite_offset + 3, MAP_WALL_MASK))) {
 		// bypass left
 		character_frame = (character_frame & CHARACTER_FRAME_MASK) + CHARACTER_FRAME_LEFT;
 		data->writeByte(character_offset + CHARACTER_FRAME, character_frame);
@@ -1026,7 +1036,7 @@ bool Field::moveCharacterUp(word character_offset)
 			if (detectCollision(character_offset) == COLLISION_NOTDETECTED) {
 				sprite_offset = calculateMapOffset(character_coord_xw - 1, character_coord_yw + character_heightw - 1);
 
-				if (data->testByte(sprite_offset + 1, MAP_WALL) == false) {
+				if (data->testByte(sprite_offset + 1, MAP_WALL_MASK) == false) {
 					// update
 					data->writeWord(character_offset + CHARACTER_COORD_XW, --character_coord_xw);
 
@@ -1048,7 +1058,7 @@ bool Field::moveCharacterUp(word character_offset)
 	}
 	else {
 		sprite_offset += character_widthw * 2;
-		if (!(data->testByte(sprite_offset + 1, MAP_WALL)) || !(data->testByte(sprite_offset + 3, MAP_WALL))) {
+		if (!(data->testByte(sprite_offset + 1, MAP_WALL_MASK)) || !(data->testByte(sprite_offset + 3, MAP_WALL_MASK))) {
 			// bypass right
 			character_frame = (character_frame & CHARACTER_FRAME_MASK) + CHARACTER_FRAME_RIGHT;
 			data->writeByte(character_offset + CHARACTER_FRAME, character_frame);
@@ -1057,7 +1067,7 @@ bool Field::moveCharacterUp(word character_offset)
 				if (detectCollision(character_offset) == COLLISION_NOTDETECTED) {
 					sprite_offset = calculateMapOffset(character_coord_xw + character_widthw, character_coord_yw + character_heightw - 1);
 
-					if (data->testByte(sprite_offset + 1, MAP_WALL) == false) {
+					if (data->testByte(sprite_offset + 1, MAP_WALL_MASK) == false) {
 						// update
 						data->writeWord(character_offset + CHARACTER_COORD_XW, ++character_coord_xw);
 
@@ -1101,7 +1111,7 @@ bool Field::moveCharacterDown(word character_offset)
 				word sprite_offset = calculateMapOffset(character_coord_xw, character_coord_yw + character_heightw);
 
 				for (int i = 0; i < character_widthw; i++) {
-					if (data->testByte(sprite_offset + 1, MAP_WALL) == false) {
+					if (data->testByte(sprite_offset + 1, MAP_WALL_MASK) == false) {
 						sprite_offset += 2;
 						continue;
 					}
@@ -1135,7 +1145,7 @@ bool Field::moveCharacterDown(word character_offset)
 
 	// blocked
 	word sprite_offset = calculateMapOffset(character_coord_xw - 1, character_coord_yw + character_heightw);
-	if (!(data->testByte(sprite_offset + 1, MAP_WALL)) || !(data->testByte(sprite_offset + 3, MAP_WALL))) {
+	if (!(data->testByte(sprite_offset + 1, MAP_WALL_MASK)) || !(data->testByte(sprite_offset + 3, MAP_WALL_MASK))) {
 		// bypass left
 		character_frame = (character_frame & CHARACTER_FRAME_MASK) + CHARACTER_FRAME_LEFT;
 		data->writeByte(character_offset + CHARACTER_FRAME, character_frame);
@@ -1144,7 +1154,7 @@ bool Field::moveCharacterDown(word character_offset)
 			if (detectCollision(character_offset) == COLLISION_NOTDETECTED) {
 				sprite_offset = calculateMapOffset(character_coord_xw - 1, character_coord_yw + character_heightw - 1);
 
-				if (data->testByte(sprite_offset + 1, MAP_WALL) == false) {
+				if (data->testByte(sprite_offset + 1, MAP_WALL_MASK) == false) {
 					// update
 					data->writeWord(character_offset + CHARACTER_COORD_XW, --character_coord_xw);
 
@@ -1166,7 +1176,7 @@ bool Field::moveCharacterDown(word character_offset)
 	}
 	else {
 		sprite_offset += character_widthw * 2;
-		if (!(data->testByte(sprite_offset + 1, MAP_WALL)) || !(data->testByte(sprite_offset + 3, MAP_WALL))) {
+		if (!(data->testByte(sprite_offset + 1, MAP_WALL_MASK)) || !(data->testByte(sprite_offset + 3, MAP_WALL_MASK))) {
 			// bypass right
 			character_frame = (character_frame & CHARACTER_FRAME_MASK) + CHARACTER_FRAME_RIGHT;
 			data->writeByte(character_offset + CHARACTER_FRAME, character_frame);
@@ -1175,7 +1185,7 @@ bool Field::moveCharacterDown(word character_offset)
 				if (detectCollision(character_offset) == COLLISION_NOTDETECTED) {
 					sprite_offset = calculateMapOffset(character_coord_xw + character_widthw, character_coord_yw + character_heightw - 1);
 
-					if (data->testByte(sprite_offset + 1, MAP_WALL) == false) {
+					if (data->testByte(sprite_offset + 1, MAP_WALL_MASK) == false) {
 						// update
 						data->writeWord(character_offset + CHARACTER_COORD_XW, ++character_coord_xw);
 
@@ -1218,7 +1228,7 @@ bool Field::moveCharacterLeft(word character_offset)
 				// check wall
 				word sprite_offset = calculateMapOffset(character_coord_xw - 1, character_coord_yw + character_heightw - 1);
 
-				if (data->testByte(sprite_offset + 1, MAP_WALL)) {
+				if (data->testByte(sprite_offset + 1, MAP_WALL_MASK)) {
 					is_wall = true;
 				}
 			}
@@ -1246,7 +1256,7 @@ bool Field::moveCharacterLeft(word character_offset)
 
 	// blocked
 	word sprite_offset = calculateMapOffset(character_coord_xw - 1, character_coord_yw + character_heightw - 3);
-	if (!(data->testByte(sprite_offset + 1, MAP_WALL)) || !(data->testByte(sprite_offset + (map_widthw * 2) + 1, MAP_WALL))) {
+	if (!(data->testByte(sprite_offset + 1, MAP_WALL_MASK)) || !(data->testByte(sprite_offset + (map_widthw * 2) + 1, MAP_WALL_MASK))) {
 		// bypass up
 		character_frame = (character_frame & CHARACTER_FRAME_MASK) + CHARACTER_FRAME_UP;
 		data->writeByte(character_offset + CHARACTER_FRAME, character_frame);
@@ -1258,7 +1268,7 @@ bool Field::moveCharacterLeft(word character_offset)
 				word sprite_offset = calculateMapOffset(character_coord_xw, character_coord_yw + character_heightw - 2);
 
 				for (int i = 0; i < character_widthw; i++) {
-					if (data->testByte(sprite_offset + 1, MAP_WALL) == false) {
+					if (data->testByte(sprite_offset + 1, MAP_WALL_MASK) == false) {
 						sprite_offset += 2;
 						continue;
 					}
@@ -1290,7 +1300,7 @@ bool Field::moveCharacterLeft(word character_offset)
 	}
 	else {
 		sprite_offset += map_widthw * 6;
-		if (!(data->testByte(sprite_offset + 1, MAP_WALL)) || !(data->testByte(sprite_offset + (map_widthw * 2) + 1, MAP_WALL))) {
+		if (!(data->testByte(sprite_offset + 1, MAP_WALL_MASK)) || !(data->testByte(sprite_offset + (map_widthw * 2) + 1, MAP_WALL_MASK))) {
 			// bypass down
 			character_frame = (character_frame & CHARACTER_FRAME_MASK) + CHARACTER_FRAME_DOWN;
 			data->writeByte(character_offset + CHARACTER_FRAME, character_frame);
@@ -1302,7 +1312,7 @@ bool Field::moveCharacterLeft(word character_offset)
 					sprite_offset = calculateMapOffset(character_coord_xw, character_coord_yw + character_heightw);
 
 					for (int i = 0; i < character_widthw; i++) {
-						if (data->testByte(sprite_offset + 1, MAP_WALL) == false) {
+						if (data->testByte(sprite_offset + 1, MAP_WALL_MASK) == false) {
 							sprite_offset += 2;
 							continue;
 						}
@@ -1353,7 +1363,7 @@ bool Field::moveCharacterRight(word character_offset)
 			if (data->testByte(character_offset + CHARACTER_FLAG, CHARACTER_FLAG_INVISIBLE) == false) {
 				word sprite_offset = calculateMapOffset(character_coord_xw + character_widthw, character_coord_yw + character_heightw - 1);
 
-				if (data->testByte(sprite_offset + 1, MAP_WALL)) {
+				if (data->testByte(sprite_offset + 1, MAP_WALL_MASK)) {
 					is_wall = true;
 				}
 			}
@@ -1381,7 +1391,7 @@ bool Field::moveCharacterRight(word character_offset)
 
 	// blocked
 	word sprite_offset = calculateMapOffset(character_coord_xw + character_widthw, character_coord_yw + character_heightw - 3);
-	if (!(data->testByte(sprite_offset + 1, MAP_WALL)) || !(data->testByte(sprite_offset + (map_widthw * 2) + 1, MAP_WALL))) {
+	if (!(data->testByte(sprite_offset + 1, MAP_WALL_MASK)) || !(data->testByte(sprite_offset + (map_widthw * 2) + 1, MAP_WALL_MASK))) {
 		// bypass up
 		character_frame = (character_frame & CHARACTER_FRAME_MASK) + CHARACTER_FRAME_UP;
 		data->writeByte(character_offset + CHARACTER_FRAME, character_frame);
@@ -1393,7 +1403,7 @@ bool Field::moveCharacterRight(word character_offset)
 				word sprite_offset = calculateMapOffset(character_coord_xw, character_coord_yw + character_heightw - 2);
 
 				for (int i = 0; i < character_widthw; i++) {
-					if (data->testByte(sprite_offset + 1, MAP_WALL) == false) {
+					if (data->testByte(sprite_offset + 1, MAP_WALL_MASK) == false) {
 						sprite_offset += 2;
 						continue;
 					}
@@ -1425,7 +1435,7 @@ bool Field::moveCharacterRight(word character_offset)
 	}
 	else {
 		sprite_offset += map_widthw * 6;
-		if (!(data->testByte(sprite_offset + 1, MAP_WALL)) || !(data->testByte(sprite_offset + (map_widthw * 2) + 1, MAP_WALL))) {
+		if (!(data->testByte(sprite_offset + 1, MAP_WALL_MASK)) || !(data->testByte(sprite_offset + (map_widthw * 2) + 1, MAP_WALL_MASK))) {
 			// bypass down
 			character_frame = (character_frame & CHARACTER_FRAME_MASK) + CHARACTER_FRAME_DOWN;
 			data->writeByte(character_offset + CHARACTER_FRAME, character_frame);
@@ -1437,7 +1447,7 @@ bool Field::moveCharacterRight(word character_offset)
 					sprite_offset = calculateMapOffset(character_coord_xw, character_coord_yw + character_heightw);
 
 					for (int i = 0; i < character_widthw; i++) {
-						if (data->testByte(sprite_offset + 1, MAP_WALL) == false) {
+						if (data->testByte(sprite_offset + 1, MAP_WALL_MASK) == false) {
 							sprite_offset += 2;
 							continue;
 						}
@@ -1477,20 +1487,428 @@ inline void Field::toggleFrame(word character_offset)
 }
 
 
-void Field::setPath(word character_offset, word destination_coord_xw, word destination_coord_yw, bool use_alternative)
-{
+#define TW	FILE *test = fopen("c:\\temp\\path.txt", "ab");\
+	for (word yw = 0; yw < map_heightw; yw++) {\
+	for (word xw = 0; xw < map_widthw; xw++) {\
+	byte test_type = data->queryByte(calculatePathOffset(xw, yw));\
+	if (test_type == 0xFF) fprintf(test, "[]");\
+					else if (test_type == 0xFE) fprintf(test, "  ");\
+					else fprintf(test, "%2x", test_type);\
+	}\
+	fprintf(test, "\n");\
+	}\
+	fclose(test);
 
+
+void Field::setPath(word character_offset, word target_coord_xw, word target_coord_yw, bool use_alternative)
+{
+	if (is_path_found) {
+		is_path_found = false;
+		return;
+	}
+
+	word character_coord_xw = data->queryWord(character_offset + CHARACTER_COORD_XW);
+	word character_coord_yw = data->queryWord(character_offset + CHARACTER_COORD_YW);
+
+	word start_offset = calculatePathOffset(character_coord_xw, character_coord_yw);
+	word target_offset = calculatePathOffset(target_coord_xw, target_coord_yw);
+
+	// initialize path
+	initializePath(start_offset);
+
+	if (data->queryByte(target_offset) != PATH_MARK_CLOSED) {
+		data->writeByte(start_offset, PATH_MARK_CHARACTER);
+
+		if ((generatePath(character_offset, target_coord_xw, target_coord_yw, PATH_MARK_INITIAL, PATH_SEQUENCE_DEFAULT) == false)) {
+			data->writeByte(start_offset, PATH_MARK_CLOSED);
+		}
+
+		TW;
+
+		if (data->queryByte(target_offset) < PATH_MARK_OPENED) {
+			is_path_found = true;
+			return;
+		}
+	}
+
+	if (use_alternative) {
+		//TODO: implement alternative pathfinding method
+	}
+
+	is_path_found = false;
+	return;
+}
+
+
+inline word Field::calculatePathOffset(word coord_xw, word coord_yw)
+{
+	return ((coord_yw * map_widthw) + coord_xw) + path_offset;
+}
+
+
+inline byte Field::getPathMark(word coord_xw, word coord_yw)
+{
+	return (data->queryByte(calculatePathOffset(coord_xw, coord_yw)));
 }
 
 
 void Field::initializePath(word character_offset)
 {
+	//HACK: it seems to be needless
+	//word character_widthw = data->queryWord(character_offset + CHARACTER_WIDTHW);
+	//word character_heightw = data->queryWord(character_offset + CHARACTER_HEIGHTW);
+
+	//for (word yw = (character_heightw - 1); yw < map_heightw; yw++) {
+	for (word yw = 0; yw < map_heightw; yw++) {
+		for (word xw = 0; xw < map_widthw; xw++) {
+			word sprite_offset = calculateMapOffset(xw, yw);
+
+			byte path_type;
+			if ((data->testByte(sprite_offset + 1, MAP_WALL_MASK)) || (data->testByte(sprite_offset + 3, MAP_WALL_MASK))) {
+				path_type = PATH_MARK_CLOSED;
+			}
+			else {
+				path_type = PATH_MARK_OPENED;
+			}
+			data->writeByte(path_offset + (yw * map_widthw) + xw, path_type);
+		}
+	}
+}
+
+
+bool Field::generatePath(word character_offset, word coord_xw, word coord_yw, word mark, word sequence)
+{
+	word character_coord_xw = data->queryWord(character_offset + CHARACTER_COORD_XW);
+	word character_coord_yw = data->queryWord(character_offset + CHARACTER_COORD_YW);
+
+	word current_offset = calculatePathOffset(coord_xw, coord_yw);
+
+	// various asserts
+	if (data->queryByte(current_offset) == PATH_MARK_CLOSED) {
+		return false;
+	}
+
+	if (coord_xw < 0 || coord_xw >= (map_widthw - 1) || coord_yw < 0 || coord_yw >= (map_heightw - 1)) {
+		return false;
+	}
+
+	//TODO: what does this mean?
+	if (mark <= PATH_MARK_CHARACTER || mark >= PATH_MARK_OPENED) {
+		return false;
+	}
+
+	// check found
+	if (data->queryByte(current_offset) == PATH_MARK_CHARACTER) {
+		data->writeByte(current_offset, (byte) mark);
+		return true;
+	}
+
+	// make horizontal and vertical sequences
+	bool is_first_time = false;
+	if (sequence == PATH_SEQUENCE_DEFAULT) {
+		is_first_time = true;
+		sequence = 0;
+	}
+
+	if (coord_yw < character_coord_yw) {
+		sequence |= PATH_SEQUENCE_DOWN_MASK;
+	}
+	else if (coord_yw > character_coord_yw) {
+		sequence &= ~PATH_SEQUENCE_DOWN_MASK;
+	}
+
+	if (coord_xw < character_coord_xw) {
+		sequence |= PATH_SEQUENCE_RIGHT_MASK;
+	}
+	else if (coord_xw > character_coord_xw) {
+		sequence &= ~PATH_SEQUENCE_RIGHT_MASK;
+	}
+
+	// make orthogonal sequence
+	int vertical_difference = abs(coord_yw - character_coord_yw);
+	int horizontal_difference = abs(coord_xw - character_coord_xw);
+
+	int difference = abs(horizontal_difference - vertical_difference);
+//	if ((difference > PATH_ORTHOGONAL_THRESHOLD) || is_first_time) {
+		if (vertical_difference <= horizontal_difference) {
+			sequence |= PATH_SEQUENCE_HORIZONTAL_MASK;
+		}
+		else {
+			sequence &= ~PATH_SEQUENCE_HORIZONTAL_MASK;
+		}
+//	}
+
+	// verify sequence
+	data->writeByte(current_offset, PATH_MARK_CLOSED);
+
+	if (sequence <= PATH_SEQUENCE_MASK) {
+#define GENERATE_PATH_UP	if (generatePath(character_offset, coord_xw, coord_yw - 1, mark - 1, sequence)) {	\
+								data->writeByte(current_offset, (byte) mark);	return true;	}
+#define GENERATE_PATH_DOWN	if (generatePath(character_offset, coord_xw, coord_yw + 1, mark - 1, sequence)) {	\
+								data->writeByte(current_offset, (byte) mark);	return true;	}
+#define GENERATE_PATH_LEFT	if (generatePath(character_offset, coord_xw - 1, coord_yw, mark - 1, sequence)) {	\
+								data->writeByte(current_offset, (byte) mark);	return true;	}
+#define GENERATE_PATH_RIGHT	if (generatePath(character_offset, coord_xw + 1, coord_yw, mark - 1, sequence)) {	\
+								data->writeByte(current_offset, (byte) mark);	return true;	}
+
+		switch (sequence) {
+			case 0x0000:
+				{
+					GENERATE_PATH_UP;
+					GENERATE_PATH_LEFT;
+					GENERATE_PATH_RIGHT;
+					GENERATE_PATH_DOWN;
+				}
+				break;
+
+			case 0x0001:
+				{
+					GENERATE_PATH_DOWN;
+					GENERATE_PATH_LEFT;
+					GENERATE_PATH_RIGHT;
+					GENERATE_PATH_UP;
+				}
+				break;
+
+			case 0x0010:
+				{
+					GENERATE_PATH_UP;
+					GENERATE_PATH_RIGHT;
+					GENERATE_PATH_LEFT;
+					GENERATE_PATH_DOWN;
+				}
+				break;
+
+			case 0x0011:
+				{
+					GENERATE_PATH_DOWN;
+					GENERATE_PATH_RIGHT;
+					GENERATE_PATH_LEFT;
+					GENERATE_PATH_UP;
+				}
+				break;
+
+			case 0x0100:
+				{
+					GENERATE_PATH_LEFT;
+					GENERATE_PATH_UP;
+					GENERATE_PATH_DOWN;
+					GENERATE_PATH_RIGHT;
+				}
+				break;
+
+			case 0x0101:
+				{
+					GENERATE_PATH_LEFT;
+					GENERATE_PATH_DOWN;
+					GENERATE_PATH_UP;
+					GENERATE_PATH_RIGHT;
+				}
+				break;
+
+			case 0x0110:
+				{
+					GENERATE_PATH_RIGHT;
+					GENERATE_PATH_UP;
+					GENERATE_PATH_DOWN;
+					GENERATE_PATH_LEFT;
+				}
+				break;
+
+			case 0x0111:
+				{
+					GENERATE_PATH_RIGHT;
+					GENERATE_PATH_DOWN;
+					GENERATE_PATH_UP;
+					GENERATE_PATH_LEFT;
+				}
+				break;
+		}
+
+		return false;
+	}
+	else {
+		data->writeByte(current_offset, (byte) mark);
+		return true;
+	}
 }
 
 
 void Field::moveCharacterOnPath(word character_offset)
 {
+	word character_coord_xw = data->queryWord(character_offset + CHARACTER_COORD_XW);
+	word character_coord_yw = data->queryWord(character_offset + CHARACTER_COORD_YW);
 
+	byte current_mark = getPathMark(character_coord_xw, character_coord_yw);
+	if (current_mark >= PATH_MARK_INITIAL) {
+		is_path_found = false;
+		return;
+	}
+
+	byte next_mark;
+	next_mark = getPathMark(character_coord_xw - 1, character_coord_yw - 1);
+	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
+		next_mark = getPathMark(character_coord_xw, character_coord_yw - 1);
+
+		// move up and left
+		if (next_mark < PATH_MARK_OPENED) {
+			bool status_up = moveCharacterUp(character_offset);
+			bool status_left = moveCharacterLeft(character_offset);
+			
+			if (!(status_up && status_left)) {
+				is_path_found = false;
+			}
+
+			return;
+		}
+		// move left and up
+		else {
+			next_mark = getPathMark(character_coord_xw - 1, character_coord_yw);
+			if (next_mark < PATH_MARK_OPENED) {
+				bool status_left = moveCharacterLeft(character_offset);
+				bool status_up = moveCharacterUp(character_offset);
+
+				if (!(status_left && status_up)) {
+					is_path_found = false;
+				}
+
+				return;
+			}
+		}
+	}
+
+	next_mark = getPathMark(character_coord_xw + 1, character_coord_yw - 1);
+	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
+		next_mark = getPathMark(character_coord_xw, character_coord_yw - 1);
+
+		// move up and right
+		if (next_mark < PATH_MARK_OPENED) {
+			bool status_up = moveCharacterUp(character_offset);
+			bool status_right = moveCharacterRight(character_offset);
+
+			if (!(status_up && status_right)) {
+				is_path_found = false;
+			}
+
+			return;
+		}
+		// move right and up
+		else {
+			next_mark = getPathMark(character_coord_xw + 1, character_coord_yw);
+			if (next_mark < PATH_MARK_OPENED) {
+				bool status_right = moveCharacterRight(character_offset);
+				bool status_up = moveCharacterUp(character_offset);
+
+				if (!(status_right && status_up)) {
+					is_path_found = false;
+				}
+
+				return;
+			}
+		}
+	}
+
+	next_mark = getPathMark(character_coord_xw + 1, character_coord_yw + 1);
+	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
+		next_mark = getPathMark(character_coord_xw, character_coord_yw + 1);
+
+		// move down and right
+		if (next_mark < PATH_MARK_OPENED) {
+			bool status_down = moveCharacterDown(character_offset);
+			bool status_right = moveCharacterRight(character_offset);
+
+			if (!(status_down && status_right)) {
+				is_path_found = false;
+			}
+
+			return;
+		}
+		// move right and down
+		else {
+			next_mark = getPathMark(character_coord_xw + 1, character_coord_yw);
+			if (next_mark < PATH_MARK_OPENED) {
+				bool status_right = moveCharacterRight(character_offset);
+				bool status_down = moveCharacterDown(character_offset);
+
+				if (!(status_right && status_down)) {
+					is_path_found = false;
+				}
+
+				return;
+			}
+		}
+	}
+
+	next_mark = getPathMark(character_coord_xw - 1, character_coord_yw + 1);
+	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
+		next_mark = getPathMark(character_coord_xw, character_coord_yw + 1);
+
+		// move down and left
+		if (next_mark < PATH_MARK_OPENED) {
+			bool status_down = moveCharacterDown(character_offset);
+			bool status_left = moveCharacterLeft(character_offset);
+
+			if (!(status_down && status_left)) {
+				is_path_found = false;
+			}
+
+			return;
+		}
+		// move left and down
+		else {
+			next_mark = getPathMark(character_coord_xw - 1, character_coord_yw);
+			if (next_mark < PATH_MARK_OPENED) {
+				bool status_left = moveCharacterLeft(character_offset);
+				bool status_down = moveCharacterDown(character_offset);
+
+				if (!(status_left && status_down)) {
+					is_path_found = false;
+				}
+
+				return;
+			}
+		}
+	}
+
+	// move left
+	next_mark = getPathMark(character_coord_xw - 1, character_coord_yw);
+	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
+		if (moveCharacterLeft(character_offset) == false) {
+			is_path_found = false;
+		}
+
+		return;
+	}
+
+	// move right
+	next_mark = getPathMark(character_coord_xw + 1, character_coord_yw);
+	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
+		if (moveCharacterRight(character_offset) == false) {
+			is_path_found = false;
+		}
+
+		return;
+	}
+
+	// move down
+	next_mark = getPathMark(character_coord_xw, character_coord_yw + 1);
+	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
+		if (moveCharacterDown(character_offset) == false) {
+			is_path_found = false;
+		}
+
+		return;
+	}
+
+	// move up
+	next_mark = getPathMark(character_coord_xw, character_coord_yw - 1);
+	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
+		if (moveCharacterUp(character_offset) == false) {
+			is_path_found = false;
+		}
+
+		return;
+	}
 }
 
 
