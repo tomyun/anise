@@ -967,8 +967,9 @@ void Field::executeOperation(word character_offset)
 				}
 				else {
 					setPath(character_offset, destination_coord_xw, destination_coord_yw, true);
-					toggleFrame(character_offset);
 				}
+
+				toggleFrame(character_offset);
 			}
 			break;
 	}
@@ -1514,22 +1515,23 @@ void Field::setPath(word character_offset, word target_coord_xw, word target_coo
 	word target_offset = calculatePathOffset(target_coord_xw, target_coord_yw);
 
 	// initialize path
-	initializePath(start_offset);
+	initializePath(character_offset);
 
-	if (data->queryByte(target_offset) != PATH_MARK_CLOSED) {
+	//if (data->queryByte(target_offset) != PATH_MARK_CLOSED) {
 		data->writeByte(start_offset, PATH_MARK_CHARACTER);
 
 		if ((generatePath(character_offset, target_coord_xw, target_coord_yw, PATH_MARK_INITIAL, PATH_SEQUENCE_DEFAULT) == false)) {
 			data->writeByte(start_offset, PATH_MARK_CLOSED);
 		}
 
-		TW;
+//TODO: remove this
+//TW;
 
 		if (data->queryByte(target_offset) < PATH_MARK_OPENED) {
 			is_path_found = true;
 			return;
 		}
-	}
+	//}
 
 	if (use_alternative) {
 		//TODO: implement alternative pathfinding method
@@ -1552,14 +1554,57 @@ inline byte Field::getPathMark(word coord_xw, word coord_yw)
 }
 
 
+bool Field::checkPathMark(word coord_xw, word coord_yw, PathDirection direction)
+{
+	byte current_mark = getPathMark(coord_xw, coord_yw);
+
+	byte next_mark;
+	switch (direction) {
+		case PATH_DIRECTION_UP_LEFT:
+			next_mark = getPathMark(coord_xw - 1, coord_yw - 1);
+			break;
+
+		case PATH_DIRECTION_UP_RIGHT:
+			next_mark = getPathMark(coord_xw + 1, coord_yw - 1);
+			break;
+
+		case PATH_DIRECTION_DOWN_LEFT:
+			next_mark = getPathMark(coord_xw - 1, coord_yw + 1);
+			break;
+
+		case PATH_DIRECTION_DOWN_RIGHT:
+			next_mark = getPathMark(coord_xw + 1, coord_yw + 1);
+			break;
+
+		case PATH_DIRECTION_LEFT:
+			next_mark = getPathMark(coord_xw - 1, coord_yw);
+			break;
+
+		case PATH_DIRECTION_RIGHT:
+			next_mark = getPathMark(coord_xw + 1, coord_yw);
+			break;
+
+		case PATH_DIRECTION_DOWN:
+			next_mark = getPathMark(coord_xw, coord_yw + 1);
+			break;
+
+		case PATH_DIRECTION_UP:
+			next_mark = getPathMark(coord_xw, coord_yw - 1);
+			break;
+
+		default:
+			next_mark = PATH_MARK_CLOSED;
+	}
+
+	return ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark));
+}
+
+
 void Field::initializePath(word character_offset)
 {
-	//HACK: it seems to be needless
-	//word character_widthw = data->queryWord(character_offset + CHARACTER_WIDTHW);
-	//word character_heightw = data->queryWord(character_offset + CHARACTER_HEIGHTW);
+	byte character_heightw = data->queryByte(character_offset + CHARACTER_HEIGHTW);
 
-	//for (word yw = (character_heightw - 1); yw < map_heightw; yw++) {
-	for (word yw = 0; yw < map_heightw; yw++) {
+	for (word yw = (character_heightw - 1); yw < map_heightw; yw++) {
 		for (word xw = 0; xw < map_widthw; xw++) {
 			word sprite_offset = calculateMapOffset(xw, yw);
 
@@ -1570,7 +1615,7 @@ void Field::initializePath(word character_offset)
 			else {
 				path_type = PATH_MARK_OPENED;
 			}
-			data->writeByte(path_offset + (yw * map_widthw) + xw, path_type);
+			data->writeByte(path_offset + ((yw - (character_heightw - 1)) * map_widthw) + xw, path_type);
 		}
 	}
 }
@@ -1629,14 +1674,14 @@ bool Field::generatePath(word character_offset, word coord_xw, word coord_yw, wo
 	int horizontal_difference = abs(coord_xw - character_coord_xw);
 
 	int difference = abs(horizontal_difference - vertical_difference);
-//	if ((difference > PATH_ORTHOGONAL_THRESHOLD) || is_first_time) {
+	if ((difference > PATH_ORTHOGONAL_THRESHOLD) || is_first_time) {
 		if (vertical_difference <= horizontal_difference) {
 			sequence |= PATH_SEQUENCE_HORIZONTAL_MASK;
 		}
 		else {
 			sequence &= ~PATH_SEQUENCE_HORIZONTAL_MASK;
 		}
-//	}
+	}
 
 	// verify sequence
 	data->writeByte(current_offset, PATH_MARK_CLOSED);
@@ -1745,168 +1790,83 @@ void Field::moveCharacterOnPath(word character_offset)
 		return;
 	}
 
-	byte next_mark;
-	next_mark = getPathMark(character_coord_xw - 1, character_coord_yw - 1);
-	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
-		next_mark = getPathMark(character_coord_xw, character_coord_yw - 1);
-
+	// check up-left
+	if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_UP_LEFT)) {
 		// move up and left
-		if (next_mark < PATH_MARK_OPENED) {
-			bool status_up = moveCharacterUp(character_offset);
-			bool status_left = moveCharacterLeft(character_offset);
-			
-			if (!(status_up && status_left)) {
-				is_path_found = false;
-			}
-
+		if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_UP)) {
+			is_path_found = moveCharacterUp(character_offset) && moveCharacterLeft(character_offset);
 			return;
 		}
 		// move left and up
-		else {
-			next_mark = getPathMark(character_coord_xw - 1, character_coord_yw);
-			if (next_mark < PATH_MARK_OPENED) {
-				bool status_left = moveCharacterLeft(character_offset);
-				bool status_up = moveCharacterUp(character_offset);
-
-				if (!(status_left && status_up)) {
-					is_path_found = false;
-				}
-
-				return;
-			}
+		else if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_LEFT)) {
+			is_path_found = moveCharacterLeft(character_offset) && moveCharacterUp(character_offset);
+			return;
 		}
 	}
 
-	next_mark = getPathMark(character_coord_xw + 1, character_coord_yw - 1);
-	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
-		next_mark = getPathMark(character_coord_xw, character_coord_yw - 1);
-
+	// check up-right
+	if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_UP_RIGHT)) {
 		// move up and right
-		if (next_mark < PATH_MARK_OPENED) {
-			bool status_up = moveCharacterUp(character_offset);
-			bool status_right = moveCharacterRight(character_offset);
-
-			if (!(status_up && status_right)) {
-				is_path_found = false;
-			}
-
+		if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_UP)) {
+			is_path_found = moveCharacterUp(character_offset) && moveCharacterRight(character_offset);
 			return;
 		}
 		// move right and up
-		else {
-			next_mark = getPathMark(character_coord_xw + 1, character_coord_yw);
-			if (next_mark < PATH_MARK_OPENED) {
-				bool status_right = moveCharacterRight(character_offset);
-				bool status_up = moveCharacterUp(character_offset);
-
-				if (!(status_right && status_up)) {
-					is_path_found = false;
-				}
-
-				return;
-			}
+		else if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_RIGHT)) {
+			is_path_found = moveCharacterRight(character_offset) && moveCharacterUp(character_offset);
+			return;
 		}
 	}
 
-	next_mark = getPathMark(character_coord_xw + 1, character_coord_yw + 1);
-	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
-		next_mark = getPathMark(character_coord_xw, character_coord_yw + 1);
-
+	// check down-right
+	if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_DOWN_RIGHT)) {
 		// move down and right
-		if (next_mark < PATH_MARK_OPENED) {
-			bool status_down = moveCharacterDown(character_offset);
-			bool status_right = moveCharacterRight(character_offset);
-
-			if (!(status_down && status_right)) {
-				is_path_found = false;
-			}
-
+		if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_DOWN)) {
+			is_path_found = moveCharacterDown(character_offset) && moveCharacterRight(character_offset);
 			return;
 		}
 		// move right and down
-		else {
-			next_mark = getPathMark(character_coord_xw + 1, character_coord_yw);
-			if (next_mark < PATH_MARK_OPENED) {
-				bool status_right = moveCharacterRight(character_offset);
-				bool status_down = moveCharacterDown(character_offset);
-
-				if (!(status_right && status_down)) {
-					is_path_found = false;
-				}
-
-				return;
-			}
+		else if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_RIGHT)) {
+			is_path_found = moveCharacterRight(character_offset) && moveCharacterDown(character_offset);
+			return;
 		}
 	}
 
-	next_mark = getPathMark(character_coord_xw - 1, character_coord_yw + 1);
-	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
-		next_mark = getPathMark(character_coord_xw, character_coord_yw + 1);
-
+	// check down-left
+	if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_DOWN_LEFT)) {
 		// move down and left
-		if (next_mark < PATH_MARK_OPENED) {
-			bool status_down = moveCharacterDown(character_offset);
-			bool status_left = moveCharacterLeft(character_offset);
-
-			if (!(status_down && status_left)) {
-				is_path_found = false;
-			}
-
+		if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_DOWN)) {
+			is_path_found = moveCharacterDown(character_offset) && moveCharacterLeft(character_offset);
 			return;
 		}
 		// move left and down
-		else {
-			next_mark = getPathMark(character_coord_xw - 1, character_coord_yw);
-			if (next_mark < PATH_MARK_OPENED) {
-				bool status_left = moveCharacterLeft(character_offset);
-				bool status_down = moveCharacterDown(character_offset);
-
-				if (!(status_left && status_down)) {
-					is_path_found = false;
-				}
-
-				return;
-			}
+		else if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_LEFT)) {
+			is_path_found = moveCharacterLeft(character_offset) && moveCharacterDown(character_offset);
+			return;
 		}
 	}
 
 	// move left
-	next_mark = getPathMark(character_coord_xw - 1, character_coord_yw);
-	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
-		if (moveCharacterLeft(character_offset) == false) {
-			is_path_found = false;
-		}
-
+	if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_LEFT)) {
+		is_path_found = moveCharacterLeft(character_offset);
 		return;
 	}
 
 	// move right
-	next_mark = getPathMark(character_coord_xw + 1, character_coord_yw);
-	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
-		if (moveCharacterRight(character_offset) == false) {
-			is_path_found = false;
-		}
-
+	if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_RIGHT)) {
+		is_path_found = moveCharacterRight(character_offset);
 		return;
 	}
 
 	// move down
-	next_mark = getPathMark(character_coord_xw, character_coord_yw + 1);
-	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
-		if (moveCharacterDown(character_offset) == false) {
-			is_path_found = false;
-		}
-
+	if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_DOWN)) {
+		is_path_found = moveCharacterDown(character_offset);
 		return;
 	}
 
 	// move up
-	next_mark = getPathMark(character_coord_xw, character_coord_yw - 1);
-	if ((next_mark < PATH_MARK_OPENED) && (next_mark > current_mark)) {
-		if (moveCharacterUp(character_offset) == false) {
-			is_path_found = false;
-		}
-
+	if (checkPathMark(character_coord_xw, character_coord_yw, PATH_DIRECTION_UP)) {
+		is_path_found = moveCharacterUp(character_offset);
 		return;
 	}
 }
