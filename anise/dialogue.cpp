@@ -18,7 +18,7 @@ Dialogue::Dialogue(Memory *memory, Video *video, Timer *timer, Input *input, Ani
 		code_newline_second = 0x93;
 	}
 
-	previous_code = NULL;
+	previous_code = 0x00;
 
 	if (option->font_type == FONT_JIS) {
 		font = font_jis;
@@ -106,7 +106,7 @@ void Dialogue::putFullWidthCharacter(byte first_code, byte second_code)
 {
 	word coord_xb = memory->b_SystemVariable->queryWord(iw_Dialogue_CoordXb);
 	word coord_y = memory->b_SystemVariable->queryWord(iw_Dialogue_CoordY);
-	long int offset = NULL;
+	int offset;
 	if (option->font_type == FONT_JIS) {
 		// calculate font code
 		if ((first_code >= 0x81) && (first_code <= 0x9F)) {
@@ -137,7 +137,7 @@ void Dialogue::putFullWidthCharacter(byte first_code, byte second_code)
 		//HACK: adjust space size to improve readablity
 		if (first_code == 0x81 && second_code == 0x40) {
 			if (coord_y != 295) {
-				setPosition(coord_xb - 1, NULL);
+				setPosition(coord_xb - 1, NONE);
 			}
 		}
 
@@ -179,11 +179,11 @@ void Dialogue::putFullWidthCharacter(byte first_code, byte second_code)
 		if (second_code < 0xBD) {
 			code = (first_code * 0xBD) + second_code;
 			if (code >= (4841 - 128)) {
-				code = NULL;
+				code = 0x00;
 			}
 		}
 		else {
-			code = NULL;
+			code = 0x00;
 		}
 
 		// joi10a
@@ -192,11 +192,11 @@ void Dialogue::putFullWidthCharacter(byte first_code, byte second_code)
 	else if (option->font_type == FONT_GAMEBOX) {
 		//HACK: adjust space size to improve readablity
 		if (first_code == 0x91 && second_code == 0x40) {
-			setPosition(coord_xb - 1, NULL);
+			setPosition(coord_xb - 1, NONE);
 		}
 		else if (first_code == 0x91 && second_code == 0x41) {
 			if (coord_y != 295) {
-				setPosition(coord_xb - 1, NULL);
+				setPosition(coord_xb - 1, NONE);
 			}
 		}
 
@@ -255,7 +255,7 @@ void Dialogue::updatePosition()
 	word dialogue_coord_xb = memory->b_SystemVariable->queryWord(iw_Dialogue_CoordXb);
 	byte font_widthb = memory->b_SystemVariable->queryByte(ib_Dialogue_FontWidthb);
 
-	setPosition(dialogue_coord_xb + font_widthb, NULL);
+	setPosition(dialogue_coord_xb + font_widthb, NONE);
 
 	word video_max_coord_xb = memory->b_SystemVariable->queryWord(iw_Video_MaxCoordXb);
 	if ((dialogue_coord_xb + (font_widthb * 2) - FONT_MARGIN) >= video_max_coord_xb) {
@@ -283,10 +283,10 @@ void Dialogue::breakNewLine()
 
 inline void Dialogue::setPosition(word coord_xb, word coord_y)
 {
-	if (coord_xb != NULL) {
+	if (coord_xb != NONE) {
 		memory->b_SystemVariable->writeWord(iw_Dialogue_CoordXb, coord_xb);
 	}
-	if (coord_y != NULL) {
+	if (coord_y != NONE) {
 		memory->b_SystemVariable->writeWord(iw_Dialogue_CoordY, coord_y);
 	}
 }
