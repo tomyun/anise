@@ -267,7 +267,7 @@ bool Animation::parse(word slot_offset)
 								BlitStruct order;
 								initializeBlit(script_offset, &order);
 								//TODO: process exit
-								PRINT("[Animation::parse()] invalid code: %x\n", code);
+								PRINT_ERROR("[Animation::parse()] invalid code: %x\n", code);
 								return false;
 							}
 							break;

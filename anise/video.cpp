@@ -14,7 +14,7 @@ Video::Video(Memory *memory, Timer *timer, Option *option)
 	}
 
 	if (sdl_screen == NULL) {
-		PRINT("[Video::Video()] unable to set %dx%dx%d video mode: %s\n", VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, SDL_GetError());
+		PRINT_ERROR("[Video::Video()] unable to set %dx%dx%d video mode: %s\n", VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, SDL_GetError());
 	}
 
 	overlap_old_screen = NULL;
@@ -692,7 +692,7 @@ void Video::drawPixel(SDL_Surface *sdl_surface, int x, int y, Uint32 sdl_color)
 		}
 	}
 	else {
-		PRINT("[Video::drawPixel()] out of bound: x = %d, y = %d\n", x, y);
+		PRINT_ERROR("[Video::drawPixel()] out of bound: x = %d, y = %d\n", x, y);
 		PAUSE;
 	}
 }

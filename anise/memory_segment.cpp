@@ -27,7 +27,7 @@ void MemorySegment::add(MemoryBlock *memory_block)
 	}
 	else {
 		//TODO: process error
-		PRINT("[MemorySegment::add()] segment space is full (%d of %d)\n", count, MAX_BLOCK);
+		PRINT_ERROR("[MemorySegment::add()] segment space is full (%d of %d)\n", count, MAX_BLOCK);
 		exit(1);
 	}
 }
