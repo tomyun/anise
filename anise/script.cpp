@@ -264,6 +264,10 @@ void Script::setOpcodes()
 		//HACK: same as aisimai
 		opcode_oput_list = opcode_aisimai_oput_list;
 	}
+	else if (option->game_type == GAME_KAWA) {
+		//HACK: same as aisimai
+		opcode_oput_list = opcode_aisimai_oput_list;
+	}
 }
 
 
