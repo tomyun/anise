@@ -5887,3 +5887,61 @@ void Dialogue::initializeGameboxFont()
 	code_newline_first = 0x94;
 	code_newline_second = 0x45;
 }
+
+
+int Dialogue::getGameboxFontOffset(byte first_code, byte second_code)
+{
+	word coord_xb = memory->b_SystemVariable->queryWord(iw_Dialogue_CoordXb);
+	word coord_y = memory->b_SystemVariable->queryWord(iw_Dialogue_CoordY);
+
+	//HACK: adjust space size to improve readablity
+	if (first_code == 0x91 && second_code == 0x40) {
+		setPosition(coord_xb - 1, NONE);
+	}
+	else if (first_code == 0x91 && second_code == 0x41) {
+		if (coord_y != 295) {
+			setPosition(coord_xb - 1, NONE);
+		}
+	}
+
+	// calculate font code
+	if ((first_code == 0x91) && (second_code >= 0x82) && (second_code <= 0x86)) {
+		PRINT("[Dialogue::getGameboxFontOffset()] josa code: %2x%2x\n", first_code, second_code);
+	}
+
+	word code = (first_code << 8) + second_code;
+	code = code - 0x8140;
+	first_code = (byte) ((code & MASK_UPPER_WORD) >> 8);
+	second_code = (byte) (code & MASK_LOWER_WORD);
+
+	code = first_code * 0xBB;
+	if (code >= 0x0DE1) {
+		code = code - 0x01CD;
+	}
+	if (code >= 0x0BB0) {
+		code = code - 0x012C;
+	}
+	if (code >= 0x02EC) {
+		code = code - 0x0118;
+	}
+
+	if (second_code >= 0x3F) {
+		second_code = second_code - 1;
+	}
+
+	code = code + second_code;
+
+	if (second_code >= 0x1C) {
+		code = code + 0x7F;
+	}
+	else {
+		code = code + 0x80;
+	}
+
+	if (code <= 0x09EB) {
+		previous_code = code;
+	}
+
+	int offset = code * (FONT_FULL_WIDTH / FONT_BPB) * FONT_FULL_HEIGHT;
+	return offset;
+}
