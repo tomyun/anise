@@ -19,7 +19,7 @@ bool Engine::on()
 
 	//TODO: initialize video, mouse and keyboard (SDL related)
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0) {
-		PRINT("[Engine::initialize()] unable to initialize SDL backend: %s\n", SDL_GetError());
+		PRINT_ERROR("[Engine::on()] unable to initialize SDL backend: %s\n", SDL_GetError());
 		exit(1);
 	}
 
@@ -69,7 +69,7 @@ bool Engine::off()
 
 	SDL_Quit();
 
-	PRINT("[Engine::off()] successfully turned off\n");
+	printf("[Engine::off()] successfully turned off\n");
 
 	return true;
 }
@@ -79,8 +79,6 @@ bool Engine::run()
 {
 	script->load(option->script_file_name.c_str());
 	SCRIPTCALL condition = script->parse();
-
-	PAUSE;
 
 	if (condition == RETURN_ERROR) {
 		PRINT_ERROR("[Engine::run()] terminated by error\n");
