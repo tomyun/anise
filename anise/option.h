@@ -7,7 +7,7 @@
 
 using std::string;
 
-#define TITLE				"ANISE beta 6"
+#define TITLE				"ANISE beta 6 (20040128)"
 #define TITLE_EXTRA			" - A Newly Implemented Scripting Engine for ai5v\n"
 #define FILE_NAME_LENGTH	32
 
