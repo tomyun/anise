@@ -801,7 +801,7 @@ void Video::capture()
 		string count_str = count_c_str;
 
 		screen_name = count_str + screen_str + extension_str;
-		for (int i = 0; i < VIDEO_BUFFER; i++) {
+		for (int i = 0; i <= VIDEO_BUFFER; i++) {
 			char index_str[2];
 			sprintf(index_str, "%d", i);
 
@@ -812,7 +812,7 @@ void Video::capture()
 			count++;
 			continue;
 		}
-		for (int i = 0; i < VIDEO_BUFFER; i++) {
+		for (int i = 0; i <= VIDEO_BUFFER; i++) {
 			if (fopen(buffer_name[i].c_str(), "r")) {
 				count++;
 				continue;
@@ -824,12 +824,20 @@ void Video::capture()
 
 	SDL_SaveBMP(sdl_screen, screen_name.c_str());
 
-	for (int i = 0; i < VIDEO_BUFFER; i++) {
+	for (int i = 0; i <= VIDEO_BUFFER; i++) {
 		SDL_Surface *sdl_buffer = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
+
+		byte *buffers;
+		if (i == 0) {
+			buffers = screen;
+		}
+		else {
+			buffers = buffer[i - 1];
+		}
 
 		for (word y = 0; y < VIDEO_HEIGHT; y++) {
 			for (word x = 0; x < VIDEO_WIDTH; x++) {
-				Uint32 sdl_color = convertColor(intermediate_palette[buffer[i][(y * VIDEO_WIDTH) + x]]);
+				Uint32 sdl_color = convertColor(intermediate_palette[buffers[(y * VIDEO_WIDTH) + x]]);
 				drawPixel(sdl_buffer, x, y, sdl_color);
 			}
 		}
