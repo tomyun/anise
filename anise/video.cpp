@@ -7,10 +7,10 @@ Video::Video(Memory *memory, Timer *timer, Option *option)
 	this->option = option;
 
 	if (option->is_fullscreen) {
-		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, SDL_SWSURFACE | SDL_FULLSCREEN);
+		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, SDL_SWSURFACE | SDL_ANYFORMAT | SDL_FULLSCREEN);
 	}
 	else {
-		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, SDL_SWSURFACE);
+		sdl_screen = SDL_SetVideoMode(VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_SCREEN_DEPTH, SDL_SWSURFACE | SDL_ANYFORMAT);
 	}
 
 	if (sdl_screen == NULL) {
