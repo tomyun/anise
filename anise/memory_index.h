@@ -137,8 +137,8 @@ enum SystemVariableIndex {
 	idp_Video_Buffer3_Plane2 = 178,
 	idp_Video_Buffer3_Plane3 = 182,
 	// 93
-	ib_DATFile_Slot0 = 186,
-	ib_DATFile_Slot1 = 187,
+	ib_PackedFile_Slot0 = 186,
+	ib_PackedFile_Slot1 = 187,
 	iw_GP4File_CoordXb = 188,
 	iw_GP4File_CoordY = 190,
 	// 96
