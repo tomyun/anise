@@ -32,9 +32,6 @@ Dialogue::Dialogue(Memory *memory, Timer *timer, Input *input, Video *video, Ani
 
 Dialogue::~Dialogue()
 {
-	if (josa_array != NULL) {
-		delete josa_array;
-	}
 }
 
 
