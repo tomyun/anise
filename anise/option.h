@@ -16,7 +16,7 @@ enum GameType {
 	GAME_NANPA2,
 	GAME_ISAKU,
 	GAME_KAKYUSEI,
-	GAME_AISI,
+	GAME_AISIMAI,
 	GAME_KAWA,
 	GAME_NONO,
 	GAME_ISLE,
@@ -40,6 +40,8 @@ public:
 
 	GameType game_type;
 	FontType font_type;
+
+	bool is_fullscreen;
 
 	string path_name;
 	string script_file_name;

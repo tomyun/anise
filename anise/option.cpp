@@ -10,11 +10,12 @@ Option::Option()
 		"Options:\n"
 		"  -p		Path to the game\n"
 		"  -l		Select language (j: Japanese, k: *Korean, K: Korean (gamebox))\n"
+		"  -f		Fullscreen mode\n"
 		"\n"
 		"Supported Games:\n"
 		"  nanpa2	Dokyusei 2 (including special version)\n"
 		"  nanpa1	Dokyusei 1\n"
-		"  aisi		Aisi\n"
+		"  aisimai	Aisimai\n"
 		"  crescent	Crescent\n"
 		"\n"
 		"Example:\n"
@@ -25,6 +26,8 @@ Option::Option()
 
 	game_type = GAME_UNKNOWN;
 	font_type = FONT_JISHAN;
+
+	is_fullscreen = false;
 
 	variable_size = 0;
 	selection_item_entry = 0;
@@ -75,26 +78,25 @@ bool Option::initialize(int argc, char *argv[])
 
 					case 'l':
 						{
-							//TODO: need clean up
 							switch (option[2]) {
 								case 'j':
-									{
-										font_type = FONT_JIS;
-									}
+									font_type = FONT_JIS;
 									break;
 
 								case 'k':
-									{
-										font_type = FONT_JISHAN;
-									}
+									font_type = FONT_JISHAN;
 									break;
 
 								case 'K':
-									{
-										font_type = FONT_GAMEBOX;
-									}
+									font_type = FONT_GAMEBOX;
 									break;
 							}
+						}
+						break;
+
+					case 'f':
+						{
+							is_fullscreen = true;
 						}
 						break;
 				}
@@ -121,8 +123,8 @@ bool Option::initialize(int argc, char *argv[])
 				animation_slot_entry = 0xF682;
 				animation_script_entry = 0x8000;
 			}
-			else if (strcmp(option, "aisi") == 0) {
-				game_type = GAME_AISI;
+			else if (strcmp(option, "aisimai") == 0) {
+				game_type = GAME_AISIMAI;
 
 				script_file_name = "main.mes";
 
@@ -137,7 +139,7 @@ bool Option::initialize(int argc, char *argv[])
 
 				script_file_name = "start.m";
 
-				//HACK: same as aisi
+				//HACK: same as aisimai
 				variable_size = 512;
 				selection_item_entry = 0xED78;
 				procedure_entry = 0xEDA4;
