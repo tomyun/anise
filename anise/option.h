@@ -46,6 +46,8 @@ public:
 	bool is_scanline;
 
 	string path_name;
+	string packed_file_name;
+	string packed_file_extension;
 	string script_file_name;
 	string sound_file_name;
 

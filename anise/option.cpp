@@ -104,6 +104,7 @@ bool Option::initialize(int argc, char *argv[])
 						{
 							is_unpacked = true;
 						}
+						break;
 
 					case 'f':
 						{
@@ -137,6 +138,9 @@ bool Option::initialize(int argc, char *argv[])
 			else if (strcmp(option, "nanpa1") == 0) {
 				game_type = GAME_NANPA1;
 
+				packed_file_name = "elf";
+				packed_file_extension = ".dat";
+
 				script_file_name = "start.mes";
 
 				variable_size = 512;
@@ -148,6 +152,9 @@ bool Option::initialize(int argc, char *argv[])
 			else if (strcmp(option, "aisimai") == 0) {
 				game_type = GAME_AISIMAI;
 
+				//HACK: it's probably a packed game
+				is_unpacked = true;
+
 				script_file_name = "main.mes";
 
 				variable_size = 512;
@@ -158,6 +165,8 @@ bool Option::initialize(int argc, char *argv[])
 			}
 			else if (strcmp(option, "crescent") == 0) {
 				game_type = GAME_CRESCENT;
+
+				is_unpacked = true;
 
 				script_file_name = "start.m";
 
