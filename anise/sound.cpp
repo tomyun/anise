@@ -76,10 +76,14 @@ void Sound::load()
 
 	SDL_AudioSpec dummy_spec;
 
-	if (SDL_LoadWAV(option->sound_file_name.data(), &dummy_spec, &buffer, &length) == NULL) {
-		//TODO: process error
-		//PRINT_ERROR("[Sound::load()] unable to load wave file(%s): %s\n", option->sound_file_name, SDL_GetError());
-		//exit(1);
+	if (file_name != option->sound_file_name) {
+		file_name = option->sound_file_name;
+
+		if (SDL_LoadWAV(option->sound_file_name.c_str(), &dummy_spec, &buffer, &length) == NULL) {
+			//TODO: process error
+			//PRINT_ERROR("[Sound::load()] unable to load wave file(%s): %s\n", option->sound_file_name, SDL_GetError());
+			//exit(1);
+		}
 	}
 
 	current_length = 0;

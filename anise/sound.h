@@ -1,6 +1,7 @@
 #ifndef SOUND_H
 #define SOUND_H
 
+#include <string>
 #include "option.h"
 #include "SDL.h"
 #include "SDL_audio.h"
@@ -8,6 +9,8 @@
 class Sound {
 private:
 	Option *option;
+
+	string file_name;
 
 	SDL_AudioSpec spec;
 	Uint8 *buffer;
