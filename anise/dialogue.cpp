@@ -10,13 +10,13 @@ Dialogue::Dialogue(Memory *memory, Timer *timer, Input *input, Video *video, Ani
 	this->option = option;
 
 	if (option->font_type == FONT_JIS) {
-		initializeFontJis();
+		initializeJisFont();
 	}
 	else if (option->font_type == FONT_JISHAN) {
-		initializeFontJisHan();
+		initializeJisHanFont();
 	}
 	else if (option->font_type == FONT_GAMEBOX) {
-		initializeFontGamebox();
+		initializeGameboxFont();
 	}
 
 	previous_code = 0x00;

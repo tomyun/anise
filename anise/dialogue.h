@@ -39,9 +39,9 @@ private:
 
 	word previous_code;
 
-	void initializeFontJis();
-	void initializeFontJisHan();
-	void initializeFontGamebox();
+	void initializeJisFont();
+	void initializeJisHanFont();
+	void initializeGameboxFont();
 
 	void updatePosition();
 	void breakNewLine();
