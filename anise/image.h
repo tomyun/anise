@@ -32,7 +32,7 @@ private:
 	word width;
 	word height;
 
-	byte *surface;
+	SurfaceType surface_type;
 
 	byte table[VIDEO_COLOR + 1][VIDEO_COLOR];
 

@@ -246,7 +246,8 @@ public:
 	void clearScreen();
 
 	byte* getSurface(byte surface_type);
-	byte* getDrawSurface();
+	SurfaceType getDrawSurface();
+
 	bool isScreen(byte *surface);
 	bool isScreen(byte surface_type);
 

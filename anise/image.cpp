@@ -14,7 +14,7 @@ Image::Image(Memory *memory, Video *video, File *file)
 	width = 0;
 	height = 0;
 
-	surface = NULL;
+	surface_type = SURFACE_SCREEN;
 
 	for (int i = 0; i < (VIDEO_COLOR + 1); i++) {
 		for (int j = 0; j < VIDEO_COLOR; j++) {
@@ -80,7 +80,7 @@ void Image::decode(word destination_x, word destination_y)
 						}
 
 						table_index = color;
-						surface[((coord_y + destination_y) * VIDEO_WIDTH) + (coord_x + destination_x + x)] = color;
+						video->putPoint(surface_type, (coord_x + destination_x) + x, coord_y + destination_y, color);
 					}
 
 					destination_y++;
@@ -145,8 +145,8 @@ void Image::decode(word destination_x, word destination_y)
 
 					for (word y = 0; y < length; y++) {
 						for (word x = 0; x < 4; x++) {
-							byte color = surface[((coord_y + replica_y) * VIDEO_WIDTH) + (coord_x + replica_x + x)];
-							surface[((coord_y + destination_y) * VIDEO_WIDTH) + (coord_x + destination_x + x)] = color;
+							byte color = video->getPoint(surface_type, (coord_x + replica_x) + x, coord_y + replica_y);
+							video->putPoint(surface_type, (coord_x + destination_x) + x, coord_y + destination_y, color);
 						}
 
 						replica_y++;
@@ -176,7 +176,7 @@ void Image::load(const char *filename)
 	initializeHeader();
 	initializeTable();
 
-	surface = video->getDrawSurface();
+	surface_type = video->getDrawSurface();
 
 	b_Image->set(image_offset + GP4_RAW_OFFSET, BIT_FLOW_LEFT);
 
@@ -197,7 +197,7 @@ void Image::load(const char *filename)
 		}
 	}
 
-	if (video->isScreen(surface)) {
+	if (video->isScreen(surface_type)) {
 		video->updateScreen(coord_x, coord_y, width, height);
 	}
 }

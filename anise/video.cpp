@@ -185,11 +185,11 @@ byte* Video::getSurface(byte surface_type)
 }
 
 
-byte* Video::getDrawSurface()
+SurfaceType Video::getDrawSurface()
 {
 	byte surface_type = (byte) (memory->b_SystemVariable->queryWord(iw_DisplayBuffer));
 
-	return getSurface(surface_type);
+	return (SurfaceType) surface_type;
 }
 
 
@@ -361,14 +361,14 @@ void Video::drawBox(byte mode, word coord_x0b, word coord_y0, word coord_x1b, wo
 	byte color = (byte) memory->b_SystemVariable->queryByte(iw_Video_Color);
 	color = color >> 4;
 
-	byte *draw_surface = getDrawSurface();
+	SurfaceType surface_type = getDrawSurface();
 
 	switch (mode) {
 		case DRAWBOX_SOLID:
 			{
 				for (word y = 0; y < height; y++) {
 					for (word x = 0; x < width; x++) {
-						draw_surface[((coord_y + y) * VIDEO_WIDTH) + (coord_x + x)] = color;
+						putPoint(surface_type, coord_x + x, coord_y + y, color);
 					}
 				}
 
@@ -379,14 +379,15 @@ void Video::drawBox(byte mode, word coord_x0b, word coord_y0, word coord_x1b, wo
 			{
 				for (word y = 0; y < height; y++) {
 					for (word x = 0; x < width; x++) {
-						draw_surface[((coord_y + y) * VIDEO_WIDTH) + (coord_x + x)] ^= color;
+						byte original_color = getPoint(surface_type, coord_x + x, coord_y + y);
+						putPoint(surface_type, coord_x + x, coord_y + y, (original_color ^ color));
 					}
 				}
 			}
 			break;
 	}
 	
-	if (isScreen(draw_surface)) {
+	if (isScreen(surface_type)) {
 		updateScreen(coord_x, coord_y, width, height);
 	}
 }
@@ -972,16 +973,16 @@ void Video::drawFont(word coord_x, word coord_y, const byte *font, long int offs
 	byte foreground_color = color & COLOR_MASK;
 	byte background_color = color >> 4;
 
-	byte *surface = getDrawSurface();
+	SurfaceType surface_type = getDrawSurface();
 
 	for (word y = 0; y < height; y++) {
 		for (word x = 0; x < width; x++) {
 			switch (b_Font->readBit()) {
 				case FONT_BACKGROUND:
-					surface[((coord_y + y) * VIDEO_WIDTH) + (coord_x + x)] = background_color;
+					putPoint(surface_type, coord_x + x, coord_y + y, background_color);
 					break;
 				case FONT_FOREGROUND:
-					surface[((coord_y + y) * VIDEO_WIDTH) + (coord_x + x)] = foreground_color;
+					putPoint(surface_type, coord_x + x, coord_y + y, foreground_color);
 					break;
 			}
 		}
@@ -994,7 +995,7 @@ void Video::drawFont(word coord_x, word coord_y, const byte *font, long int offs
 			switch (b_Font->readBit()) {
 				case FONT_FOREGROUND:
 					if (x != (width - 1)) {
-						surface[((coord_y + y) * VIDEO_WIDTH) + (coord_x + x + 1)] = foreground_color;
+						putPoint(surface_type, (coord_x + x) + 1, coord_y + y, foreground_color);
 					}
 					break;
 			}
@@ -1003,7 +1004,7 @@ void Video::drawFont(word coord_x, word coord_y, const byte *font, long int offs
 	
 	delete b_Font;
 
-	if (isScreen(surface)) {
+	if (isScreen(surface_type)) {
 		updateScreen(coord_x, coord_y, width, height);
 	}
 }
