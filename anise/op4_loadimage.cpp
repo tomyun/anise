@@ -5,11 +5,25 @@ SCRIPTCALL Script::op4_loadImage()
 	char filename[PARAMETER_LENGTH];
 
 	parameter = getParameter();
-	parameter->load(0, filename);
+	//HACK: support empty parameter
+	bool is_parameter;
+	if (parameter->getCount() != 0) {
+		is_parameter = true;
+		parameter->load(0, filename);
+	}
+	else {
+		is_parameter = false;
+	}
 	deleteParameter();
 
 	animation->clearSlot();
-	image->load(filename);
+
+	if (is_parameter) {
+		image->load(filename);
+	}
+	else {
+		image->load(NULL);
+	}
 
 	return RETURN_NORMAL;
 }
