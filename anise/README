@@ -1,0 +1,19 @@
+Project ANISE
+=============
+
+ANISE stands 'A New Implemented Scripting Engine for ai5v'.
+
+The goal of this project is to make a new interpreter for 90's Japanese adventure games made by (c)Elf and (c)Silky's.  Their games have based on the scripting engine called 'AI5V' or 'SILV'(trailing 'V' means their platform, DOS/V).
+
+This project has been progressed on Windows platform with SDL library.  Now finally, I've managed to compile and run it on Linux platform.
+
+If you have any questions or bugs, please visit project website.
+
+	http://kldp.net/projects/anise
+	http://anise.kldp.net
+
+Also you may want to contact by e-mail.
+
+	tomyun (at) yonsei.ac.kr
+
+Thanks.
