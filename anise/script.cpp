@@ -179,14 +179,14 @@ void Script::setOpcodes()
 	static Opcode opcode_nanpa2_oput_list[OPCODE_OPUT] = {
 		// 00
 		OPCODE(oput_unpackAniHeader),
-		OPCODE(oput_dummy),				//TODO: getMainArg2
+		OPCODE(oput_dummy),		//TODO: getMainArg2
 		OPCODE(oput_overlapScreen),
 		OPCODE(oput_swapScreen),
 		// 04
 		OPCODE(oput_sprayScreen),
-		OPCODE(oput_dummy),				//TODO: getParam1
-		OPCODE(oput_dummy),				//TODO: exitWithMessage0 (call scroll_2)
-		OPCODE(oput_dummy),				//TODO: exitWithMessage0 (call deja2_scroll)
+		OPCODE(oput_dummy),		//TODO: getParam1
+		OPCODE(oput_dummy),		//TODO: exitWithMessage0 (call scroll_2)
+		OPCODE(oput_dummy),		//TODO: exitWithMessage0 (call deja2_scroll)
 		// 08
 		OPCODE(oput_dummy),
 		OPCODE(oput_dummy),
@@ -221,13 +221,13 @@ void Script::setOpcodes()
 	static Opcode opcode_aisimai_oput_list[OPCODE_OPUT] = {
 		// 00
 		OPCODE(oput_dummy),
-		OPCODE(oput_dummy),			//TODO: getMainArg2
+		OPCODE(oput_dummy),		//TODO: getMainArg2
 		OPCODE(oput_dummy),
 		OPCODE(oput_sprayScreen),
 		// 04
 		OPCODE(oput_overlapScreen),
 		OPCODE(oput_dummy),
-		OPCODE(oput_dummy),			//TODO: waitForVSync
+		OPCODE(oput_dummy),		//TODO: waitForVSync
 		OPCODE(oput_dummy),
 		// 08
 		OPCODE(oput_dummy),
