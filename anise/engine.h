@@ -9,8 +9,6 @@
 #include "config.h"
 #include "SDL.h"
 
-#define TITLE	"ANISE beta 3"
-
 class Engine {
 private:
 	// connected objects

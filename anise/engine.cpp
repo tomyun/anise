@@ -23,7 +23,7 @@ bool Engine::on()
 		exit(1);
 	}
 
-	SDL_WM_SetCaption(TITLE, NULL);
+	SDL_WM_SetCaption(config->title, NULL);
 
 	memory = new Memory(config);
 	video = new Video(memory, config);
