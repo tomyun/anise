@@ -23,6 +23,7 @@ Video::Video(Memory *memory, Timer *timer, Option *option)
 	color_blue_mask = video_info->vfmt->Bmask;
 	color_alpha_mask = video_info->vfmt->Amask;
 
+#ifdef FIELD_EXPERIMENT
 	sdl_map = NULL;
 	map_width = 0;
 	map_height = 0;
@@ -34,6 +35,7 @@ Video::Video(Memory *memory, Timer *timer, Option *option)
 	}
 
 	has_character_moved = false;
+#endif
 
 	overlap_old_screen = NULL;
 	overlap_new_screen = NULL;
@@ -50,6 +52,7 @@ Video::~Video()
 {
 	SDL_FreeSurface(sdl_screen);
 
+#ifdef FIELD_EXPERIMENT
 	if (sdl_map != NULL) {
 		SDL_FreeSurface(sdl_map);
 	}
@@ -61,6 +64,7 @@ Video::~Video()
 			}
 		}
 	}
+#endif
 }
 
 
@@ -170,9 +174,11 @@ byte* Video::getSurface(byte surface_type)
 		default:
 			surface = buffer[2];
 			break;
+#ifdef FIELD_EXPERIMENT
 		case SURFACE_MAP:
 			surface = map;
 			break;
+#endif
 	}
 
 	return surface;
@@ -520,6 +526,7 @@ void Video::blitMerged(byte mode, word foreground_coord_x, word foreground_coord
 }
 
 
+#ifdef FIELD_EXPERIMENT
 void Video::initializeMap(word width, word height)
 {
 	if (sdl_map != NULL) {
@@ -671,6 +678,7 @@ void Video::drawCharacter(word view_coord_xw, word view_coord_yw, word view_marg
 		has_character_moved = false;
 	}
 }
+#endif
 
 
 void Video::putSprite(word coord_x, word coord_y, word background_layer, word foreground_layer_1st, word foreground_layer_2nd, word foreground_layer_3rd, byte surface_type)
@@ -733,8 +741,10 @@ void Video::putSprite(word coord_x, word coord_y, word background_layer, word fo
 
 void Video::putPoint(byte surface_type, word coord_x, word coord_y, byte color_index)
 {
+#ifdef FIELD_EXPERIMENT
 	word max_coord_x;
 	word max_coord_y;
+
 	if (surface_type == SURFACE_MAP) {
 		max_coord_x = map_width;
 		max_coord_y = map_height;
@@ -748,6 +758,12 @@ void Video::putPoint(byte surface_type, word coord_x, word coord_y, byte color_i
 		byte *surface = getSurface(surface_type);
 		surface[(coord_y * max_coord_x) + coord_x] = color_index;
 	}
+#else
+	if (((coord_x >= 0) && (coord_x < VIDEO_WIDTH)) && ((coord_y >= 0) && (coord_y < VIDEO_HEIGHT))) {
+		byte *surface = getSurface(surface_type);
+		surface[(coord_y * VIDEO_WIDTH) + coord_x] = color_index;
+	}
+#endif
 	else {
 		//TODO: process error
 		PRINT_ERROR("[Video::putPoint()] out of bound: st = %d, x = %d, y = %d, c = %d\n", surface_type, coord_x, coord_y, color_index);
@@ -763,6 +779,7 @@ void Video::putPoint(word coord_x, word coord_y, byte color_index)
 
 byte Video::getPoint(byte surface_type, word coord_x, word coord_y)
 {
+#ifdef FIELD_EXPERIMENT
 	word max_coord_x;
 	word max_coord_y;
 	if (surface_type == SURFACE_MAP) {
@@ -778,6 +795,12 @@ byte Video::getPoint(byte surface_type, word coord_x, word coord_y)
 		byte *surface = getSurface(surface_type);
 		return surface[(coord_y * max_coord_x) + coord_x];
 	}
+#else
+	if (((coord_x >= 0) && (coord_x < VIDEO_WIDTH)) && ((coord_y >= 0) && (coord_y < VIDEO_HEIGHT))) {
+		byte *surface = getSurface(surface_type);
+		return surface[(coord_y * VIDEO_WIDTH) + coord_x];
+	}
+#endif
 	else {
 		PRINT_ERROR("[Video::getPoint()] out of bound: type = %d, coord_x = %d, coord_y = %d\n", surface_type, coord_x, coord_y);
 		return COLOR_NONE;
@@ -874,6 +897,7 @@ void Video::drawPixel(SDL_Surface *sdl_surface, int x, int y, Uint32 sdl_color)
 Uint32 Video::getFilteredColor(word coord_x, word coord_y, byte surface_type)
 {
 	if (option->is_filter) {
+#ifdef FIELD_EXPERIMENT
 		word max_coord_x;
 		if (surface_type == SURFACE_MAP) {
 			max_coord_x = map_width;
@@ -881,6 +905,7 @@ Uint32 Video::getFilteredColor(word coord_x, word coord_y, byte surface_type)
 		else {
 			max_coord_x = VIDEO_WIDTH;
 		}
+#endif
 
 		int color_red_sum = 0;
 		int color_green_sum = 0;
@@ -888,7 +913,11 @@ Uint32 Video::getFilteredColor(word coord_x, word coord_y, byte surface_type)
 
 		int count = 0;
 		for (int dx = -FILTER_RADIUS; dx <= FILTER_RADIUS; dx++) {
+#ifdef FIELD_EXPERIMENT
 			if (((coord_x + dx) >= 0) && ((coord_x + dx) < max_coord_x)) {
+#else
+			if (((coord_x + dx) >= 0) && ((coord_x + dx) < VIDEO_WIDTH)) {
+#endif
 				byte color_index = getPoint(surface_type, coord_x + dx, coord_y);
 				Uint32 color = getColor(color_index);
 

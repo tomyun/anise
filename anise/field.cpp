@@ -15,20 +15,22 @@ Field::Field(Memory *memory, Input *input, Video *video, Option *option)
 	is_path_found = false;
 	has_moved = false;
 
+#ifdef FIELD_EXPERIMENT
 	has_map_created = false;
 	has_map_scrolled = false;
 
 	for (int i = 0; i < SPRITE_LAYERS; i++) {
 		map_sprite[i] = NULL;
 	}
-/*
+#else
 	for (int i = 0; i < VIEW_SPRITES; i++) {
 		for (int j = 0; j < SPRITE_LAYERS; j++) {
 			view[i][j] = 0;
 			view_buffer[i][j] = 0;
 		}
 	}
-*/
+#endif
+
 	movement_direction = NONE;
 	movement_collision = COLLISION_NOTDETECTED;
 	movement_entrance = ENTRANCE_NOTFOUND;
@@ -45,11 +47,13 @@ Field::Field(Memory *memory, Input *input, Video *video, Option *option)
 
 Field::~Field()
 {
+#ifdef FIELD_EXPERIMENT
 	for (int i = 0; i < SPRITE_LAYERS; i++) {
 		if (map_sprite[i] != NULL) {
 			delete[] map_sprite[i];
 		}
 	}
+#endif
 }
 
 
@@ -92,6 +96,7 @@ word Field::loadMapFile()
 	data->writeWord(iw_Map_Widthw, map_widthw);
 	data->writeWord(iw_Map_Heightw, map_heightw);
 
+#ifdef FIELD_EXPERIMENT
 	video->initializeMap(map_widthw * SPRITE_SIZE, map_heightw * SPRITE_SIZE);
 
 	for (int i = 0; i < SPRITE_LAYERS; i++) {
@@ -115,6 +120,7 @@ word Field::loadMapFile()
 	}
 
 	has_map_created = false;
+#endif
 
 	path_offset = ((map_widthw * map_heightw)) * 2 + map_offset + 4;
 	is_path_found = false;
@@ -142,7 +148,8 @@ void Field::loadC5File()
 
 void Field::initializeMap()
 {
-/*
+#ifdef FIELD_EXPERIMENT
+#else
 	for (word yw = 0; yw < view_heightw; yw++) {
 		if (yw >= map_heightw) {
 			break;
@@ -161,7 +168,7 @@ void Field::initializeMap()
 			view[(yw * view_widthw) + xw][3] = 0;
 		}
 	}
-*/
+#endif
 }
 
 
@@ -169,7 +176,9 @@ void Field::setCharactersOnMap()
 {
 	word character_offset = data->queryWord(header_offset + C5_CHARACTER);
 
+#ifdef FIELD_EXPERIMENT
 	int character_index = 0;
+#endif
 	while (true) {
 		byte flag = data->queryByte(character_offset + CHARACTER_FLAG);
 		if (flag == CHARACTER_FLAG_NULL) {
@@ -201,6 +210,7 @@ void Field::setCharactersOnMap()
 
 		word sprite_index_offset = sprite_info_offset + 4;
 
+#ifdef FIELD_EXPERIMENT
 		// sprite information for video->updateCharacter()
 		CharacterSprite *character = new CharacterSprite;
 		//character->coord_x = ((character_coord_xw - view_coord_xw) + view_margin_xw) * SPRITE_SIZE;
@@ -221,6 +231,7 @@ void Field::setCharactersOnMap()
 		character->neighbour_foreground_layer_1st = new word[character_heightw * 2];
 		character->neighbour_foreground_layer_2nd = new word[character_heightw * 2];
 		character->neighbour_foreground_layer_3rd = new word[character_heightw * 2];
+#endif
 
 		for (word yw = 0; yw < character_heightw; yw++) {
 			if (character_coord_yw + yw < view_coord_yw) {
@@ -237,6 +248,7 @@ void Field::setCharactersOnMap()
 				word sprite_index = data->queryWord(sprite_index_offset);
 				sprite_index_offset += 2;
 
+#ifdef FIELD_EXPERIMENT
 				character->background_layer[(yw * character_widthw) + xw] = map_sprite[0][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw)];
 				character->foreground_layer_1st[(yw * character_widthw) + xw] = map_sprite[1][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw)];
 				character->foreground_layer_2nd[(yw * character_widthw) + xw] = map_sprite[2][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw)];
@@ -251,7 +263,7 @@ void Field::setCharactersOnMap()
 				else if (map_sprite[3][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw)] == 0) {
 					character->foreground_layer_3rd[(yw * character_widthw) + xw] = sprite_index;
 				}
-/*
+#else
 				if (view[((character_coord_yw - view_coord_yw + yw) * view_widthw) + (character_coord_xw - view_coord_xw + xw)][1] == 0) {
 					view[((character_coord_yw - view_coord_yw + yw) * view_widthw) + (character_coord_xw - view_coord_xw + xw)][1] = sprite_index;
 				}
@@ -261,7 +273,9 @@ void Field::setCharactersOnMap()
 				else if (view[((character_coord_yw - view_coord_yw + yw) * view_widthw) + (character_coord_xw - view_coord_xw + xw)][3] == 0) {
 					view[((character_coord_yw - view_coord_yw + yw) * view_widthw) + (character_coord_xw - view_coord_xw + xw)][3] = sprite_index;
 				}
-*/
+#endif
+
+#ifdef FIELD_EXPERIMENT
 				//HACK: to support graphic filter
 				if (xw == 0) {
 					character->neighbour_background_layer[yw * 2] = map_sprite[0][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw) - FILTER_RADIUS];
@@ -275,10 +289,13 @@ void Field::setCharactersOnMap()
 					character->neighbour_foreground_layer_2nd[(yw * 2) + 1] = map_sprite[2][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw) + FILTER_RADIUS];
 					character->neighbour_foreground_layer_3rd[(yw * 2) + 1] = map_sprite[3][((character_coord_yw + yw) * map_widthw) + (character_coord_xw + xw) + FILTER_RADIUS];
 				}
+#endif
 			}
 		}
 
+#ifdef FIELD_EXPERIMENT
 		video->updateCharacter(character_index++, character);
+#endif
 
 		character_offset += C5_CHARACTER_SIZE;
 	}
@@ -287,6 +304,7 @@ void Field::setCharactersOnMap()
 
 void Field::quickDraw()
 {
+#ifdef FIELD_EXPERIMENT
 	initialize();
 
 	if (has_map_scrolled) {
@@ -308,7 +326,7 @@ void Field::quickDraw()
 	}
 
 	video->drawCharacter(view_coord_xw, view_coord_yw, view_margin_xw, view_margin_y);
-/*
+#else
 	bool is_drawn = false;
 
 	for (word yw = 0; yw < view_heightw; yw++) {
@@ -332,14 +350,15 @@ void Field::quickDraw()
 	}
 
 	if (is_drawn) {
-		//video->updateScreen(view_margin_xw * SPRITE_SIZE, view_margin_y, view_widthw * SPRITE_SIZE, view_heightw * SPRITE_SIZE);
+		video->updateScreen(view_margin_xw * SPRITE_SIZE, view_margin_y, view_widthw * SPRITE_SIZE, view_heightw * SPRITE_SIZE);
 	}
-*/
+#endif
 }
 
 
 void Field::draw()
 {
+#ifdef FIELD_EXPERIMENT
 	if (!has_map_created) {
 		video->createMap();
 
@@ -348,7 +367,7 @@ void Field::draw()
 
 	has_map_scrolled = true;
 	quickDraw();
-/*
+#else
 	for (word yw = 0; yw < view_heightw; yw++) {
 		for (word xw = 0; xw < view_widthw; xw++) {
 			view_buffer[(yw * view_widthw) + xw][0] = view[(yw * view_widthw) + xw][0];
@@ -360,8 +379,9 @@ void Field::draw()
 		}
 	}
 
-	//video->updateScreen(view_margin_xw * SPRITE_SIZE, view_margin_y, view_widthw * SPRITE_SIZE, view_heightw * SPRITE_SIZE);
-*/
+	video->updateScreen(view_margin_xw * SPRITE_SIZE, view_margin_y, view_widthw * SPRITE_SIZE, view_heightw * SPRITE_SIZE);
+#endif
+
 	verifyMovement();
 }
 
@@ -470,8 +490,10 @@ word Field::checkEntrance(word character_index)
 		}
 		else {
 			if ((character_coord_xw >= coord_xw_start) && (character_coord_xw <= coord_xw_end) && (character_coord_yw >= coord_yw_start) && (character_coord_yw <= coord_yw_end)) {
+#ifdef FIELD_EXPERIMENT
 				//HACK: draw screen buffer
 				drawScreenBuffer();
+#endif
 
 				return entrance;
 			}
@@ -590,8 +612,10 @@ word Field::checkClick()
 				input->refresh();
 			}
 
+#ifdef FIELD_EXPERIMENT
 			//HACK: draw screen buffer
 			drawScreenBuffer();
+#endif
 
 			return SUBMAP_CLICKED;
 		}
@@ -731,6 +755,7 @@ void Field::saveCharacterLog(word character_offset, byte character_frame, word c
 }
 
 
+#ifdef FIELD_EXPERIMENT
 void Field::drawScreenBuffer()
 {
 	for (word yw = 0; yw < view_heightw; yw++) {
@@ -746,3 +771,4 @@ void Field::drawScreenBuffer()
 
 	video->drawCharacter(view_coord_xw, view_coord_yw, view_margin_xw, view_margin_y, true);
 }
+#endif

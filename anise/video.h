@@ -43,8 +43,10 @@ enum SurfaceType {
 	SURFACE_SCREEN = 0,
 	SURFACE_BUFFER1 = 1,
 	SURFACE_BUFFER2 = 2,
-	SURFACE_BUFFER3 = 3,
-	SURFACE_MAP = 4
+	SURFACE_BUFFER3 = 3
+#ifdef FIELD_EXPERIMENT
+	, SURFACE_MAP = 4
+#endif
 };
 
 
@@ -67,6 +69,7 @@ enum FontColor {
 };
 
 
+#ifdef FIELD_EXPERIMENT
 enum CharacterSpriteType {
 	SPRITE_PREVIOUS = 0,
 	SPRITE_CURRENT = 1
@@ -77,6 +80,7 @@ enum CharacterSpriteNeighbor {
 	SPRITE_LEFT = 0,
 	SPRITE_RIGHT = 1
 };
+#endif
 
 
 struct BlitStruct {
@@ -89,6 +93,7 @@ struct BlitStruct {
 };
 
 
+#ifdef FIELD_EXPERIMENT
 class CharacterSprite {
 public:
 	word coord_xw;
@@ -174,6 +179,7 @@ public:
 		return return_value;
 	}
 };
+#endif
 
 
 class Video {
@@ -191,6 +197,7 @@ private:
 	Uint32 color_green_mask;
 	Uint32 color_alpha_mask;
 
+#ifdef FIELD_EXPERIMENT
 	SDL_Surface *sdl_map;
 	byte *map;
 	int map_width;
@@ -198,6 +205,7 @@ private:
 
 	CharacterSprite *character[CHARACTER_TOTAL][2];
 	bool has_character_moved;
+#endif
 
 	Uint32 sdl_palette[VIDEO_COLOR];
 	word intermediate_palette[VIDEO_COLOR];
@@ -255,11 +263,13 @@ public:
 
 	void blitMerged(byte mode, word foreground_coord_x, word foreground_coord_y, word background_coord_x, word background_coord_y, word destination_coord_x, word destination_coord_y, word width, word height);
 
+#ifdef FIELD_EXPERIMENT
 	void initializeMap(word width, word height);
 	void createMap();
 	void drawMap(SDL_Rect *map_region, SDL_Rect *screen_region);
 	void updateCharacter(int index, CharacterSprite *new_character);
 	void drawCharacter(word view_coord_xw, word view_coord_yw, word view_margin_xw, word view_margin_y, bool is_forced = false);
+#endif
 	void putSprite(word coord_x, word coord_y, word background_layer, word foreground_layer_1st, word foreground_layer_2nd, word foreground_layer_3rd, byte surface_type = SURFACE_SCREEN);
 
 	void putPoint(byte surface_type, word coord_x, word coord_y, byte color_index);

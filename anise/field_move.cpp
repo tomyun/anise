@@ -431,7 +431,9 @@ bool Field::moveCharacterUp(word character_offset)
 					if (heightw <= character_uplimit) {
 						if (view_coord_yw != view_uplimit) {
 							data->decreaseWord(iw_View_CoordYw);
+#ifdef FIELD_EXPERIMENT
 							has_map_scrolled = true;
+#endif
 						}
 					}
 				}
@@ -464,7 +466,9 @@ bool Field::moveCharacterUp(word character_offset)
 						if (widthw <= character_leftlimit) {
 							if (view_coord_xw != view_leftlimit) {
 								data->decreaseWord(iw_View_CoordXw);
+#ifdef FIELD_EXPERIMENT
 								has_map_scrolled = true;
+#endif
 							}
 						}
 					}
@@ -497,7 +501,9 @@ bool Field::moveCharacterUp(word character_offset)
 							if (widthw >= view_widthw) {
 								if ((view_coord_xw + view_widthw - 1) != view_rightlimit) {
 									data->increaseWord(iw_View_CoordXw);
+#ifdef FIELD_EXPERIMENT
 									has_map_scrolled = true;
+#endif
 								}
 							}
 						}
@@ -552,7 +558,9 @@ bool Field::moveCharacterDown(word character_offset)
 					if (heightw >= view_heightw) {
 						if ((view_coord_yw + view_heightw - 1) != view_downlimit) {
 							data->increaseWord(iw_View_CoordYw);
+#ifdef FIELD_EXPERIMENT
 							has_map_scrolled = true;
+#endif
 						}
 					}
 				}
@@ -585,7 +593,9 @@ bool Field::moveCharacterDown(word character_offset)
 						if (widthw <= character_leftlimit) {
 							if (view_coord_xw != view_leftlimit) {
 								data->decreaseWord(iw_View_CoordXw);
+#ifdef FIELD_EXPERIMENT
 								has_map_scrolled = true;
+#endif
 							}
 						}
 					}
@@ -618,7 +628,9 @@ bool Field::moveCharacterDown(word character_offset)
 							if (widthw >= view_widthw) {
 								if ((view_coord_xw + view_widthw - 1) != view_rightlimit) {
 									data->increaseWord(iw_View_CoordXw);
+#ifdef FIELD_EXPERIMENT
 									has_map_scrolled = true;
+#endif
 								}
 							}
 						}
@@ -666,7 +678,9 @@ bool Field::moveCharacterLeft(word character_offset)
 					if (widthw <= character_leftlimit) {
 						if (view_coord_xw != view_leftlimit) {
 							data->decreaseWord(iw_View_CoordXw);
+#ifdef FIELD_EXPERIMENT
 							has_map_scrolled = true;
+#endif
 						}
 					}
 				}
@@ -712,7 +726,9 @@ bool Field::moveCharacterLeft(word character_offset)
 						if (heightw <= character_uplimit) {
 							if (view_coord_yw != view_uplimit) {
 								data->decreaseWord(iw_View_CoordYw);
+#ifdef FIELD_EXPERIMENT
 								has_map_scrolled = true;
+#endif
 							}
 						}
 					}
@@ -757,7 +773,9 @@ bool Field::moveCharacterLeft(word character_offset)
 							if (heightw >= view_heightw) {
 								if ((view_coord_yw + view_heightw - 1) != view_downlimit) {
 									data->increaseWord(iw_View_CoordYw);
+#ifdef FIELD_EXPERIMENT
 									has_map_scrolled = true;
+#endif
 								}
 							}
 						}
@@ -804,7 +822,9 @@ bool Field::moveCharacterRight(word character_offset)
 					if (widthw >= view_widthw) {
 						if ((view_coord_xw + view_widthw - 1) != view_rightlimit) {
 							data->increaseWord(iw_View_CoordXw);
+#ifdef FIELD_EXPERIMENT
 							has_map_scrolled = true;
+#endif
 						}
 					}
 				}
@@ -850,7 +870,9 @@ bool Field::moveCharacterRight(word character_offset)
 						if (heightw <= character_uplimit) {
 							if (view_coord_yw != view_uplimit) {
 								data->decreaseWord(iw_View_CoordYw);
+#ifdef FIELD_EXPERIMENT
 								has_map_scrolled = true;
+#endif
 							}
 						}
 					}
@@ -895,7 +917,9 @@ bool Field::moveCharacterRight(word character_offset)
 							if (heightw >= view_heightw) {
 								if ((view_coord_yw + view_heightw - 1) != view_downlimit) {
 									data->increaseWord(iw_View_CoordYw);
+#ifdef FIELD_EXPERIMENT
 									has_map_scrolled = true;
+#endif
 								}
 							}
 						}

@@ -184,15 +184,18 @@ private:
 	word view_coord_xw;
 	word view_coord_yw;
 
-	bool has_map_created;
-	bool has_map_scrolled;
-
 	word map_widthw;
 	word map_heightw;
 
+#ifdef FIELD_EXPERIMENT
+	bool has_map_created;
+	bool has_map_scrolled;
+
 	word *map_sprite[SPRITE_LAYERS];
-	//word view[VIEW_SPRITES][SPRITE_LAYERS];
-	//word view_buffer[VIEW_SPRITES][SPRITE_LAYERS];
+#else
+	word view[VIEW_SPRITES][SPRITE_LAYERS];
+	word view_buffer[VIEW_SPRITES][SPRITE_LAYERS];
+#endif
 
 	byte operation_type;	//TODO: figure it out
 
@@ -208,7 +211,10 @@ private:
 
 	word calculateMapOffset(word coord_xw, word coord_yw);
 	void saveCharacterLog(word character_offset, byte character_frame, word character_coord_xw, word character_coord_yw);
+
+#ifdef FIELD_EXPERIMENT
 	void drawScreenBuffer();
+#endif
 
 	// character movement related stuffs (field_move.cpp)
 	word verifyMovement();
