@@ -84,22 +84,24 @@ void Sound::load()
 
 		//HACK: check music file whether it is an effect file that should be played just one time
 		string raw_name = file_name.substr(option->path_name.size());
-		if ((raw_name == "chime.") ||
-			(raw_name == "cockoo.m") ||
-			(raw_name == "damage.m") ||
-			(raw_name == "elf.m") ||
-			(raw_name == "gcrash3.m") ||
-			(raw_name == "halley.m") ||
-			(raw_name == "se7_1.m") ||
-			(raw_name == "se7_2.m") ||
-			(raw_name == "se11.m") ||
-			(raw_name == "shot_me.m") ||
-			(raw_name == "spoon.m") ||
-			(raw_name == "tennis.m")) {
-				is_effect = true;
+		if (option->game_type == GAME_NANPA2) {
+			if ((raw_name == "chime.") ||
+				(raw_name == "cockoo.m") ||
+				(raw_name == "damage.m") ||
+				(raw_name == "elf.m") ||
+				(raw_name == "gcrash3.m") ||
+				(raw_name == "halley.m") ||
+				(raw_name == "se7_1.m") ||
+				(raw_name == "se7_2.m") ||
+				(raw_name == "se11.m") ||
+				(raw_name == "shot_me.m") ||
+				(raw_name == "spoon.m") ||
+				(raw_name == "tennis.m")) {
+					is_effect = true;
+				}
+			else {
+				is_effect = false;
 			}
-		else {
-			is_effect = false;
 		}
 
 		if (SDL_LoadWAV(option->sound_file_name.c_str(), &dummy_spec, &buffer, &length) == NULL) {
