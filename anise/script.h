@@ -1,11 +1,12 @@
 #ifndef SCRIPT_H
 #define SCRIPT_H
 
+#include "anise.h"
 #include "memory.h"
-#include "video.h"
-#include "sound.h"
 #include "timer.h"
 #include "input.h"
+#include "sound.h"
+#include "video.h"
 #include "file.h"
 #include "image.h"
 #include "animation.h"
@@ -15,7 +16,6 @@
 #include "script_code.h"
 #include "script_parameter.h"
 #include "script_stack.h"
-#include "debug.h"
 
 #define OPCODE(x)		{&Script::x, #x}
 #define OPCODE_OP		17
@@ -40,10 +40,10 @@ enum ScriptCallReturnType {
 class Script {
 private:
 	Memory *memory;
-	Video *video;
-	Sound *sound;
 	Timer *timer;
 	Input *input;
+	Sound *sound;
+	Video *video;
 	File *file;
 	Image *image;
 	Animation *animation;
@@ -166,7 +166,7 @@ private:
 
 public:
 	// constructor & destructor
-	Script(Memory *memory, Video *video, Sound *sound, Timer *timer, Input *input, Option *option);
+	Script(Memory *memory, Timer *timer, Input *input, Sound *sound, Video *video, Option *option);
 	~Script();
 
 	// methods

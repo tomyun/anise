@@ -1,6 +1,7 @@
 #ifndef MEMORY_SEGMENT_H
 #define MEMORY_SEGMENT_H
 
+#include "anise.h"
 #include "memory_block.h"
 
 #define MAX_BLOCK	10

@@ -1,6 +1,7 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
+#include "anise.h"
 #include "memory.h"
 #include "video.h"
 #include "file.h"

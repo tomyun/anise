@@ -1,10 +1,10 @@
 #include "field.h"
 
-Field::Field(Memory *memory, Video *video, Input *input, Option *option)
+Field::Field(Memory *memory, Input *input, Video *video, Option *option)
 {
 	this->memory = memory;
-	this->video = video;
 	this->input = input;
+	this->video = video;
 	this->option = option;
 	
 	data = NULL;

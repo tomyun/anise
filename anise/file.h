@@ -1,10 +1,7 @@
 #ifndef FILE_H
 #define FILE_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string>
+#include "anise.h"
 #include "memory.h"
 #include "option.h"
 

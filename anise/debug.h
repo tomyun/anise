@@ -4,7 +4,6 @@
 //#define DEBUG
 
 #ifdef DEBUG
-	#include <stdio.h>
 	#define PRINT				printf
 	#define PAUSE				{char ch; scanf("%c", &ch);}
 #else

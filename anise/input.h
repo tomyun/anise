@@ -1,6 +1,7 @@
 #ifndef INPUT_H
 #define INPUT_H
 
+#include "anise.h"
 #include "memory.h"
 #include "timer.h"
 #include "SDL_events.h"

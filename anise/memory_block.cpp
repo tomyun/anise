@@ -1,5 +1,4 @@
 #include "memory_block.h"
-//#include <assert.h>
 
 /* constructor & destructor */
 MemoryBlock::MemoryBlock(word entry, word size)

@@ -1,11 +1,11 @@
 #include "dialogue.h"
 
-Dialogue::Dialogue(Memory *memory, Video *video, Timer *timer, Input *input, Animation *animation, Option *option)
+Dialogue::Dialogue(Memory *memory, Timer *timer, Input *input, Video *video, Animation *animation, Option *option)
 {
 	this->memory = memory;
-	this->video = video;
 	this->timer = timer;
 	this->input = input;
+	this->video = video;
 	this->animation = animation;
 	this->option = option;
 

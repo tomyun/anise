@@ -1,7 +1,7 @@
 #ifndef SOUND_H
 #define SOUND_H
 
-#include <string>
+#include "anise.h"
 #include "option.h"
 #include "SDL.h"
 #include "SDL_audio.h"

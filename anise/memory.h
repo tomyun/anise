@@ -1,6 +1,7 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
+#include "anise.h"
 #include "memory_segment.h"
 #include "memory_block.h"
 #include "memory_index.h"

@@ -1,10 +1,11 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
+#include "anise.h"
 #include "memory.h"
-#include "video.h"
 #include "timer.h"
 #include "input.h"
+#include "video.h"
 
 #define SLOTS			10
 #define SLOT_SIZE		16
@@ -65,9 +66,9 @@ enum AnimationOperationScriptBlitStruct {
 class Animation {
 private:
 	Memory *memory;
-	Video *video;
 	Timer *timer;
 	Input *input;
+	Video *video;
 
 	MemoryBlock *b_Slot;
 	MemoryBlock *b_Script;
@@ -90,7 +91,7 @@ private:
 	bool parse(word slot_offset);
 
 public:
-	Animation(Memory *memory, Video *video, Timer *timer, Input *input);
+	Animation(Memory *memory, Timer *timer, Input *input, Video *video);
 	~Animation();
 
 	bool setSlot(word function, word slot_index, word parameter_2 = 0, word parameter_3 = 0);

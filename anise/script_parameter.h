@@ -1,6 +1,7 @@
 #ifndef SCRIPT_PARAMETER_H
 #define SCRIPT_PARAMETER_H
 
+#include "anise.h"
 #include "memory.h"
 #include "script_code.h"
 

@@ -1,9 +1,10 @@
 #ifndef FIELD_H
 #define FIELD_H
 
+#include "anise.h"
 #include "memory.h"
-#include "video.h"
 #include "input.h"
+#include "video.h"
 #include "option.h"
 
 #define VIEW_SPRITES					1000
@@ -151,8 +152,8 @@ enum PathDirection {
 class Field {
 private:
 	Memory *memory;
-	Video *video;
 	Input *input;
+	Video *video;
 	Option *option;
 
 	MemoryBlock *data;
@@ -228,7 +229,7 @@ private:
 	bool checkPathMark(word coord_xw, word coord_yw, PathDirection direction);
 
 public:
-	Field(Memory *memory, Video *video, Input *input, Option *option);
+	Field(Memory *memory, Input *input, Video *video, Option *option);
 	~Field();
 
 	void initialize();

@@ -1,11 +1,12 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+#include "anise.h"
 #include "memory.h"
-#include "video.h"
-#include "sound.h"
 #include "timer.h"
 #include "input.h"
+#include "sound.h"
+#include "video.h"
 #include "script.h"
 #include "option.h"
 #include "SDL.h"
@@ -21,10 +22,10 @@ class Engine {
 private:
 	// connected objects
 	Memory *memory;
-	Video *video;
-	Sound *sound;
 	Timer *timer;
 	Input *input;
+	Sound *sound;
+	Video *video;
 	Script *script;
 	Option *option;
 

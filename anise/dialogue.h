@@ -1,10 +1,11 @@
 #ifndef DIALOGUE_H
 #define DIALOGUE_H
 
+#include "anise.h"
 #include "memory.h"
-#include "video.h"
 #include "timer.h"
 #include "input.h"
+#include "video.h"
 #include "animation.h"
 #include "script_code.h"
 
@@ -24,9 +25,9 @@ using std::string;
 class Dialogue {
 private:
 	Memory *memory;
-	Video *video;
 	Timer *timer;
 	Input *input;
+	Video *video;
 	Animation *animation;
 	Option *option;
 
@@ -46,7 +47,7 @@ private:
 	void breakNewLine();
 
 public:
-	Dialogue(Memory *memory, Video *video, Timer *timer, Input *input, Animation *animation, Option *option);
+	Dialogue(Memory *memory, Timer *timer, Input *input, Video *video, Animation *animation, Option *option);
 	~Dialogue();
 
 	void putHalfWidthCharacters();

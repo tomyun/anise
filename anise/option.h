@@ -1,9 +1,7 @@
 #ifndef OPTION_H
 #define OPTION_H
 
-#include <stdio.h>
-#include <string>
-#include "memory_block.h"
+#include "anise.h"
 
 using std::string;
 

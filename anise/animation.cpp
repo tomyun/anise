@@ -1,11 +1,11 @@
 #include "animation.h"
 
-Animation::Animation(Memory *memory, Video *video, Timer *timer, Input *input)
+Animation::Animation(Memory *memory, Timer *timer, Input *input, Video *video)
 {
 	this->memory = memory;
-	this->video = video;
 	this->timer = timer;
 	this->input = input;
+	this->video = video;
 
 	b_Slot = memory->b_AnimationSlot;
 }

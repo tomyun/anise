@@ -1,8 +1,6 @@
 #ifndef MEMORY_INDEX_H
 #define MEMORY_INDEX_H
 
-#define NONE	0xFFFF
-
 enum BaseVariableIndex {
 	// 00
 	iw_SystemVariable = 0,

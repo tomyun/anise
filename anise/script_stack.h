@@ -1,7 +1,7 @@
 #ifndef SCRIPT_STACK_H
 #define SCRIPT_STACK_H
 
-#include "memory.h"
+#include "anise.h"
 
 #define STACK_SIZE	64
 
