@@ -10,11 +10,16 @@ SCRIPTCALL Script::op_callProcedure()
 	word procedure_offset = memory->b_Procedure->queryWord(procedure_index);
 	setOffset(procedure_offset);
 
-	parseNested();
+	SCRIPTCALL condition = parseNested();
 
 	setOffset(script_offset);
 
 	deleteParameter();
 
-	return RETURN_NORMAL;
+	if ((condition == RETURN_EXIT) || (condition == RETURN_ERROR)) {
+		return condition;
+	}
+	else {
+		return RETURN_NORMAL;
+	}
 }

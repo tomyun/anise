@@ -34,8 +34,13 @@ SCRIPTCALL Script::op4_displaySelection()
 
 	word script_offset = getOffset();
 
+	SCRIPTCALL condition = RETURN_NORMAL;
+
 	setOffset(memory->b_Procedure->queryWord(iwpo_Selection_ShowMenu));
-	parseNested();
+	condition = parseNested();
+	if ((condition == RETURN_EXIT) || (condition == RETURN_ERROR)) {
+		return condition;
+	}
 
 	while (true) {
 		//TODO: debugmode
@@ -50,11 +55,17 @@ SCRIPTCALL Script::op4_displaySelection()
 		}
 
 		setOffset(memory->b_Procedure->queryWord(iwpo_Selection_CheckPosition));
-		parseNested();
+		condition = parseNested();
+		if ((condition == RETURN_EXIT) || (condition == RETURN_ERROR)) {
+			return condition;
+		}
 
 		if (memory->b_SystemVariable->testByte(ibf_Selection_Status, STATUS_OK) && input->check(INPUT_OK)) {
 			setOffset(memory->b_Procedure->queryWord(iwpo_Selection_OK));
-			parseNested();
+			condition = parseNested();
+			if ((condition == RETURN_EXIT) || (condition == RETURN_ERROR)) {
+				return condition;
+			}
 
 			if (memory->b_SystemVariable->testByte(ibf_Selection_Status, STATUS_RELEASED) == false) {
 				while (input->check(INPUT_OK)) {
@@ -66,7 +77,10 @@ SCRIPTCALL Script::op4_displaySelection()
 		}
 		else if (memory->b_SystemVariable->testByte(ibf_Selection_Status, STATUS_CANCEL) && input->check(INPUT_CANCEL)) {
 			setOffset(memory->b_Procedure->queryWord(iwpo_Selection_Cancel));
-			parseNested();
+			condition = parseNested();
+			if ((condition == RETURN_EXIT) || (condition == RETURN_ERROR)) {
+				return condition;
+			}
 
 			if (memory->b_SystemVariable->testByte(ibf_Selection_Status, STATUS_RELEASED) == false) {
 				while (input->check(INPUT_CANCEL)) {
@@ -78,7 +92,10 @@ SCRIPTCALL Script::op4_displaySelection()
 		}
 		else if (memory->b_SystemVariable->testByte(ibf_Selection_Status, STATUS_UP) && input->check(INPUT_UP)) {
 			setOffset(memory->b_Procedure->queryWord(iwpo_Selection_Up));
-			parseNested();
+			condition = parseNested();
+			if ((condition == RETURN_EXIT) || (condition == RETURN_ERROR)) {
+				return condition;
+			}
 
 			if (memory->b_SystemVariable->testByte(ibf_Selection_Status, STATUS_RELEASED) == false) {
 				while (input->check(INPUT_UP)) {
@@ -90,7 +107,10 @@ SCRIPTCALL Script::op4_displaySelection()
 		}
 		else if (memory->b_SystemVariable->testByte(ibf_Selection_Status, STATUS_DOWN) && input->check(INPUT_DOWN)) {
 			setOffset(memory->b_Procedure->queryWord(iwpo_Selection_Down));
-			parseNested();
+			condition = parseNested();
+			if ((condition == RETURN_EXIT) || (condition == RETURN_ERROR)) {
+				return condition;
+			}
 
 			if (memory->b_SystemVariable->testByte(ibf_Selection_Status, STATUS_RELEASED) == false) {
 				while (input->check(INPUT_DOWN)) {
@@ -102,7 +122,10 @@ SCRIPTCALL Script::op4_displaySelection()
 		}
 		else if (memory->b_SystemVariable->testByte(ibf_Selection_Status, STATUS_LEFT) && input->check(INPUT_LEFT)) {
 			setOffset(memory->b_Procedure->queryWord(iwpo_Selection_Left));
-			parseNested();
+			condition = parseNested();
+			if ((condition == RETURN_EXIT) || (condition == RETURN_ERROR)) {
+				return condition;
+			}
 
 			if (memory->b_SystemVariable->testByte(ibf_Selection_Status, STATUS_RELEASED) == false) {
 				while (input->check(INPUT_LEFT)) {
@@ -114,7 +137,10 @@ SCRIPTCALL Script::op4_displaySelection()
 		}
 		else if (memory->b_SystemVariable->testByte(ibf_Selection_Status, STATUS_RIGHT) && input->check(INPUT_RIGHT)) {
 			setOffset(memory->b_Procedure->queryWord(iwpo_Selection_Right));
-			parseNested();
+			condition = parseNested();
+			if ((condition == RETURN_EXIT) || (condition == RETURN_ERROR)) {
+				return condition;
+			}
 
 			if (memory->b_SystemVariable->testByte(ibf_Selection_Status, STATUS_RELEASED) == false) {
 				while (input->check(INPUT_RIGHT)) {
