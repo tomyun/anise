@@ -765,14 +765,14 @@ void Video::putPoint(word coord_x, word coord_y, byte color_index, SurfaceType s
 		max_coord_y = VIDEO_HEIGHT;
 	}
 
-	if (((coord_x >= 0) && (coord_x < max_coord_x)) && ((coord_y >= 0) && (coord_y < max_coord_y))) {
+	if ((coord_x < max_coord_x) && (coord_y < max_coord_y)) {
 		lockScreen(sdl_buffer[surface_type]);
 		putPixel(sdl_buffer[surface_type], coord_x, coord_y, color_index);
 		unlockScreen(sdl_buffer[surface_type]);
 	}
 #else
 #ifdef DEBUG
-	if (((coord_x >= 0) && (coord_x < VIDEO_WIDTH)) && ((coord_y >= 0) && (coord_y < VIDEO_HEIGHT))) {
+	if ((coord_x < VIDEO_WIDTH) && (coord_y < VIDEO_HEIGHT)) {
 #endif
 		lockScreen(sdl_buffer[surface_type]);
 		putPixel(sdl_buffer[surface_type], coord_x, coord_y, color_index);
@@ -804,13 +804,13 @@ byte Video::getPoint(word coord_x, word coord_y, SurfaceType surface_type)
 		max_coord_y = VIDEO_HEIGHT;
 	}
 
-	if (((coord_x >= 0) && (coord_x < max_coord_x)) && ((coord_y >= 0) && (coord_y < max_coord_y))) {
+	if ((coord_x < max_coord_x) && (coord_y < max_coord_y)) {
 		return (byte) getPixel(sdl_buffer[surface_type], coord_x, coord_y);
 
 	}
 #else
 #ifdef DEBUG
-	if (((coord_x >= 0) && (coord_x < VIDEO_WIDTH)) && ((coord_y >= 0) && (coord_y < VIDEO_HEIGHT))) {
+	if ((coord_x < VIDEO_WIDTH) && (coord_y < VIDEO_HEIGHT)) {
 #endif
 		return (byte) getPixel(sdl_buffer[surface_type], coord_x, coord_y);
 #ifdef DEBUG
