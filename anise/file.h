@@ -7,14 +7,14 @@
 
 using std::string;
 
-#define FILE_READ				"rb"
-#define FILE_WRITE				"wb"
-#define FILE_NAME_LENGTH		32
+#define FILE_READ		"rb"
+#define FILE_WRITE		"wb"
+#define FILE_NAME_LENGTH	32
 
-#define M_FILE_EXTENSION		".m"
+#define M_FILE_EXTENSION	".m"
 #define M_FILE_EXTENSION_LENGTH	2
 
-#define WAV_FILE_EXTENSION		".wav"
+#define WAV_FILE_EXTENSION	".wav"
 
 class File {
 private:

@@ -4,11 +4,11 @@
 //#define DEBUG
 
 #ifdef DEBUG
-	#define PRINT				printf
-	#define PAUSE				{char ch; scanf("%c", &ch);}
+	#define PRINT			printf
+	#define PAUSE			{char ch; scanf("%c", &ch);}
 #else
 	#ifdef _MSC_VER
-		#define PRINT			/##/
+		#define PRINT		/##/
 	#else
 		//HACK: for gcc
 		#define PRINT(args...)
@@ -16,6 +16,6 @@
 	#define PAUSE
 #endif
 
-#define PRINT_ERROR				printf
+#define PRINT_ERROR			printf
 
 #endif

@@ -8,9 +8,9 @@
 
 //#define WAIT_DURATION	1		//TODO: deprecate this
 
-#define CURSOR_SIZE		32
+#define CURSOR_SIZE	32
 #define CURSOR_HEIGHT	CURSOR_SIZE
-#define CURSOR_BPB		8
+#define CURSOR_BPB	8
 #define CURSOR_WIDTH	(CURSOR_HEIGHT / CURSOR_BPB)
 #define CURSOR_FRAME	30		//ACK: original value was 10
 

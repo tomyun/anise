@@ -68,18 +68,18 @@ enum SystemVariableIndex {
 	iw_Video_Color = 38,
 	// 20
 	ib_SysVar20l = 40,
-	ibf_OP_DisplayNumber = 41,					//TODO: change name (OP_prnum)
+	ibf_OP_DisplayNumber = 41,		//TODO: change name (OP_prnum)
 	ib_Dialogue_FontHeight = 42,
 	ib_Dialogue_FontWidthb = 43,
-	iwpo_Selection_Item = 44,				//TODO: may change name (SELECT_)
+	iwpo_Selection_Item = 44,		//TODO: may change name (SELECT_)
 	iw_SysVar23 = 46,
 	// 24
-	iw_Selection_SkipItemCount = 48,		//TODO: may change name (SELECT_)
-	iw_Selection_TotalItemCount = 50,		//TODO: may change name (SELECT_)
+	iw_Selection_SkipItemCount = 48,	//TODO: may change name (SELECT_)
+	iw_Selection_TotalItemCount = 50,	//TODO: may change name (SELECT_)
 	iw_Selection_CurrentItemCount = 52,	//TODO: may change name (SELECT_)
-	iwf_Selection_InUse = 54,				//TODO: may change name (SELECT_)
+	iwf_Selection_InUse = 54,		//TODO: may change name (SELECT_)
 	// 28
-	iw_Video_CoordFactor = 56,			//UNK?
+	iw_Video_CoordFactor = 56,		//UNKNOWN
 	iw_SysVar29 = 58,
 	iw_SysVar30 = 60,
 	iw_Video_Palette0 = 62,
@@ -144,7 +144,7 @@ enum SystemVariableIndex {
 	// 96
 	iw_GP4File_Widthb = 192,
 	iw_GP4File_Height = 194,
-	iw_File_Size = 196,				//TODO: may change name (LoadFile_)
+	iw_File_Size = 196,			//TODO: may change name (LoadFile_)
 	iwpo_Script = 198			//TODO: may change name (LoadFile_)
 };
 
@@ -288,12 +288,12 @@ enum FieldHeaderIndex {
 
 enum DisabledStatus {
 	DISABLE_PRESERVEIMAGEPALETTE = 0x01,	// 0000_0001b
-	DISABLE_ANIMATION = 0x02,				// 0000_0010b
-	DISABLE_4 = 0x04,						// 0000_0100b
-	DISABLE_PREDEFINEDTEXT = 0x08,			// 0000_1000b
-	DISABLE_PRESERVEPALETTE = 0x10,			// 0001_0000b
-	DISABLE_FLAG_RESET = 0x60,				// 0110_0000b
-	DISABLE_FLAG_SET = 0x9F					// 1001_1111b
+	DISABLE_ANIMATION = 0x02,		// 0000_0010b
+	DISABLE_4 = 0x04,			// 0000_0100b
+	DISABLE_PREDEFINEDTEXT = 0x08,		// 0000_1000b
+	DISABLE_PRESERVEPALETTE = 0x10,		// 0001_0000b
+	DISABLE_FLAG_RESET = 0x60,		// 0110_0000b
+	DISABLE_FLAG_SET = 0x9F			// 1001_1111b
 };
 
 #endif

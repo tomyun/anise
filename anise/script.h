@@ -17,13 +17,13 @@
 #include "script_parameter.h"
 #include "script_stack.h"
 
-#define OPCODE(x)		{&Script::x, #x}
-#define OPCODE_OP		17
-#define OPCODE_OPUT		14
-#define OPCODE_OP4		24
-#define OPCODE_OPRE		16
+#define OPCODE(x)	{&Script::x, #x}
+#define OPCODE_OP	17
+#define OPCODE_OPUT	14
+#define OPCODE_OP4	24
+#define OPCODE_OPRE	16
 
-#define RANDOM_SEED		0x8801
+#define RANDOM_SEED	0x8801
 
 typedef int SCRIPTCALL;
 

@@ -9,10 +9,10 @@
 #include "SDL_endian.h"
 #include "SDL_error.h"
 
-#define FADE_LEVEL			8
-#define FONT_BPB			8
+#define FADE_LEVEL		8
+#define FONT_BPB		8
 #define CHARACTER_TOTAL		8
-#define SPRITE_SIZE			16
+#define SPRITE_SIZE		16
 #define SPRITE_LAYER_MASK	0x0FFF
 #define SPRITE_COLOR_MASK	0x07
 #define FILTER_RADIUS		1

@@ -11,7 +11,7 @@
 //HACK: isolate experimental code for faster field operation
 //#define FIELD_EXPERIMENT
 
-#define NONE				0xFFFF
+#define NONE			0xFFFF
 
 #define MASK_UPPER_BYTE		0xF0
 #define MASK_LOWER_BYTE		0x0F

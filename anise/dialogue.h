@@ -11,16 +11,16 @@
 
 using std::string;
 
-#define FONT_HALF_WIDTH			8
-#define FONT_HALF_HEIGHT		16
-#define FONT_FULL_WIDTH			16
-#define FONT_FULL_HEIGHT		16
-#define FONT_MARGIN				2
+#define FONT_HALF_WIDTH		8
+#define FONT_HALF_HEIGHT	16
+#define FONT_FULL_WIDTH		16
+#define FONT_FULL_HEIGHT	16
+#define FONT_MARGIN		2
 
-#define FONT_FACTOR				0x20
+#define FONT_FACTOR		0x20
 #define FONT_PREDEFINED_FACTOR	0x80
 
-#define WAIT_DURATION	1
+#define WAIT_DURATION		1
 
 class Dialogue {
 private:

@@ -7,10 +7,10 @@
 #include "input.h"
 #include "video.h"
 
-#define SLOTS			10
-#define SLOT_SIZE		16
-#define FRAME_RATE		10
-#define FRAME_DELAY		2
+#define SLOTS		10
+#define SLOT_SIZE	16
+#define FRAME_RATE	10
+#define FRAME_DELAY	2
 #define OPERATION_SIZE	33
 
 enum AnimationSetSlotFunction {

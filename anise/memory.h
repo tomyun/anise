@@ -7,17 +7,17 @@
 #include "memory_index.h"
 #include "option.h"
 
-#define SEGMENT_SIZE			0xFFFF
+#define SEGMENT_SIZE		0xFFFF
 
-#define SCRIPT_ENTRY			0
-#define SCRIPT_SIZE				0xE000
-#define SCRIPT_NAME_SIZE		32
-#define BASE_VARIABLE_SIZE		54		// 27 * 2
-#define SYSTEM_VARIABLE_SIZE	200		// 100 * 2
-#define SELECTION_ITEM_SIZE		44		// 11 * (2 * 2)
-#define PROCEDURE_SIZE			122		// 61 * 2
-#define ANIMATION_SLOT_SIZE		162		// 10 * 16 + 2
-#define FLAG_SIZE				3072
+#define SCRIPT_ENTRY		0
+#define SCRIPT_SIZE		0xE000
+#define SCRIPT_NAME_SIZE	32
+#define BASE_VARIABLE_SIZE	54	// 27 * 2
+#define SYSTEM_VARIABLE_SIZE	200	// 100 * 2
+#define SELECTION_ITEM_SIZE	44	// 11 * (2 * 2)
+#define PROCEDURE_SIZE		122	// 61 * 2
+#define ANIMATION_SLOT_SIZE	162	// 10 * 16 + 2
+#define FLAG_SIZE		3072
 
 class Memory {
 private:
