@@ -32,9 +32,12 @@ Sound::Sound(Option *option)
 
 Sound::~Sound()
 {
+	stop();
+
 	if (buffer != NULL) {
 		SDL_FreeWAV(buffer);
 	}
+
 	SDL_CloseAudio();
 }
 
