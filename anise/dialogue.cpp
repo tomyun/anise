@@ -106,7 +106,7 @@ void Dialogue::putFullWidthCharacter(byte first_code, byte second_code)
 {
 	word coord_xb = memory->b_SystemVariable->queryWord(iw_Dialogue_CoordXb);
 	word coord_y = memory->b_SystemVariable->queryWord(iw_Dialogue_CoordY);
-	int offset;
+	int offset = 0;
 	if (option->font_type == FONT_JIS) {
 		// calculate font code
 		if ((first_code >= 0x81) && (first_code <= 0x9F)) {

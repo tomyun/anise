@@ -2,10 +2,9 @@
 
 SCRIPTCALL Script::op_clearScreen()
 {
-	word color;
-
 	parameter = getParameter();
 
+	word color = 0;
 	if (parameter->getCount() > 0) {
 		color = memory->b_SystemVariable->queryWord(iw_Video_Color);
 		memory->b_SystemVariable->writeWord(iw_Video_Color, parameter->get(0) << 4);
