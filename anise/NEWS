@@ -1,0 +1,81 @@
+Project ANISE
+=============
+
+ 2004. 2. 5
+ ----------
+
+   beta 7 (20040205) Released
+     * Can be compiled on Linux platform
+     * Fix Video::overlapScreen() cause unexpected crash due to unproper operation inside timer thread
+
+
+ 2004. 1. 28
+ -----------
+
+   beta 6 (20040128) Released
+     * Support 'Aisimai' and 'CRESCENT'
+     * Embed font files
+     * Change icon shape and make it appear on the title bar
+     * Fix music problem in 'Dokyusei 2 -Retail-'
+     * Can play WAV files instead of M files if you put them on the game directory
+     * Fix program quit properly
+     * Fix problem that shows only one digit when it is converted from ascii number.
+
+
+ 2004. 1. 21
+ -----------
+
+   beta 5 (20040121a) Released
+     * Fix wrong algorithm which converts ascii number to character.
+
+   beta 5 (20040121) Released
+     * Implement pathfinding algorithm on the field map
+     * Implement Field::copyMapBlock()
+     * Fix wrong coordination conversion when right button is clicked
+     * Fix mouse bug occurs when playing 'Dokyusei 1'
+
+
+ 2004. 1. 15
+ -----------
+
+   beta 4 (20040115) Released
+     * Fix bug always intend to play WAV files even it should not (kju135)
+
+
+ 2004. 1. 5
+ ----------
+
+   beta 4 (20040105) Released
+     * Support WAV files in 'Dokyusei 2 -Retail-'
+     * Fix bug font setting is not applied
+
+
+ 2003. 12. 30
+ ------------
+
+   beta 3 (20031230) Released
+     * Implement new font rendering engine
+     * Reconstruct the structure for game specific scripting
+     * Parse command line arguments
+     * Remove dependencies on MSVCP71.dll and MSVCR71.dll
+
+
+ 2003. 10. 18
+ ------------
+
+   beta 2 Phase
+     * Implement class Field except pathfinding algorithm
+     * Improve fading algorithm
+     * Fix bug on processing constant variable
+     * Implement random number generator
+     * Add some missing routines for class Animation
+     * Fix incorrect sizing bug on Video::blitSwapped()
+
+
+ 2003. 9. 21
+ -----------
+
+   beta 1 Phase
+     * Recoded with an concept of object oriented programming
+     * Support palette emulation
+     * Support bold font
