@@ -11,8 +11,14 @@ Sound::Sound(Option *option)
 	is_effect = false;
 	is_playing = false;
 
+	if ((option->game_type == GAME_NANPA2) && (option->font_type == FONT_GAMEBOX)) {
+		spec.format = AUDIO_U8;
+	}
+	else {
+		spec.format = AUDIO_S16;
+	}
+
 	spec.channels = 1;
-	spec.format = AUDIO_U8;
 	spec.freq = 22050;
 	spec.padding = 0;
 	spec.samples = 4096;
@@ -83,34 +89,41 @@ void Sound::load()
 	SDL_AudioSpec dummy_spec;
 
 	if (file_name != option->sound_file_name) {
-		file_name = option->sound_file_name;
+		file_name = option->sound_file_name + option->sound_file_extension;
 
 		//HACK: check music file whether it is an effect file that should be played just one time
-		string raw_name = file_name.substr(option->path_name.size());
+		is_effect = false;
+		string raw_name = option->sound_file_name.substr(option->path_name.size());
 		if (option->game_type == GAME_NANPA2) {
-			if ((raw_name == "chime.m") ||
-				(raw_name == "cockoo.m") ||
-				(raw_name == "damage.m") ||
-				(raw_name == "elf.m") ||
-				(raw_name == "gcrash3.m") ||
-				(raw_name == "halley.m") ||
-				(raw_name == "se7_1.m") ||
-				(raw_name == "se7_2.m") ||
-				(raw_name == "se11.m") ||
-				(raw_name == "shot_me.m") ||
-				(raw_name == "spoon.m") ||
-				(raw_name == "tennis.m")) {
+			if ((raw_name == "chime") ||
+				(raw_name == "cockoo") ||
+				(raw_name == "damage") ||
+				(raw_name == "elf") ||
+				(raw_name == "gcrash3") ||
+				(raw_name == "halley") ||
+				(raw_name == "se7_1") ||
+				(raw_name == "se7_2") ||
+				(raw_name == "se11") ||
+				(raw_name == "shot_me") ||
+				(raw_name == "spoon") ||
+				(raw_name == "tennis")) {
 					is_effect = true;
 				}
-			else {
-				is_effect = false;
-			}
+		}
+		else if (option->game_type == GAME_NANPA1) {
+			if ((raw_name == "punch") ||
+				(raw_name == "chaime") ||
+				(raw_name == "cockoo") ||
+				(raw_name == "effe3") ||
+				(raw_name == "effe4") ||
+				(raw_name == "jo_se") ||
+				(raw_name == "window")) {
+					is_effect = true;
+				}
 		}
 
-		if (SDL_LoadWAV(option->sound_file_name.c_str(), &dummy_spec, &buffer, &length) == NULL) {
-			//TODO: process error
-			//PRINT_ERROR("[Sound::load()] unable to load wave file(%s): %s\n", option->sound_file_name, SDL_GetError());
-			//exit(1);
+		if (SDL_LoadWAV(file_name.c_str(), &dummy_spec, &buffer, &length) == NULL) {
+			PRINT_ERROR("[Sound::load()] unable to load wave file(%s): %s\n", file_name.c_str(), SDL_GetError());
 		}
 	}
 
