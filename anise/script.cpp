@@ -1,20 +1,19 @@
 #include "script.h"
 
-Script::Script(Memory *memory, Video *video, Sound *sound, Timer *timer, Input *input, Option *option)
+Script::Script(Memory *memory, Timer *timer, Input *input, Sound *sound, Video *video, Option *option)
 {
 	this->memory = memory;
-	this->video = video;
-	this->sound = sound;
 	this->timer = timer;
 	this->input = input;
+	this->sound = sound;
+	this->video = video;
 	this->option = option;
 	
 	file = new File(memory, option);
 	image = new Image(memory, video, file);
-	animation = new Animation(memory, video, timer, input);
-	dialogue = new Dialogue(memory, video, timer, input, animation, option);
-
-	field = new Field(memory, video, input, option);
+	animation = new Animation(memory, timer, input, video);
+	dialogue = new Dialogue(memory, timer, input, video, animation, option);
+	field = new Field(memory, input, video, option);
 
 	parameter = NULL;
 
@@ -27,12 +26,12 @@ Script::Script(Memory *memory, Video *video, Sound *sound, Timer *timer, Input *
 
 
 Script::~Script()
-{
-	delete file;
-	delete image;
-	delete animation;
-	delete dialogue;
+{	
 	delete field;
+	delete dialogue;
+	delete animation;
+	delete image;
+	delete file;
 }
 
 
@@ -402,6 +401,8 @@ SCRIPTCALL Script::parse()
 		for (int i = 0; i < FRAME_RATE; i++) {
 			animation->show();
 		}
+
+		video->overlapScreen();
 
 		word reload = memory->b_SystemVariable->queryWord(iwf_Parser_Reload);
 		if (reload > 0) {
