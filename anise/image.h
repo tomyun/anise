@@ -28,13 +28,15 @@ private:
 
 	word coord_x;
 	word coord_y;
+
 	word width;
 	word height;
 
-	byte table[VIDEO_COLOR + 1][VIDEO_COLOR];
 	byte *surface;
 
-	word scan(byte length);
+	byte table[VIDEO_COLOR + 1][VIDEO_COLOR];
+
+	word scan(byte length = 1);
 
 	void initializeHeader();
 	void initializeTable();
