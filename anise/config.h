@@ -57,4 +57,4 @@ public:
 	bool initialize(int argc, char *argv[]);
 };
 
-#endif CONFIG_H
+#endif
