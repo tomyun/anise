@@ -2,6 +2,8 @@
 #define FILE_H
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
 #include <string>
 #include "memory.h"
 #include "option.h"
