@@ -2,109 +2,93 @@
 
 Timer::Timer()
 {
-	cursor_timer = 0;
-	frame_timer = 0;
-	delay_timer = 0;
-	overlap_timer = 0;
-	overlap_frame_timer = 0;
-	spray_timer = 0;
-
-	timer_id = SDL_AddTimer(TIMER_INTERVAL, (SDL_NewTimerCallback) callback, this);
+	cursor_ticks = 0;
+	frame_ticks = 0;
+	delay_ticks = 0;
+	overlap_ticks = 0;
+	overlap_frame_ticks = 0;
+	spray_ticks = 0;
 }
 
 
 Timer::~Timer()
 {
-	SDL_RemoveTimer(timer_id);
 }
 
 
-Uint32 Timer::callback(Uint32 interval, void *pointer)
+void Timer::delay(Uint32 ticks)
 {
-	((Timer*)pointer)->accumulate();
-
-	return interval;
-}
-
-
-void Timer::accumulate()
-{
-	cursor_timer++;
-	frame_timer++;
-	delay_timer++;
-	overlap_timer++;
-	overlap_frame_timer++;
-	spray_timer++;
+	SDL_Delay(ticks);
 }
 
 
 void Timer::resetCursorTimer()
 {
-	cursor_timer = 0;
+	cursor_ticks = SDL_GetTicks();
 }
 
 
 void Timer::resetFrameTimer()
 {
-	frame_timer = 0;
+	frame_ticks = SDL_GetTicks();
 }
 
 
 void Timer::resetDelayTimer()
 {
-	delay_timer = 0;
+	delay_ticks = SDL_GetTicks();
 }
 
 
 void Timer::resetOverlapTimer()
 {
-	overlap_timer = 0;
+	overlap_ticks = SDL_GetTicks();
 }
 
 
 void Timer::resetOverlapFrameTimer()
 {
-	overlap_frame_timer = 0;
+	overlap_frame_ticks = SDL_GetTicks();
 }
 
 
 void Timer::resetSprayTimer()
 {
-	spray_timer = 0;
+	spray_ticks = SDL_GetTicks();
 }
 
 
 word Timer::checkCursorTimer()
 {
-	return cursor_timer;
+	return (word) ((SDL_GetTicks() - cursor_ticks) / TIMER_INTERVAL);
 }
 
 
 dword Timer::checkFrameTimer()
 {
-	return frame_timer;
+	return (dword) ((SDL_GetTicks() - frame_ticks) / TIMER_INTERVAL);
 }
 
 
 dword Timer::checkDelayTimer()
 {
-	return delay_timer;
+	return (dword) ((SDL_GetTicks() - delay_ticks) / TIMER_INTERVAL);
 }
 
 
 word Timer::checkOverlapTimer()
 {
-	return overlap_timer;
+	return (word) ((SDL_GetTicks() - overlap_ticks) / TIMER_INTERVAL);
 }
 
 
 word Timer::checkOverlapFrameTimer()
 {
-	return overlap_frame_timer;
+	return (word) ((SDL_GetTicks() - overlap_frame_ticks) / TIMER_INTERVAL);
 }
 
 
 word Timer::checkSprayTimer()
 {
-	return spray_timer;
+	return (word) ((SDL_GetTicks() - spray_ticks) / TIMER_INTERVAL);
 }

@@ -8,21 +8,18 @@
 
 class Timer {
 private:
-	SDL_TimerID timer_id;
-
-	word cursor_timer;
-	dword frame_timer;
-	dword delay_timer;
-	word overlap_timer;
-	word overlap_frame_timer;
-	word spray_timer;
-
-	static Uint32 callback(Uint32 interval, void *pointer);
-	void accumulate();
+	Uint32 cursor_ticks;
+	Uint32 frame_ticks;
+	Uint32 delay_ticks;
+	Uint32 overlap_ticks;
+	Uint32 overlap_frame_ticks;
+	Uint32 spray_ticks;
 
 public:
 	Timer();
 	~Timer();
+
+	void delay(Uint32 ticks = TIMER_INTERVAL);
 
 	void resetCursorTimer();
 	void resetFrameTimer();
