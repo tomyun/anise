@@ -76,10 +76,16 @@ bool Engine::off()
 
 bool Engine::run()
 {
-	script->load(option->script_file_name);
+	script->load(option->script_file_name.c_str());
 	SCRIPTCALL condition = script->parse();
 
 	PAUSE;
 
-	return true;
+	if (condition == RETURN_ERROR) {
+		PRINT_ERROR("[Engine::run()] terminated by error\n");
+		return false;
+	}
+	else {
+		return true;
+	}
 }
