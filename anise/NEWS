@@ -1,6 +1,17 @@
 Project ANISE
 =============
 
+ 2004. 2. 26
+ -----------
+
+   beta 9 Released
+     * Support 'Paradise Lost(isle)'
+     * Support 'Kawarasagi(kawa)' and 'Nonomura(nono)' for experimental purpose
+     * Fix hang on the ending cutscenes in 'Dokyusei 2' (thanks to lmy417)
+     * Fix screen corruption in non-32-bit color depth
+     * Eliminate flickering on overlapping screens
+
+
  2004. 2. 16
  -----------
 
@@ -29,7 +40,7 @@ Project ANISE
  -----------
 
    beta 6 (20040128) Released
-     * Support 'Aisimai' and 'CRESCENT'
+     * Support 'Aisimai(aisimai)' and 'CRESCENT(crescent)'
      * Embed font files
      * Change icon shape and make it appear on the title bar
      * Fix music problem in 'Dokyusei 2 -Retail-'
@@ -55,7 +66,7 @@ Project ANISE
  -----------
 
    beta 4 (20040115) Released
-     * Fix bug always intend to play WAV files even it should not (kju135)
+     * Fix bug always intend to play WAV files even it should not (thanks to kju135)
 
 
  2004. 1. 5
