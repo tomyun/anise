@@ -9,26 +9,17 @@ Dialogue::Dialogue(Memory *memory, Video *video, Timer *timer, Input *input, Ani
 	this->animation = animation;
 	this->option = option;
 
-	if (option->font_type == FONT_GAMEBOX) {
-		code_newline_first = 0x94;
-		code_newline_second = 0x45;
+	if (option->font_type == FONT_JIS) {
+		initializeFontJis();
 	}
-	else {
-		code_newline_first = 0x81;
-		code_newline_second = 0x93;
+	else if (option->font_type == FONT_JISHAN) {
+		initializeFontJisHan();
+	}
+	else if (option->font_type == FONT_GAMEBOX) {
+		initializeFontGamebox();
 	}
 
 	previous_code = 0x00;
-
-	if (option->font_type == FONT_JIS) {
-		font = font_jis;
-	}
-	else if (option->font_type == FONT_JISHAN) {
-		font = font_jishan;
-	}
-	else if (option->font_type == FONT_GAMEBOX) {
-		font = font_gamebox;
-	}
 }
 
 
@@ -51,8 +42,13 @@ void Dialogue::putHalfWidthCharacters()
 			break;
 		}
 
-		long int offset = code * (FONT_HALF_WIDTH / FONT_BPB) * (FONT_HALF_HEIGHT);
-		video->drawFont(coord_xb << 3, coord_y, font, offset, FONT_HALF_WIDTH, FONT_HALF_HEIGHT);
+		int offset = code * (FONT_HALF_WIDTH / FONT_BPB) * (FONT_HALF_HEIGHT);
+		if (offset < size) {
+			video->drawFont(coord_xb << 3, coord_y, font, offset, FONT_HALF_WIDTH, FONT_HALF_HEIGHT);
+		}
+		else {
+			PRINT_ERROR("[Dialogue::putHalfWidthCharacters()] out of bound: offset = %d, size = %d\n", offset, size);
+		}
 
 		word duration = memory->b_SystemVariable->queryWord(iw_Dialogue_Delay);
 		delay(duration);
@@ -241,7 +237,12 @@ void Dialogue::putFullWidthCharacter(byte first_code, byte second_code)
 		offset = code * (FONT_FULL_WIDTH / FONT_BPB) * FONT_FULL_HEIGHT;
 	}
 	
-	video->drawFont(coord_xb << 3, coord_y, font, offset, FONT_FULL_WIDTH, FONT_FULL_HEIGHT);
+	if (offset < size) {
+		video->drawFont(coord_xb << 3, coord_y, font, offset, FONT_FULL_WIDTH, FONT_FULL_HEIGHT);
+	}
+	else {
+		PRINT_ERROR("[Dialogue::putFullWidthCharacter()] out of bound: offset = %d, size = %d\n", offset, size);
+	}
 
 	word duration = memory->b_SystemVariable->queryWord(iw_Dialogue_Delay);
 	delay(duration);
