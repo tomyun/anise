@@ -151,7 +151,7 @@ public:
 
 	void drawFont(word coord_x, word coord_y, const byte *font, long int offset, word width, word height);
 
-	void dump();
+	void capture();
 };
 
 #endif
