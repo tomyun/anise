@@ -179,6 +179,8 @@ void Video::updateScreen(word coord_x, word coord_y, word width, word height)
 	//TODO: implement this
 	//filter(coord_x, coord_y, width, height);
 
+//Uint32 start_ticks = SDL_GetTicks();
+
 	for (word y = 0; y < height; y++) {
 		for (word x = 0; x < width; x++) {
 			Uint32 sdl_color = getColor(getPoint(coord_x + x, coord_y + y));
@@ -186,7 +188,13 @@ void Video::updateScreen(word coord_x, word coord_y, word width, word height)
 		}
 	}
 
+//Uint32 draw_ticks = SDL_GetTicks();
+
 	SDL_UpdateRect(sdl_screen, coord_x, coord_y, width, height);
+
+//Uint32 update_ticks = SDL_GetTicks();
+
+//PRINT("[Video::updateScreen()] draw ticks = %d, update ticks = %d\n", (draw_ticks - start_ticks), (update_ticks - draw_ticks));
 
 	unlockScreen();
 }

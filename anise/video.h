@@ -6,6 +6,7 @@
 #include "SDL_video.h"
 #include "SDL_endian.h"
 #include "SDL_error.h"
+#include "SDL_timer.h"
 
 #define FADE_LEVEL			8
 #define FONT_BPB			8
