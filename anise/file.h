@@ -9,6 +9,8 @@ using std::string;
 
 #define FILE_READ		"rb"
 #define FILE_WRITE		"wb"
+#define FILE_READ_WRITE		"r+b"
+
 #define FILE_NAME_LENGTH	32
 
 #define M_FILE_EXTENSION	".m"
@@ -25,11 +27,14 @@ private:
 	string name;
 	word size;
 
+	void openDirect(const char *filename, const char *mode);
+	void openFromDAT(const char *filename);
+
 public:
 	File(Memory *memory, Option *option);
 	~File();
 
-	void open(const char *filename, const char *mode);
+	void open(const char *filename, bool is_flag = false);
 	void close();
 	word tell();
 	void seek(word offset, int mode);

@@ -18,12 +18,27 @@ File::~File()
 }
 
 
-void File::open(const char *filename, const char *mode)
+void File::open(const char *filename, bool is_flag)
+{
+	if (is_flag) {
+		openDirect(filename, FILE_READ_WRITE);
+	}
+	else {
+		if (option->is_unpacked) {
+			openDirect(filename, FILE_READ);
+		}
+		else {
+			openFromDAT(filename);
+		}
+	}
+}
+
+
+void File::openDirect(const char *filename, const char *mode)
 {
 	PRINT("[File::open()] %s\n", filename);
 
 	if (handle != NULL) {
-		//TODO: process error
 		PRINT_ERROR("[File::open()] %s is already opened\n", filename);
 		close();
 	}
@@ -41,7 +56,6 @@ void File::open(const char *filename, const char *mode)
 
 	handle = fopen(name.c_str(), mode);
 	if (handle == NULL) {
-		//TODO: process error
 		PRINT_ERROR("[File::open()] fopen() failed: %s\n", name.c_str());
 		exit(1);
 	}
@@ -71,6 +85,11 @@ void File::open(const char *filename, const char *mode)
 			}
 		}
 	}
+}
+
+
+void File::openFromDAT(const char *filename)
+{
 }
 
 
