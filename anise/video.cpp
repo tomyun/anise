@@ -765,16 +765,22 @@ void Video::putPoint(word coord_x, word coord_y, byte color_index, SurfaceType s
 		unlockScreen(sdl_buffer[surface_type]);
 	}
 #else
+#ifdef DEBUG
 	if (((coord_x >= 0) && (coord_x < VIDEO_WIDTH)) && ((coord_y >= 0) && (coord_y < VIDEO_HEIGHT))) {
+#endif
 		lockScreen(sdl_buffer[surface_type]);
 		putPixel(sdl_buffer[surface_type], coord_x, coord_y, color_index);
 		unlockScreen(sdl_buffer[surface_type]);
+#ifdef DEBUG
 	}
 #endif
+#endif
+#ifdef DEBUG
 	else {
 		//TODO: process error
 		PRINT_ERROR("[Video::putPoint()] out of bound: st = %d, x = %d, y = %d, c = %d\n", surface_type, coord_x, coord_y, color_index);
 	}
+#endif DEBUG
 }
 
 
@@ -797,14 +803,20 @@ byte Video::getPoint(word coord_x, word coord_y, SurfaceType surface_type)
 
 	}
 #else
+#ifdef DEBUG
 	if (((coord_x >= 0) && (coord_x < VIDEO_WIDTH)) && ((coord_y >= 0) && (coord_y < VIDEO_HEIGHT))) {
+#endif
 		return (byte) getPixel(sdl_buffer[surface_type], coord_x, coord_y);
+#ifdef DEBUG
 	}
 #endif
+#endif
+#ifdef DEBUG
 	else {
 		PRINT_ERROR("[Video::getPoint()] out of bound: type = %d, coord_x = %d, coord_y = %d\n", surface_type, coord_x, coord_y);
 		return COLOR_NONE;
 	}
+#endif
 }
 
 
@@ -923,10 +935,12 @@ Uint32 Video::getFilteredColor(word coord_x, word coord_y, SurfaceType surface_t
 
 	int count = 0;
 	for (int dx = -FILTER_RADIUS; dx <= FILTER_RADIUS; dx++) {
+#ifdef DEBUG
 #ifdef FIELD_EXPERIMENT
 		if (((coord_x + dx) >= 0) && ((coord_x + dx) < max_coord_x)) {
 #else
 		if (((coord_x + dx) >= 0) && ((coord_x + dx) < VIDEO_WIDTH)) {
+#endif
 #endif
 			byte color = getPoint(coord_x + dx, coord_y, surface_type);
 			Uint8 color_red, color_green, color_blue;
@@ -947,7 +961,9 @@ Uint32 Video::getFilteredColor(word coord_x, word coord_y, SurfaceType surface_t
 
 				count++;
 			}
+#ifdef DEBUG
 		}
+#endif
 	}
 
 	//HACK: make scanline
