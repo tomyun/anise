@@ -15,6 +15,7 @@
 #define SPRITE_LAYER_MASK	0x0FFF
 #define SPRITE_COLOR_MASK	0x07
 #define FILTER_RADIUS		1
+#define FILTER_PRESERVE		3
 
 enum VideoSpecification {
 	VIDEO_WIDTH = 640,
