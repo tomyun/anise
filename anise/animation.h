@@ -93,7 +93,7 @@ public:
 	Animation(Memory *memory, Video *video, Timer *timer, Input *input);
 	~Animation();
 
-	bool setSlot(word function, word slot_index, word parameter_2 = NULL, word parameter_3 = NULL);
+	bool setSlot(word function, word slot_index, word parameter_2 = 0, word parameter_3 = 0);
 	void clearSlot();
 	bool show();
 };

@@ -513,13 +513,13 @@ void Video::putSprite(word coord_x, word coord_y, word background_layer, word fo
 			if (background_color >= COLOR_KEY) {
 				color = background_color & SPRITE_COLOR_MASK;
 			}
-			else if ((foreground_layer_3rd != NULL) && (foreground3_color != COLOR_KEY)) {
+			else if ((foreground_layer_3rd != 0) && (foreground3_color != COLOR_KEY)) {
 				color = foreground3_color & SPRITE_COLOR_MASK;
 			}
-			else if ((foreground_layer_2nd != NULL) && (foreground2_color != COLOR_KEY)) {
+			else if ((foreground_layer_2nd != 0) && (foreground2_color != COLOR_KEY)) {
 				color = foreground2_color & SPRITE_COLOR_MASK;
 			}
-			else if ((foreground_layer_1st != NULL) && (foreground1_color != COLOR_KEY)) {
+			else if ((foreground_layer_1st != 0) && (foreground1_color != COLOR_KEY)) {
 				color = foreground1_color & SPRITE_COLOR_MASK;
 			}
 			else if (background_color != COLOR_KEY) {

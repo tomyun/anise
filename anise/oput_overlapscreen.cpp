@@ -15,7 +15,7 @@ SCRIPTCALL Script::oput_overlapScreen()
 
 	deleteParameter();
 
-	word return_value = NULL;
+	word return_value = 0;
 	switch (mode) {
 		case OVERLAP_SET:
 			{
