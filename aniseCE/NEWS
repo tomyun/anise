@@ -1,13 +1,22 @@
 Project ANISE
 =============
 
+ 2004. 12. 6
+ -----------
+
+   aniseCE CVS Version
+     * Can be compiled on Linux platform, again
+     * Support '.M' play in DAT archive
+     * Support '.wav' play, again
+     * Support sound frequency option(and, sound off)
+
  2004. 11. 29
  ------------
 
-   Windows CE Temporary Version
-     * Support Windows CE(640x400 or High Resolution) - Test in Sigmarion 3, IBee
-     * Add .M play with OPL3 emulation(but, not play in DAT archive)
-     * Remove .wav play(temporary)
+   Windows CE Temporary Version(branch ANISE)
+     * Can be cross-compiled for Windows CE(640x400 or High Resolution) - Test in Sigmarion 3, IBee
+     * Support '.M' play with OPL3 emulation(but, not play in DAT archive)
+     * Remove '.wav' play(temporary)
      * Unsupport Linux(maybe)
 
  2004. 3. 7
