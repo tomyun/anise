@@ -1,16 +1,16 @@
 #include "field.h"
 
 #define DUMPPATH	FILE *test = fopen("c:\\temp\\path.txt", "ab");\
-					for (word yw = 0; yw < map_heightw; yw++) {\
-						for (word xw = 0; xw < map_widthw; xw++) {\
-							byte test_type = data->queryByte(calculatePathOffset(xw, yw));\
-								if (test_type == 0xFF) fprintf(test, "[]");\
-								else if (test_type == 0xFE) fprintf(test, "  ");\
-								else fprintf(test, "%2x", test_type);\
-						}\
-						fprintf(test, "\n");\
-					}\
-					fclose(test);
+			for (word yw = 0; yw < map_heightw; yw++) {\
+				for (word xw = 0; xw < map_widthw; xw++) {\
+					byte test_type = data->queryByte(calculatePathOffset(xw, yw));\
+					if (test_type == 0xFF) fprintf(test, "[]");\
+					else if (test_type == 0xFE) fprintf(test, "  ");\
+					else fprintf(test, "%2x", test_type);\
+				}\
+				fprintf(test, "\n");\
+			}\
+			fclose(test);
 
 
 void Field::setPath(word character_offset, word target_coord_xw, word target_coord_yw, bool use_alternative)
@@ -91,7 +91,7 @@ bool Field::generatePath(word character_offset, word coord_xw, word coord_yw, wo
 		return false;
 	}
 
-	if ((coord_xw < 0) || (coord_xw >= (map_widthw - 1)) || (coord_yw < 0) || (coord_yw >= (map_heightw - 1))) {
+	if ((coord_xw >= (map_widthw - 1)) || (coord_yw >= (map_heightw - 1))) {
 		return false;
 	}
 
