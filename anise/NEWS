@@ -4,9 +4,11 @@ Project ANISE
  2004. 2. 5
  ----------
 
-   beta 7 (20040205) Released
+   beta 7 Released
      * Can be compiled on Linux platform
      * Fix Video::overlapScreen() cause unexpected crash due to unproper operation inside timer thread
+     * Support fullscreen mode
+     * Fix program return sound resource properly
 
 
  2004. 1. 28
