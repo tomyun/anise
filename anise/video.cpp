@@ -17,6 +17,12 @@ Video::Video(Memory *memory, Timer *timer, Option *option)
 		PRINT_ERROR("[Video::Video()] unable to set %dx%dx%d video mode: %s\n", VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, SDL_GetError());
 	}
 
+	const SDL_VideoInfo *video_info = SDL_GetVideoInfo();
+	color_red_mask = video_info->vfmt->Rmask;
+	color_green_mask = video_info->vfmt->Gmask;
+	color_blue_mask = video_info->vfmt->Bmask;
+	color_alpha_mask = video_info->vfmt->Amask;
+
 	overlap_old_screen = NULL;
 	overlap_new_screen = NULL;
 
@@ -168,8 +174,6 @@ bool Video::isScreen(byte surface_type)
 
 void Video::updateScreen(word coord_x, word coord_y, word width, word height)
 {
-	lockScreen();
-
 //Uint32 start_ticks = SDL_GetTicks();
 
 	if (option->is_filter) {
@@ -187,6 +191,7 @@ void Video::updateScreen(word coord_x, word coord_y, word width, word height)
 		}
 	}
 
+	lockScreen();
 	for (word y = 0; y < height; y++) {
 		for (word x = 0; x < width; x++) {
 			//TODO: change or not?
@@ -195,6 +200,7 @@ void Video::updateScreen(word coord_x, word coord_y, word width, word height)
 			drawPixel(sdl_screen, (coord_x + x), (coord_y + y), sdl_color);
 		}
 	}
+	unlockScreen();
 
 //Uint32 draw_ticks = SDL_GetTicks();
 
@@ -203,8 +209,6 @@ void Video::updateScreen(word coord_x, word coord_y, word width, word height)
 //Uint32 update_ticks = SDL_GetTicks();
 
 //PRINT("[Video::updateScreen()] draw ticks = %d, update ticks = %d\n", (draw_ticks - start_ticks), (update_ticks - draw_ticks));
-
-	unlockScreen();
 }
 
 
@@ -220,15 +224,12 @@ void Video::fadeScreen()
 		setColor(i, intermediate_palette[i]);
 	}
 
-	SDL_Surface *old_screen = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
-	SDL_Surface *new_screen = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
-
-	lockScreen();
-	lockScreen(old_screen);
-	lockScreen(new_screen);
+	SDL_Surface *old_screen = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
+	SDL_Surface *new_screen = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
 
 	SDL_BlitSurface(sdl_screen, NULL, old_screen, NULL);
 
+	lockScreen(new_screen);
 	for (word y = 0; y < VIDEO_HEIGHT; y++) {
 		for (word x = 0; x < VIDEO_WIDTH; x++) {
 			//TODO: change or not?
@@ -237,6 +238,7 @@ void Video::fadeScreen()
 			drawPixel(new_screen, x, y, sdl_color);
 		}
 	}
+	unlockScreen(new_screen);
 
 	int fade_interval = (int) (SDL_ALPHA_OPAQUE / FADE_LEVEL);
 	for (int i = SDL_ALPHA_OPAQUE - (fade_interval * FADE_LEVEL); i <= SDL_ALPHA_OPAQUE; i += fade_interval) {
@@ -248,10 +250,6 @@ void Video::fadeScreen()
 		SDL_UpdateRect(sdl_screen, 0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
 	}
 
-	unlockScreen();
-	unlockScreen(old_screen);
-	unlockScreen(new_screen);
-
 	SDL_FreeSurface(old_screen);
 	SDL_FreeSurface(new_screen);
 }
@@ -262,16 +260,12 @@ void Video::initializeOverlapScreen()
 	if (overlap_old_screen != NULL) {
 		SDL_FreeSurface(overlap_old_screen);
 	}
-	overlap_old_screen = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
+	overlap_old_screen = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
 
 	if (overlap_new_screen != NULL) {
 		SDL_FreeSurface(overlap_new_screen);
 	}
-	overlap_new_screen = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
-
-	lockScreen();
-	lockScreen(overlap_old_screen);
-	lockScreen(overlap_new_screen);
+	overlap_new_screen = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
 
 	SDL_BlitSurface(sdl_screen, NULL, overlap_old_screen, NULL);
 
@@ -280,6 +274,7 @@ void Video::initializeOverlapScreen()
 		setColor(i, intermediate_palette[i]);
 	}
 
+	lockScreen(overlap_new_screen);
 	for (word y = 0; y < VIDEO_HEIGHT; y++) {
 		for (word x = 0; x < VIDEO_WIDTH; x++) {
 			//TODO: change or not?
@@ -288,9 +283,6 @@ void Video::initializeOverlapScreen()
 			drawPixel(overlap_new_screen, x, y, sdl_color);
 		}
 	}
-
-	unlockScreen();
-	unlockScreen(overlap_old_screen);
 	unlockScreen(overlap_new_screen);
 
 	overlap_inuse = true;
@@ -311,18 +303,10 @@ void Video::overlapScreen()
 		int overlap_initial = SDL_ALPHA_OPAQUE - (overlap_interval * overlap_level);
 		SDL_SetAlpha(overlap_new_screen, SDL_SRCALPHA, overlap_initial + (overlap_interval * overlap_current_level));
 
-		lockScreen();
-		lockScreen(overlap_old_screen);
-		lockScreen(overlap_new_screen);
-
 		SDL_BlitSurface(overlap_old_screen, NULL, sdl_screen, NULL);
 		SDL_BlitSurface(overlap_new_screen, NULL, sdl_screen, NULL);
 
 		SDL_UpdateRect(sdl_screen, 0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
-
-		unlockScreen();
-		unlockScreen(overlap_old_screen);
-		unlockScreen(overlap_new_screen);
 
 		overlap_current_level++;
 		if (overlap_current_level == overlap_level) {
@@ -841,7 +825,7 @@ void Video::capture()
 	SDL_SaveBMP(sdl_screen, screen_name.c_str());
 
 	for (int i = 0; i < VIDEO_BUFFER; i++) {
-		SDL_Surface *sdl_buffer = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, 0, 0, 0, 0);
+		SDL_Surface *sdl_buffer = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_COLOR_DEPTH, color_red_mask, color_green_mask, color_blue_mask, color_alpha_mask);
 
 		for (word y = 0; y < VIDEO_HEIGHT; y++) {
 			for (word x = 0; x < VIDEO_WIDTH; x++) {
