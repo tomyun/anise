@@ -212,6 +212,7 @@ void Dialogue::delay(word duration)
 				break;
 			}
 
+			timer->delay();
 			tick = (word) timer->checkDelayTimer();
 		}
 	}
