@@ -91,7 +91,7 @@ bool Field::generatePath(word character_offset, word coord_xw, word coord_yw, wo
 		return false;
 	}
 
-	if (coord_xw < 0 || coord_xw >= (map_widthw - 1) || coord_yw < 0 || coord_yw >= (map_heightw - 1)) {
+	if ((coord_xw < 0) || (coord_xw >= (map_widthw - 1)) || (coord_yw < 0) || (coord_yw >= (map_heightw - 1))) {
 		return false;
 	}
 

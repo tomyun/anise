@@ -540,7 +540,7 @@ void Video::putSprite(word coord_x, word coord_y, word background_layer, word fo
 
 void Video::putPoint(byte surface_type, word coord_x, word coord_y, byte color_index)
 {
-	if ((coord_x >= 0 && coord_x < VIDEO_WIDTH) && (coord_y >= 0 && coord_y < VIDEO_HEIGHT)) {
+	if (((coord_x >= 0) && (coord_x < VIDEO_WIDTH)) && ((coord_y >= 0) && (coord_y < VIDEO_HEIGHT))) {
 		byte *surface = getSurface(surface_type);
 		surface[(coord_y * VIDEO_WIDTH) + coord_x] = color_index;
 	}
@@ -560,7 +560,7 @@ inline void Video::putPoint(word coord_x, word coord_y, byte color_index)
 
 byte Video::getPoint(byte surface_type, word coord_x, word coord_y)
 {
-	if ((coord_x >= 0 && coord_x < VIDEO_WIDTH) && (coord_y >= 0 && coord_y < VIDEO_HEIGHT)) {
+	if (((coord_x >= 0) && (coord_x < VIDEO_WIDTH)) && ((coord_y >= 0) && (coord_y < VIDEO_HEIGHT))) {
 		byte *surface = getSurface(surface_type);
 		return surface[(coord_y * VIDEO_WIDTH) + coord_x];
 	}
