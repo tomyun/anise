@@ -68,6 +68,8 @@ bool Engine::off()
 
 	SDL_Quit();
 
+	PRINT("[Engine::off()] successfully turned off\n");
+
 	return true;
 }
 
@@ -76,7 +78,7 @@ bool Engine::run()
 {
 	script->load(option->script_file_name);
 	SCRIPTCALL condition = script->parse();
-	
+
 	PAUSE;
 
 	return true;
