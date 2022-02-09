@@ -18,7 +18,7 @@ FAQ
 
 * [각종 PDA](https://tomyun.pe.kr/2004/11/21/talk-on-project-anise-iv/) (2004)
 * [ANISE+](https://kldp.net/anise/) (2004-2005): [nightknight](http://mystictales.net/)님께서 [확장](http://kldp.net/projects/anise/forum/310205)해주신 버전으로 KLDP.net 프로젝트에 함께 들어있습니다.
-* [AnisePSP](https://github.com/AmesianX/anisePSP) (2006-2007): [AmesianX](https://twitter.com/amesianx)님께서 PSP용으로 포팅해주셨습니다. 루리웹에 글([1](https://bbs.ruliweb.com/etcs/board/300435/read/3486698), [2](https://bbs.ruliweb.com/etcs/board/300435/read/5211019))이 남아있네요.
+* [anisePSP](https://github.com/AmesianX/anisePSP) (2006-2007): [AmesianX](https://github.com/AmesianX/)님께서 PSP용으로 포팅해주셨습니다. 루리웹에 글([1](https://bbs.ruliweb.com/etcs/board/300435/read/3486698), [2](https://bbs.ruliweb.com/etcs/board/300435/read/5211019))이 남아있네요.
 * [anise-port-android](https://code.google.com/p/anise-port-android/) (2012): [이정훈](http://jeonghun_lee.blog.me/70135245828)님께서 안드로이드용으로 포팅해주셨습니다.
 
 이 외에 ANISE를 활용한 것으로 알려진 프로젝트들이 있습니다.
