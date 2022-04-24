@@ -28,4 +28,4 @@ FAQ
 
 ### 요즘에는 뭐 없나요? ###
 
-어쩌다 보니 [Juice](https://github.com/tomyun/juice)라는 도구를 만들게 되었습니다. [이 세상 끝에서 사랑을 노래하는 소녀 YU-NO](https://vndb.org/r83617)와 [드래곤 나이트 4](https://vndb.org/r83125)의 영문화 프로젝트에서 활용하고 있습니다.
+어쩌다 보니 [Juice](https://github.com/tomyun/juice)라는 도구를 만들게 되었습니다. [이 세상 끝에서 사랑을 노래하는 소녀 YU-NO](https://vndb.org/r83617), [드래곤 나이트 4](https://vndb.org/r83125), [FOXY](https://vndb.org/r87658), [RUN RUN 광주곡](https://vndb.org/r88581)과 같은 PC-98 게임들의 영문화 프로젝트에서 활용하였습니다.
